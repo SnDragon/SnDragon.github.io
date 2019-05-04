@@ -9,12 +9,12 @@ description: longerwu的个人博客
 keywords:
 author: longerwu
 language: zh-CN
-timezone:
+timezone: Asia/Shanghai
 email: wu_xilong@qq.com
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://sndragon.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
