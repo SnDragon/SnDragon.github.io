@@ -10,7 +10,7 @@ tags: ["Java","搜索","Lucene"]
 Lucene只是一个提供索引和搜索的类库,并不是一个应用,程序员需要根据自己的业务场景进行如数据获取、数据预处理、用户界面提供等工作。
 
 下图为Lucene与应用程序的关系:
-
+<!-- more -->
 ![搜索应用程序和 Lucene 之间的关系](https://www.ibm.com/developerworks/cn/java/j-lo-lucene1/fig001.jpg)
 
 
