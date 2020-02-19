@@ -6,18 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sndragon.com">
-  <title>Archives: 2020/2 | longerwu的个人博客</title>
+  <title>JavaMail实现注册邮箱验证案例 | longerwu的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="longerwu的个人博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="longerwu的个人博客">
-<meta property="og:url" content="http://sndragon.com/archives/2020/02/index.html">
+  <meta name="description" content="在日常生活中，我们在一个网站中注册一个账户时，往往在提交个人信息后，网站还要我们通过手机或邮件来验证，邮件的话大概会是下面这个样子的：  用户通过点击链接从而完成注册，然后才能登录。 也许你会想，为什么要这么麻烦直接提交注册不就行了吗？这其中很大一部分原因是为了防止恶意注册。接下来让我们一起来使用最简单的JSP+Servlet的方式来完成一个通过邮箱验证注册的小案例吧。">
+<meta name="keywords" content="Java,Mail">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaMail实现注册邮箱验证案例">
+<meta property="og:url" content="http://sndragon.com/2017/03/04/JavaMail实现注册邮箱验证案例/index.html">
 <meta property="og:site_name" content="longerwu的个人博客">
-<meta property="og:description" content="longerwu的个人博客">
+<meta property="og:description" content="在日常生活中，我们在一个网站中注册一个账户时，往往在提交个人信息后，网站还要我们通过手机或邮件来验证，邮件的话大概会是下面这个样子的：  用户通过点击链接从而完成注册，然后才能登录。 也许你会想，为什么要这么麻烦直接提交注册不就行了吗？这其中很大一部分原因是为了防止恶意注册。接下来让我们一起来使用最简单的JSP+Servlet的方式来完成一个通过邮箱验证注册的小案例吧。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4778432-142c77d9cebec478.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4778432-fbe6de795b6c0468.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4778432-25bf4413c22a9d64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4778432-340ef0a21e4a44c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4778432-8604f4b8ad70052a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4778432-3ccc4e47dd4c90e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2020-02-19T13:31:33.738Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="longerwu的个人博客">
-<meta name="twitter:description" content="longerwu的个人博客">
+<meta name="twitter:title" content="JavaMail实现注册邮箱验证案例">
+<meta name="twitter:description" content="在日常生活中，我们在一个网站中注册一个账户时，往往在提交个人信息后，网站还要我们通过手机或邮件来验证，邮件的话大概会是下面这个样子的：  用户通过点击链接从而完成注册，然后才能登录。 也许你会想，为什么要这么麻烦直接提交注册不就行了吗？这其中很大一部分原因是为了防止恶意注册。接下来让我们一起来使用最简单的JSP+Servlet的方式来完成一个通过邮箱验证注册的小案例吧。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4778432-142c77d9cebec478.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="longerwu的个人博客" type="application/atom+xml">
   
@@ -145,64 +154,232 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-JavaMail实现注册邮箱验证案例" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/02/17/Nginx的server_name和location配置/" class="archive-article-date">
-  	<time datetime="2020-02-17T14:07:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/02/17/Nginx的server_name和location配置/">Nginx的server_name和location配置</a>
+    <h1 class="article-title" itemprop="name">
+      JavaMail实现注册邮箱验证案例
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2017/03/04/JavaMail实现注册邮箱验证案例/" class="archive-article-date">
+  	<time datetime="2017-03-04T09:01:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在日常生活中，我们在一个网站中注册一个账户时，往往在提交个人信息后，网站还要我们通过手机或邮件来验证，邮件的话大概会是下面这个样子的：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4778432-142c77d9cebec478.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>用户通过点击链接从而完成注册，然后才能登录。</p>
+<p>也许你会想，为什么要这么麻烦直接提交注册不就行了吗？这其中很大一部分原因是为了防止恶意注册。接下来让我们一起来使用最简单的JSP+Servlet的方式来完成一个通过邮箱验证注册的小案例吧。<br><a id="more"></a></p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><h3 id="前提知识"><a href="#前提知识" class="headerlink" title="前提知识"></a>前提知识</h3><p>动手实践之前，你最好对以下知识有所了解：</p>
+<ul>
+<li>JSP和Servlet</li>
+<li>Maven</li>
+<li>MySQL</li>
+<li><a href="http://www.mchange.com/projects/c3p0/" target="_blank" rel="noopener">c3p0</a></li>
+<li><a href="https://zh.wikipedia.org/zh-hans/%E7%AE%80%E5%8D%95%E9%82%AE%E4%BB%B6%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE" target="_blank" rel="noopener">SMTP协议</a>和<a href="https://zh.wikipedia.org/wiki/%E9%83%B5%E5%B1%80%E5%8D%94%E5%AE%9A" target="_blank" rel="noopener">POP3协议</a></li>
+</ul>
+<p>如果对邮件收发过程完全不了解的话，可以花三分钟的时间到<a href="http://www.imooc.com/video/14260" target="_blank" rel="noopener">慕课网</a>了解一下，讲得算是非常清楚了，这里就不赘述了。放张图回忆一下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4778432-fbe6de795b6c0468.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="邮件收发过程"></p>
+<h3 id="邮箱准备"><a href="#邮箱准备" class="headerlink" title="邮箱准备"></a>邮箱准备</h3><p>在了解的上述内容之后，要实现这个案例，首先我们还得有两个邮箱账号，一个用来发送邮件，一个用来接收邮件。本案例使用QQ邮箱向163邮箱发送激活邮件，因此需要登录QQ邮箱，在设置-&gt;账户面板中开启POP3/SMTP服务，以允许我们通过第三方客户端发送邮件：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4778432-25bf4413c22a9d64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>还要注意的是，登录以下服务: POP3/IMAP/SMTP/Exchange/CardDAV/CalDAV服务时，需要用到授权码而不是QQ密码，授权码是用于登录第三方邮件客户端的专用密码。因此我们需要获得授权码，以在后面的程序中使用。</p>
+<p>好了，到此准备工作就差不多了，下面开始动手吧。</p>
+<h2 id="实现注册Demo"><a href="#实现注册Demo" class="headerlink" title="实现注册Demo"></a>实现注册Demo</h2><h3 id="创建Maven工程"><a href="#创建Maven工程" class="headerlink" title="创建Maven工程"></a>创建Maven工程</h3><p>本次案例基于Maven,因此你要先创建一个Maven的Web工程，并引入相关依赖：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- JavaEE依赖 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javaee<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javaee-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>5<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>taglibs<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>standard<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- mysql驱动依赖 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>mysql<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mysql-connector-java<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>5.1.40<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- c3p0依赖 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>c3p0<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>c3p0<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>0.9.1.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- JavaMail相关依赖 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.mail<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>mail<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.4.7<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">groupId</span>&gt;</span>javax.activation<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>activation<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">			<span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="创建数据库表"><a href="#创建数据库表" class="headerlink" title="创建数据库表"></a>创建数据库表</h3><p>接下来使用MySQL创建一张简单的用户表：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> <span class="string">`user`</span>(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span>(<span class="number">11</span>) primary <span class="keyword">key</span> auto_increment <span class="keyword">comment</span> <span class="string">'用户id'</span>,</span><br><span class="line">    username <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">comment</span> <span class="string">'用户名'</span>,</span><br><span class="line">    email <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">comment</span> <span class="string">'用户邮箱'</span>,</span><br><span class="line">    <span class="keyword">password</span> <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">comment</span> <span class="string">'用户密码'</span>,</span><br><span class="line">    state <span class="built_in">int</span>(<span class="number">1</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">default</span> <span class="number">0</span> <span class="keyword">comment</span> <span class="string">'用户激活状态：0表示未激活，1表示激活'</span>,</span><br><span class="line">    code <span class="built_in">varchar</span>(<span class="number">255</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">comment</span> <span class="string">'激活码'</span></span><br><span class="line">)<span class="keyword">engine</span>=<span class="keyword">InnoDB</span> <span class="keyword">default</span> <span class="keyword">charset</span>=utf8;</span><br></pre></td></tr></table></figure></p>
+<p>其中要注意的地方是state字段（用来判断用户账号是否激活）和code字段（激活码）。</p>
+<h3 id="创建注册页面"><a href="#创建注册页面" class="headerlink" title="创建注册页面"></a>创建注册页面</h3><p>使用JSP创建一个最简单的注册页面(请自行忽略界面):</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4778432-340ef0a21e4a44c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>嗯，果然够简单。</p>
+<h3 id="主要的业务逻辑"><a href="#主要的业务逻辑" class="headerlink" title="主要的业务逻辑"></a>主要的业务逻辑</h3><p>先想一下，我们的整个流程应该是这样的：</p>
+<ol>
+<li>用户填写相关信息，点击注册按钮</li>
+<li>系统先将用户记录保存到数据库中，其中用户状态为未激活</li>
+<li>系统发送一封邮件并通知用户去验证</li>
+<li>用户登录邮箱并点击激活链接</li>
+<li>系统将用户状态更改为已激活并通知用户注册成功</li>
+</ol>
+<p>搞清楚了整个流程，实现起来应该就不难了。下图是我建立的包结构：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4778432-8604f4b8ad70052a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><em>ps:完整代码请见后文链接，这里只讨论主要的思路</em></p>
+<p>首先是，用户提交注册信息后，相应的servlet会将相关信息传给service层去处理，在service中需要做的就是讲记录保存到数据库中(调用dao层),然后再给用户发送一封邮件，UserServiceImpl相关代码如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">doRegister</span><span class="params">(String userName, String password, String email)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 这里可以验证各字段是否为空</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//利用正则表达式（可改进）验证邮箱是否符合邮箱的格式</span></span><br><span class="line">	<span class="keyword">if</span>(!email.matches(<span class="string">"^\\w+@(\\w+\\.)+\\w+$"</span>))&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//生成激活码</span></span><br><span class="line">	String code=CodeUtil.generateUniqueCode();</span><br><span class="line">	User user=<span class="keyword">new</span> User(userName,email,password,<span class="number">0</span>,code);</span><br><span class="line">	<span class="comment">//将用户保存到数据库</span></span><br><span class="line">	UserDao userDao=<span class="keyword">new</span> UserDaoImpl();</span><br><span class="line">	<span class="comment">//保存成功则通过线程的方式给用户发送一封邮件</span></span><br><span class="line">	<span class="keyword">if</span>(userDao.save(user)&gt;<span class="number">0</span>)&#123;</span><br><span class="line">		<span class="keyword">new</span> Thread(<span class="keyword">new</span> MailUtil(email, code)).start();;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>需要注意的是，应该新建一个线程去执行发送邮件的任务，不然被骂估计是免不了了。<br>数据库的操作比较简单，此处就不贴出来了，无非是将用户记录插到数据库中。值得一提的是，此处使用c3p0来作为数据源来替代DriverManager，在频繁获取释放数据库连接时效率会大大提高，c3p0最简单的配置如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">c3p0-config</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">named-config</span> <span class="attr">name</span>=<span class="string">"mysql"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"driverClass"</span>&gt;</span>com.mysql.jdbc.Driver<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"jdbcUrl"</span>&gt;</span>jdbc:mysql://127.0.0.1:3306/test1?useSSL=false<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"user"</span>&gt;</span>root<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span>&gt;</span>123456<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 初始化时一个连接池尝试获得的连接数量，默认是3，大小应该在maxPoolSize和minPoolSize之间 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"initialPoolSize"</span>&gt;</span>5<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 一个连接最大空闲时间(单位是秒)，0意味着连接不会过时 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"maxIdleTime"</span>&gt;</span>30<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 任何指定时间的最大连接数量 ,默认值是15 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"maxPoolSize"</span>&gt;</span>20<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">		<span class="comment">&lt;!-- 任何指定时间的最小连接数量 ,默认值是3 --&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"minPoolSize"</span>&gt;</span>5<span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">named-config</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">c3p0-config</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>提供一个工具类DBUtil以获取，释放连接：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DBUtil</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> ComboPooledDataSource cpds=<span class="keyword">null</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">static</span>&#123;</span><br><span class="line">		cpds=<span class="keyword">new</span> ComboPooledDataSource(<span class="string">"mysql"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">getConnection</span><span class="params">()</span></span>&#123;</span><br><span class="line">		Connection connection=<span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			connection = cpds.getConnection();</span><br><span class="line">		&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> connection;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">(Connection conn,PreparedStatement pstmt,ResultSet rs)</span></span>&#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="keyword">if</span>(rs!=<span class="keyword">null</span>)&#123;</span><br><span class="line">				rs.close();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(pstmt!=<span class="keyword">null</span>)&#123;</span><br><span class="line">				pstmt.close();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(rs!=<span class="keyword">null</span>)&#123;</span><br><span class="line">				rs.close();</span><br><span class="line">			&#125;</span><br><span class="line">		&#125; <span class="keyword">catch</span> (SQLException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>要特别注意的一点是：即使是使用连接池，使用完Connection后调用close方法，当然这不意味着关闭与数据库的TCP 连接，而是将连接还回到池中去，如果不close掉的话，这个连接将会一直被占用，直到连接池中的连接耗尽为止。</p>
+<h3 id="使用JavaMail发送邮件"><a href="#使用JavaMail发送邮件" class="headerlink" title="使用JavaMail发送邮件"></a>使用JavaMail发送邮件</h3><p>使用JavaMail发送邮件非常简单，也是三步曲：</p>
+<ol>
+<li>创建连接对象javax.mail.Session</li>
+<li>创建邮件对象 javax.mail.Message</li>
+<li>发送邮件</li>
+</ol>
+<p>直接看代码，详细的注释在代码中，MailUtil代码如下:<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MailUtil</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> String email;<span class="comment">// 收件人邮箱</span></span><br><span class="line">	<span class="keyword">private</span> String code;<span class="comment">// 激活码</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">MailUtil</span><span class="params">(String email, String code)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.email = email;</span><br><span class="line">		<span class="keyword">this</span>.code = code;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// 1.创建连接对象javax.mail.Session</span></span><br><span class="line">		<span class="comment">// 2.创建邮件对象 javax.mail.Message</span></span><br><span class="line">		<span class="comment">// 3.发送一封激活邮件</span></span><br><span class="line">		String from = <span class="string">"xxx@qq.com"</span>;<span class="comment">// 发件人电子邮箱</span></span><br><span class="line">		String host = <span class="string">"smtp.qq.com"</span>; <span class="comment">// 指定发送邮件的主机smtp.qq.com(QQ)|smtp.163.com(网易)</span></span><br><span class="line"></span><br><span class="line">		Properties properties = System.getProperties();<span class="comment">// 获取系统属性</span></span><br><span class="line"></span><br><span class="line">		properties.setProperty(<span class="string">"mail.smtp.host"</span>, host);<span class="comment">// 设置邮件服务器</span></span><br><span class="line">		properties.setProperty(<span class="string">"mail.smtp.auth"</span>, <span class="string">"true"</span>);<span class="comment">// 打开认证</span></span><br><span class="line"></span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">//QQ邮箱需要下面这段代码，163邮箱不需要</span></span><br><span class="line">			MailSSLSocketFactory sf = <span class="keyword">new</span> MailSSLSocketFactory();</span><br><span class="line">			sf.setTrustAllHosts(<span class="keyword">true</span>);</span><br><span class="line">			properties.put(<span class="string">"mail.smtp.ssl.enable"</span>, <span class="string">"true"</span>);</span><br><span class="line">			properties.put(<span class="string">"mail.smtp.ssl.socketFactory"</span>, sf);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">			<span class="comment">// 1.获取默认session对象</span></span><br><span class="line">			Session session = Session.getDefaultInstance(properties, <span class="keyword">new</span> Authenticator() &#123;</span><br><span class="line">				<span class="function"><span class="keyword">public</span> PasswordAuthentication <span class="title">getPasswordAuthentication</span><span class="params">()</span> </span>&#123;</span><br><span class="line">					<span class="keyword">return</span> <span class="keyword">new</span> PasswordAuthentication(<span class="string">"xxx@qq.com"</span>, <span class="string">"xxx"</span>); <span class="comment">// 发件人邮箱账号、授权码</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;);</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 2.创建邮件对象</span></span><br><span class="line">			Message message = <span class="keyword">new</span> MimeMessage(session);</span><br><span class="line">			<span class="comment">// 2.1设置发件人</span></span><br><span class="line">			message.setFrom(<span class="keyword">new</span> InternetAddress(from));</span><br><span class="line">			<span class="comment">// 2.2设置接收人</span></span><br><span class="line">			message.addRecipient(Message.RecipientType.TO, <span class="keyword">new</span> InternetAddress(email));</span><br><span class="line">			<span class="comment">// 2.3设置邮件主题</span></span><br><span class="line">			message.setSubject(<span class="string">"账号激活"</span>);</span><br><span class="line">			<span class="comment">// 2.4设置邮件内容</span></span><br><span class="line">			String content = <span class="string">"&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;这是一封激活邮件,激活请点击以下链接&lt;/h1&gt;&lt;h3&gt;&lt;a href='http://localhost:8080/RegisterDemo/ActiveServlet?code="</span></span><br><span class="line">					+ code + <span class="string">"'&gt;http://localhost:8080/RegisterDemo/ActiveServlet?code="</span> + code</span><br><span class="line">					+ <span class="string">"&lt;/href&gt;&lt;/h3&gt;&lt;/body&gt;&lt;/html&gt;"</span>;</span><br><span class="line">			message.setContent(content, <span class="string">"text/html;charset=UTF-8"</span>);</span><br><span class="line">			<span class="comment">// 3.发送邮件</span></span><br><span class="line">			Transport.send(message);</span><br><span class="line">			System.out.println(<span class="string">"邮件成功发送!"</span>);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><em>ps:需要把上面的账号、授权码进行相应修改。</em></p>
+<p>完成后，再有用户提交注册信息时，应该就能收到验证邮件了：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/4778432-3ccc4e47dd4c90e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>用户点击链接后，我们要做的工作就是根据code（可以利用UUID生成)更改数据库中相应用户的状态，然后提示用户注册结果了。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>简单介绍了如何使用JavaMail完成了一个带邮箱验证的注册案例，当然在实际开发中还有许多细节要注意，例如对用户提交信息的校验，密码进行加密等，此处的简单案例并未详尽处理这些细节。</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p><a href="https://github.com/SnDragon/JavaLearning/tree/master/RegisterDemo" target="_blank" rel="noopener">RegisterDemo</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">server</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Mail</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2017/03/04/JavaMail实现注册邮箱验证案例/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2018/05/03/Lucene初识及核心类介绍/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Lucene初识及核心类介绍
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2017/02/27/JDBC回顾-二/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JDBC回顾(二)</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -225,8 +402,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
