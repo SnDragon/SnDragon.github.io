@@ -4,13 +4,14 @@ date: 2018-05-03 21:39:54
 tags: ["Java","搜索","Lucene"]
 ---
 [Lucene](http://lucene.apache.org)是目前最流行的Java开源搜索引擎类库,最新版本为7.3.0。Lucene通常用于全文检索,Lucene具有简单高效跨平台等特点,因此有不少搜索引擎都是基于Lucene构建的,例如:[Elasticsearch](http://www.elastic.co/products/elasticsearch),[Solr](http://lucene.apache.org/solr/)等等。了解Lucene可以让我们更好地理解全文检索的内部原理,本篇文章将简单介绍Lucene及其核心类。
+<!-- more -->
 ## Lucene简介
 现代搜索引擎的两大核心就是索引和搜索,建立索引的过程就是对源数据进行处理,例如过滤掉一些特殊字符/词语(如虚词等),单词大小写转换,分词,建立倒排索引等以支持后续高效准确的搜索。而搜索则是直接提供给用户的功能，尽管面向的用户不同,诸如百度、谷歌等互联网公司以及各种企业都提供了各自的搜索引擎。搜索过程需要对搜索关键词进行分词等处理,然后在引擎内部构建查询,还要根据相关度对搜索结果进行排名,最终把命中结果展示给用户。
 
 Lucene只是一个提供索引和搜索的类库,并不是一个应用,程序员需要根据自己的业务场景进行如数据获取、数据预处理、用户界面提供等工作。
 
 下图为Lucene与应用程序的关系:
-<!-- more -->
+
 ![搜索应用程序和 Lucene 之间的关系](https://www.ibm.com/developerworks/cn/java/j-lo-lucene1/fig001.jpg)
 
 
