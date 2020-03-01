@@ -6,24 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sndragon.com">
-  <title>Postman Host请求头不生效问题 | longerwu的个人博客</title>
+  <title>Nginx信号与热部署 | longerwu的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="个人开发或查看API接口经常会使用Postman来调试,特别是搭配Postman Intercepter,可以直接在postman中使用Chrome浏览器的cookie,非常方便。近日,在做nginx实验时遇到一个问题:在Postman中设置了Host请求头没生效,这里记录下排查过程和原因。">
-<meta name="keywords" content="http,postman">
+  <meta name="description" content="Nginx的一个重要特性是支持热部署,这使得我们可以在不停止服务的同时升级Nginx。Nginx的另外一个特性是可扩展性好，所以有很多第三方模块。本文将以安装echo模块为例展示Nginx热部署的步骤。">
+<meta name="keywords" content="nginx">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Postman Host请求头不生效问题">
-<meta property="og:url" content="http://sndragon.com/2020/02/29/Postman-Host请求头不生效问题/index.html">
+<meta property="og:title" content="Nginx信号与热部署">
+<meta property="og:url" content="http://sndragon.com/2020/03/01/Nginx信号与热部署/index.html">
 <meta property="og:site_name" content="longerwu的个人博客">
-<meta property="og:description" content="个人开发或查看API接口经常会使用Postman来调试,特别是搭配Postman Intercepter,可以直接在postman中使用Chrome浏览器的cookie,非常方便。近日,在做nginx实验时遇到一个问题:在Postman中设置了Host请求头没生效,这里记录下排查过程和原因。">
+<meta property="og:description" content="Nginx的一个重要特性是支持热部署,这使得我们可以在不停止服务的同时升级Nginx。Nginx的另外一个特性是可扩展性好，所以有很多第三方模块。本文将以安装echo模块为例展示Nginx热部署的步骤。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/Postman_Host.png">
-<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/curl_host_tcpdump.png">
-<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/postman_tcpdump.png">
-<meta property="og:updated_time" content="2020-02-29T17:16:11.336Z">
+<meta property="og:updated_time" content="2020-03-01T07:36:17.102Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Postman Host请求头不生效问题">
-<meta name="twitter:description" content="个人开发或查看API接口经常会使用Postman来调试,特别是搭配Postman Intercepter,可以直接在postman中使用Chrome浏览器的cookie,非常方便。近日,在做nginx实验时遇到一个问题:在Postman中设置了Host请求头没生效,这里记录下排查过程和原因。">
-<meta name="twitter:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/Postman_Host.png">
+<meta name="twitter:title" content="Nginx信号与热部署">
+<meta name="twitter:description" content="Nginx的一个重要特性是支持热部署,这使得我们可以在不停止服务的同时升级Nginx。Nginx的另外一个特性是可扩展性好，所以有很多第三方模块。本文将以安装echo模块为例展示Nginx热部署的步骤。">
   
     <link rel="alternative" href="/atom.xml" title="longerwu的个人博客" type="application/atom+xml">
   
@@ -151,35 +147,131 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Postman-Host请求头不生效问题" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Nginx信号与热部署" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Postman Host请求头不生效问题
+      Nginx信号与热部署
     </h1>
   
 
         
-        <a href="/2020/02/29/Postman-Host请求头不生效问题/" class="archive-article-date">
-  	<time datetime="2020-02-29T15:59:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-29</time>
+        <a href="/2020/03/01/Nginx信号与热部署/" class="archive-article-date">
+  	<time datetime="2020-02-29T17:19:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>个人开发或查看API接口经常会使用Postman来调试,特别是搭配<a href="https://chrome.google.com/webstore/detail/postman-interceptor/aicmkgpgakddgnaphhhpliifpcfhicfo" target="_blank" rel="noopener">Postman Intercepter</a>,可以直接在postman中使用Chrome浏览器的cookie,非常方便。近日,在做<a href="http://sndragon.com/2020/02/17/Nginx%E7%9A%84server_name%E5%92%8Clocation%E9%85%8D%E7%BD%AE/">nginx实验</a>时遇到一个问题:在Postman中设置了<code>Host</code>请求头没生效,这里记录下排查过程和原因。<br><a id="more"></a></p>
-<h2 id="问题现象"><a href="#问题现象" class="headerlink" title="问题现象"></a>问题现象</h2><p>设置了Postman的Host请求头,如下图所示,怀疑该请求头不起作用。<br><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/Postman_Host.png" alt="Postman设置"></p>
-<h2 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h2><h3 id="用curl工具测试"><a href="#用curl工具测试" class="headerlink" title="用curl工具测试"></a>用curl工具测试</h3><p>用<code>curl</code>工具测试,则返回正常:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">curl http://www.a.com -H <span class="string">"Host: www.b.com"</span></span><br><span class="line"></span><br><span class="line">返回:default_server</span><br></pre></td></tr></table></figure></p>
-<p><code>curl</code>返回结果正常,说明服务器配置正常,问题应该出在<code>Postman</code>上。</p>
-<h3 id="抓包查看请求报文"><a href="#抓包查看请求报文" class="headerlink" title="抓包查看请求报文"></a>抓包查看请求报文</h3><p>既然怀疑Postman Host请求头不生效,我们可以抓包看下原始的http请求报文,这里可以在客户端使用fiddler或tcpdump(类Unix系统)等工具抓包,当然也可以直接在服务端抓包。我们使用以下命令在服务端进行抓包:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcpdump tcp and -i any host 服务端IP  and port 80 -A</span><br></pre></td></tr></table></figure></p>
-<p>使用上面的curl请求时,我们能获取到如下报文:<br><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/curl_host_tcpdump.png" alt="curl tcpdump报文"><br>可以看到,Host请求头正常生效</p>
-<p>接着,再看下postman的报文:<br><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/postman_tcpdump.png" alt="postman tcpdump报文"><br>可见,Host请求头实际上并没有生效。</p>
-<h3 id="查阅资料"><a href="#查阅资料" class="headerlink" title="查阅资料"></a>查阅资料</h3><p>在网上查找了一下，比较相关的是这个<a href="https://github.com/postmanlabs/postman-app-support/issues/781" target="_blank" rel="noopener">issue</a>,但是里面说使用Postman Interceptor扩展程序可以解决此问题,而我使用了还是有这个问题。</p>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>某些版本的<code>Postman</code>设置Host请求头不会生效,可能是由于<code>Host</code>请求头比较特殊，可以用来实现虚拟主机,Http1.1规范中规定所有的请求都必须带上该请求头。其实,当我们使用<code>curl</code>不手动指定<code>Host</code>请求头时,会默认加上,值为请求URL中的域名,这个大家可以自己动手抓包看下。</p>
+        <p>Nginx的一个重要特性是支持热部署,这使得我们可以在不停止服务的同时升级Nginx。Nginx的另外一个特性是可扩展性好，所以有很多第三方模块。本文将以安装<a href="https://github.com/openresty/echo-nginx-module" target="_blank" rel="noopener">echo模块</a>为例展示Nginx热部署的步骤。<br><a id="more"></a></p>
+<h2 id="信号"><a href="#信号" class="headerlink" title="信号"></a>信号</h2><p>我们经常使用<code>nginx -s signal</code>去控制nginx,实际上我们也可以使用操作系统信号(可以通过<code>kill -l</code>查看所有信号)去控制nginx,nginx主进程可接收的信号如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">信号</th>
+<th style="text-align:center">对应nginx -s</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">TERM, INT</td>
+<td style="text-align:center">stop</td>
+<td style="text-align:center">快速停止nginx</td>
+</tr>
+<tr>
+<td style="text-align:center">QUIT</td>
+<td style="text-align:center">quit</td>
+<td style="text-align:center">优雅停止nginx</td>
+</tr>
+<tr>
+<td style="text-align:center">HUP</td>
+<td style="text-align:center">reload</td>
+<td style="text-align:center">重新加载配置文件</td>
+</tr>
+<tr>
+<td style="text-align:center">USR1</td>
+<td style="text-align:center">reopen</td>
+<td style="text-align:center">重新打开日志文件</td>
+</tr>
+<tr>
+<td style="text-align:center">USR2</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">升级nginx可执行文件</td>
+</tr>
+<tr>
+<td style="text-align:center">WINCH</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">优雅关闭worker进程</td>
+</tr>
+</tbody>
+</table>
+<p>我们也可以通过信号去控制worker进程(除了上述的<code>HUP</code>和<code>USR2</code>信号),但一般比较少用。</p>
+<h2 id="echo模块简介"><a href="#echo模块简介" class="headerlink" title="echo模块简介"></a>echo模块简介</h2><p>echo模块是一个第三方模块,对输入输出、并行/串行子请求、timer和sleep等nginx内部API进行了封装。使用echo模块，我们可以很方便进行调试。在实际应用中,我们可以发现在以下场景中echo模块很有用:  </p>
+<ul>
+<li>直接从内存中提供静态内容</li>
+<li>使用自定义的头部和尾部包装上游的返回</li>
+<li>合并几个子请求的内容到一个主请求中</li>
+</ul>
+<h2 id="安装nginx和相关模块"><a href="#安装nginx和相关模块" class="headerlink" title="安装nginx和相关模块"></a>安装nginx和相关模块</h2><p>先看下已有的nginx版本及配置选项:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_74_12_centos ~]<span class="comment"># nginx -V</span></span><br><span class="line">nginx version: nginx/1.16.1</span><br><span class="line">built by gcc 4.8.5 20150623 (Red Hat 4.8.5-4) (GCC) </span><br><span class="line">configure arguments: --prefix=/usr/<span class="built_in">local</span>/nginx</span><br></pre></td></tr></table></figure></p>
+<p>从<a href="http://nginx.org/en/download.html" target="_blank" rel="noopener">nginx官网</a>我们知道，截止到目前(2020-03-01)nginx的最新稳定版本是1.16.1,主线版本是    nginx-1.17.8,关于这两个版本的差异可查看<a href="https://www.nginx.com/blog/nginx-1-6-1-7-released/" target="_blank" rel="noopener">这里</a>。实际上官方推荐我们使用Mainline版本，因为加入了一些新特性和bugfixes,除非担心一些新特性可能会产生一些不良影响，例如与一些第三方模块不兼容。</p>
+<p>由于<a href="https://github.com/openresty/echo-nginx-module#compatibility" target="_blank" rel="noopener">echo模块wiki</a>里nginx的兼容最高只到1.16.x。所以我们重新编译nginx并将echo模块集成进去。 </p>
+<ol>
+<li><p>下载并解压nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://nginx.org/download/nginx-1.16.1.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf nginx-1.16.1.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载并解压echo模块</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://github.com/openresty/<span class="built_in">echo</span>-nginx-module/archive/v0.61.tar.gz</span><br><span class="line"></span><br><span class="line">tar zxvf v0.61.tar.gz</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>编译安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 进入nginx目录</span><br><span class="line"><span class="built_in">cd</span> nginx-1.16.1</span><br><span class="line">// 执行configure</span><br><span class="line">./configure --prefix=/usr/<span class="built_in">local</span>/nginx  --add-module=/root/<span class="built_in">echo</span>-nginx-module-0.61</span><br><span class="line"></span><br><span class="line">成功之后会有如下提示:</span><br><span class="line">configuring additional modules</span><br><span class="line">adding module <span class="keyword">in</span> /root/<span class="built_in">echo</span>-nginx-module-0.61</span><br><span class="line"> + ngx_http_echo_module was configured</span><br><span class="line"></span><br><span class="line"> // 安装</span><br><span class="line"> make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>以上步骤都成功之后我们查看nginx的sbin目录会发现nginx可执行文件已经替换成我们最新编译的,而老的nginx可执行文件已经重命名为nginx.old<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># ll /usr/local/nginx/sbin/</span></span><br><span class="line">total 7848</span><br><span class="line">-rwxr-xr-x 1 root root 4207472 Mar  1 12:32 nginx</span><br><span class="line">-rwxr-xr-x 1 root root 3825493 Nov 19 13:49 nginx.old</span><br></pre></td></tr></table></figure></p>
+<p><em>说明:从nginx 1.9.11版本开始,可以将echo模块编译为一个动态模块，具体可见官网文档</em></p>
+<h2 id="热部署"><a href="#热部署" class="headerlink" title="热部署"></a>热部署</h2><p>安装完毕后,我们可以修改下原来的配置:<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span>  www.a.com;</span><br><span class="line">    <span class="attribute">return</span> <span class="number">200</span> <span class="string">"www.a.com\n"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>修改为:<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span>  www.a.com;</span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="attribute">echo</span> <span class="string">"www.a.com by echo"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><em>说明:这里改成location是因为echo指令不支持在server块下配置</em></p>
+<p>修改完之后由于此时的nginx master进程还是基于老的可执行文件生成的，所以不能使用reload去重新加载配置文件,否则会提示错误:</p>
+<blockquote>
+<p>[emerg] 28354#0: unknown directive “echo” in /usr/local/nginx/conf/nginx_test.conf:71`</p>
+</blockquote>
+<p>正确做法如下:</p>
+<h3 id="1-先给原来的master进程发送一个USR2信号表明要升级可执行文件"><a href="#1-先给原来的master进程发送一个USR2信号表明要升级可执行文件" class="headerlink" title="1. 先给原来的master进程发送一个USR2信号表明要升级可执行文件:"></a>1. 先给原来的master进程发送一个USR2信号表明要升级可执行文件:</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># ps -ef | grep nginx</span></span><br><span class="line">root     32183     1  0 13:58 ?        00:00:00 nginx: master process /usr/<span class="built_in">local</span>/nginx/sbin/nginx -c /usr/<span class="built_in">local</span>/nginx/conf/nginx_test.conf</span><br><span class="line">nobody   32184 32183  0 13:58 ?        00:00:00 nginx: worker process</span><br><span class="line">root     32342 22840  0 13:59 pts/3    00:00:00 grep --color=auto nginx</span><br><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># kill -USR2 32183</span></span><br><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># ps -ef | grep nginx</span></span><br><span class="line">root       361 22840  0 14:02 pts/3    00:00:00 grep --color=auto nginx</span><br><span class="line">root     32183     1  0 13:58 ?        00:00:00 nginx: master process /usr/<span class="built_in">local</span>/nginx/sbin/nginx -c /usr/<span class="built_in">local</span>/nginx/conf/nginx_test.conf</span><br><span class="line">nobody   32184 32183  0 13:58 ?        00:00:00 nginx: worker process</span><br><span class="line">root     32673 32183  0 14:01 ?        00:00:00 nginx: master process /usr/<span class="built_in">local</span>/nginx/sbin/nginx -c /usr/<span class="built_in">local</span>/nginx/conf/nginx_test.conf</span><br><span class="line">nobody   32674 32673  0 14:01 ?        00:00:00 nginx: worker process</span><br></pre></td></tr></table></figure>
+<p>可以看到,给老的master进程发送完USR2信号后,如果配置文件没有错误的话,将会生成新的master进程和worker进程。<br>这里需要注意的是:</p>
+<ul>
+<li>新master进程的父进程是老master,而新worker进程的父进程是新master进程,因此所有这些进程都可以监听同一个端口(或者说socket/句柄),而不会冲突。</li>
+<li><p>nginx会将老master进程的pid文件加上.oldbin后缀,而新master进程的id还是保存在pid文件中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># ll /usr/local/nginx/logs/</span></span><br><span class="line">total 956</span><br><span class="line">-rw-r--r-- 1 nobody root 579995 Mar  1 14:07 access.log</span><br><span class="line">-rw-r--r-- 1 root   root   2438 Nov 20 00:04 access1.log</span><br><span class="line">-rw-r--r-- 1 nobody root 379146 Mar  1 14:01 error.log</span><br><span class="line">-rw-r--r-- 1 root   root      6 Mar  1 14:01 nginx.pid</span><br><span class="line">-rw-r--r-- 1 root   root      6 Mar  1 13:58 nginx.pid.oldbin</span><br></pre></td></tr></table></figure>
+<p>此时虽然新的master进程已经启动,但是我们会发现，所有的worker进程(老的和新的)都会处理请求:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># curl http://www.a.com</span></span><br><span class="line">www.a.com</span><br><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># curl http://www.a.com</span></span><br><span class="line">www.a.com by <span class="built_in">echo</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注意:如果是用相对路径启动的nginx，那么发送USR2信号给老master进程会产生如下错误:</p>
+<blockquote>
+<p>[alert] 30483#0: execve() failed while executing new binary process “nginx” (2: No such file or directory)</p>
+</blockquote>
+<p>原因是<code>execve()</code>函数不会去根据系统环境变量去查找nginx可执行文件,因此需要使用绝对路径启动nginx</p>
+<h3 id="2-升级成功，给老master进程发送WINCH信号"><a href="#2-升级成功，给老master进程发送WINCH信号" class="headerlink" title="2. 升级成功，给老master进程发送WINCH信号"></a>2. 升级成功，给老master进程发送WINCH信号</h3><p>前面我们说过,master进程接收到WINCH信号,会优雅地关闭其worker进程。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># kill -WINCH 32183</span></span><br><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># ps -ef | grep nginx</span></span><br><span class="line">root      3122 22840  0 14:19 pts/3    00:00:00 grep --color=auto nginx</span><br><span class="line">root     32183     1  0 13:58 ?        00:00:00 nginx: master process /usr/<span class="built_in">local</span>/nginx/sbin/nginx -c /usr/<span class="built_in">local</span>/nginx/conf/nginx_test.conf</span><br><span class="line">root     32673 32183  0 14:01 ?        00:00:00 nginx: master process /usr/<span class="built_in">local</span>/nginx/sbin/nginx -c /usr/<span class="built_in">local</span>/nginx/conf/nginx_test.conf</span><br><span class="line">nobody   32674 32673  0 14:01 ?        00:00:00 nginx: worker process</span><br><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># curl http://www.a.com</span></span><br><span class="line">www.a.com by <span class="built_in">echo</span></span><br><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># curl http://www.a.com</span></span><br><span class="line">www.a.com by <span class="built_in">echo</span></span><br></pre></td></tr></table></figure></p>
+<p>可以看到，发送WINCH信号给老的master进程后,老的worker进程将会优雅地退出(如果有还在处理的请求会等到处理完毕再退出)，之后就只有新的worker进程会处理请求。</p>
+<p>这里需要注意的是老master进程并没有退出,并且会继续监听socke。这主要是为了当新的可执行文件不符合预期时，还可以重新使用老的可执行文件(相当于版本回退)。</p>
+<h3 id="3-根据情况关闭老master进程或回滚"><a href="#3-根据情况关闭老master进程或回滚" class="headerlink" title="3. 根据情况关闭老master进程或回滚"></a>3. 根据情况关闭老master进程或回滚</h3><p>根据前面的说明,这里可能会有两种情况:</p>
+<ul>
+<li>结果符合预期,给老master进程发送QUIT信号,老master进程将会退出，升级完成。<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># kill -QUIT 32183</span></span><br><span class="line">[root@VM_74_12_centos ~/nginx-1.16.1]<span class="comment"># ps -ef | grep nginx</span></span><br><span class="line">root      9191 22840  0 14:57 pts/3    00:00:00 grep --color=auto nginx</span><br><span class="line">root     32673     1  0 14:01 ?        00:00:00 nginx: master process /usr/<span class="built_in">local</span>/nginx/sbin/nginx -c /usr/<span class="built_in">local</span>/nginx/conf/ngin</span><br><span class="line">x_test.conf</span><br><span class="line">nobody   32674 32673  0 14:01 ?        00:00:00 nginx: worker process</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li>结果不符合预期，这时需要使用原来的可执行文件，有两种选择:<ul>
+<li>给老master进程发送HUP信号。老master进程将基于原来的配置文件(不用重新读取)重新生成worker进程。之后发送QUIT信号给新master进程让其优雅退出。</li>
+<li>发送TERM信号给新master进程，它会发送消息给相应的worker进程要求其退出,之后自己也会退出。新master进程退出后，老master进程会自动生成新的worker进程。</li>
+</ul>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文首先简单介绍了通过信号去控制nginx,然后详细说明了nginx热部署的步骤。nginx热部署特性，也称平滑升级,可以在升级期间继续处理请求，对于服务实现高可用，具有重大意义。</p>
 
       
 
@@ -214,11 +306,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">postman</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
         		</li>
       		
 		</ul>
@@ -274,7 +362,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2020/02/29/Postman-Host请求头不生效问题/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2020/03/01/Nginx信号与热部署/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -288,18 +376,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/03/01/Nginx信号与热部署/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Nginx信号与热部署
-        
-      </div>
-    </a>
   
-  
-    <a href="/2020/02/17/Nginx的server_name和location配置/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Nginx的server_name和location配置</div>
+    <a href="/2020/02/29/Postman-Host请求头不生效问题/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Postman Host请求头不生效问题</div>
       <i class="icon-circle-right"></i>
     </a>
   
