@@ -6,18 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sndragon.com">
-  <title>Archives: 2017/3 | longerwu的个人博客</title>
+  <title>Vim实用技巧 | longerwu的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="longerwu的个人博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="longerwu的个人博客">
-<meta property="og:url" content="http://sndragon.com/archives/2017/03/index.html">
+  <meta name="description" content="最近看了一本书Vim实用技巧，读完之后发现以前自己对vim只是略知皮毛，vim被称之为编辑器之神，就如一个巨大的宝矿，等待我们去挖掘，本文将简单介绍其中的一些技巧，希望对你有所帮助。">
+<meta name="keywords" content="Vim">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vim实用技巧">
+<meta property="og:url" content="http://sndragon.com/2020/03/31/Vim实用技巧/index.html">
 <meta property="og:site_name" content="longerwu的个人博客">
-<meta property="og:description" content="longerwu的个人博客">
+<meta property="og:description" content="最近看了一本书Vim实用技巧，读完之后发现以前自己对vim只是略知皮毛，vim被称之为编辑器之神，就如一个巨大的宝矿，等待我们去挖掘，本文将简单介绍其中的一些技巧，希望对你有所帮助。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_wrap.png">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_nowrap.png">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_word_move.png">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim%25.png">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_text_object.png">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8.png">
+<meta property="og:updated_time" content="2020-04-03T16:03:47.342Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="longerwu的个人博客">
-<meta name="twitter:description" content="longerwu的个人博客">
+<meta name="twitter:title" content="Vim实用技巧">
+<meta name="twitter:description" content="最近看了一本书Vim实用技巧，读完之后发现以前自己对vim只是略知皮毛，vim被称之为编辑器之神，就如一个巨大的宝矿，等待我们去挖掘，本文将简单介绍其中的一些技巧，希望对你有所帮助。">
+<meta name="twitter:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_wrap.png">
   
     <link rel="alternative" href="/atom.xml" title="longerwu的个人博客" type="application/atom+xml">
   
@@ -145,64 +154,468 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Vim实用技巧" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/04/JavaMail实现注册邮箱验证案例/" class="archive-article-date">
-  	<time datetime="2017-03-04T09:01:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-04</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/04/JavaMail实现注册邮箱验证案例/">JavaMail实现注册邮箱验证案例</a>
+    <h1 class="article-title" itemprop="name">
+      Vim实用技巧
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2020/03/31/Vim实用技巧/" class="archive-article-date">
+  	<time datetime="2020-03-31T13:25:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近看了一本书<a href="https://book.douban.com/subject/26967597/" target="_blank" rel="noopener">Vim实用技巧</a>，读完之后发现以前自己对vim只是略知皮毛，vim被称之为编辑器之神，就如一个巨大的宝矿，等待我们去挖掘，本文将简单介绍其中的一些技巧，希望对你有所帮助。</p>
+<a id="more"></a>
+<h2 id="模式"><a href="#模式" class="headerlink" title="模式"></a>模式</h2><h3 id="常见的几种模式"><a href="#常见的几种模式" class="headerlink" title="常见的几种模式"></a>常见的几种模式</h3><ul>
+<li>普通模式</li>
+<li>可视化模式</li>
+<li>插入模式</li>
+<li>命令模式</li>
+</ul>
+<h3 id="模式间转换"><a href="#模式间转换" class="headerlink" title="模式间转换"></a>模式间转换</h3><h4 id="普通模式-gt-插入模式"><a href="#普通模式-gt-插入模式" class="headerlink" title="普通模式-&gt;插入模式:"></a>普通模式-&gt;插入模式:</h4><ul>
+<li>I:光标移到行首</li>
+<li>A:光标移到行尾</li>
+<li>O:向上插入一行空行，光标移至新行行首</li>
+<li>o:向下插入一行空行，光标移至新行行首</li>
+</ul>
+<h4 id="插入模式-gt-普通模式"><a href="#插入模式-gt-普通模式" class="headerlink" title="插入模式-&gt;普通模式:"></a>插入模式-&gt;普通模式:</h4><ul>
+<li><code>&lt;Esc&gt;</code>或<code>&lt;Ctrl-[&gt;</code></li>
+</ul>
+<h4 id="插入模式-gt-插入-普通模式-lt-Ctrl-o-gt"><a href="#插入模式-gt-插入-普通模式-lt-Ctrl-o-gt" class="headerlink" title="插入模式-&gt;插入-普通模式:&lt;Ctrl-o&gt;"></a>插入模式-&gt;插入-普通模式:<code>&lt;Ctrl-o&gt;</code></h4><blockquote>
+<p>插入-普通模式是普通模式的一个特例，在此模式中，我们可以执行一个普通模式命令，执行完后，马上就又返回到插入模式。</p>
+</blockquote>
+<h4 id="普通模式-gt-可视化模式"><a href="#普通模式-gt-可视化模式" class="headerlink" title="普通模式-&gt;可视化模式:"></a>普通模式-&gt;可视化模式:</h4><ul>
+<li>v:以字符为单位选中区域</li>
+<li>V:以行为单位选中区域</li>
+<li>ctrl+v:以块为单位选中区域</li>
+<li>gv:用来重选上一次由可视模式所选择的文本范围</li>
+</ul>
+<h4 id="可视化模式选择模式"><a href="#可视化模式选择模式" class="headerlink" title="可视化模式选择模式"></a>可视化模式<->选择模式</-></h4><blockquote>
+<p>在一个典型的文本编辑器环境中，当选中一段文本后，再输入任意可见字符时，这些选中的文本将会被删除。虽然 Vim 的可视模式未遵从此惯例，但是其选择模式（Select Mode）却按此方式工作。按 <code>&lt;Ctrl-g&gt;</code> 可以在可视模式及选择模式间切换。</p>
+</blockquote>
+<h2 id="移动"><a href="#移动" class="headerlink" title="移动"></a>移动</h2><h3 id="上下左右"><a href="#上下左右" class="headerlink" title="上下左右"></a>上下左右</h3><p>除了最基本的通过上下左右箭头移动光标我们还可以通过<code>h/j/k/l</code>按键代替箭头左下上右移动光标(具体对应关系可以想象下有两条反斜线<code>\\</code>,最左边对应左移，最右边对应右移)。</p>
+<h3 id="移到行首-行尾"><a href="#移到行首-行尾" class="headerlink" title="移到行首/行尾"></a>移到行首/行尾</h3><ul>
+<li>0:移到行首</li>
+<li>^:移到当前行第一个可视化字符</li>
+<li>$:移到行尾(对应0)</li>
+<li>g_:移到当前行最后一个可视化字符(对应^)</li>
+</ul>
+<h3 id="实际行与屏幕行"><a href="#实际行与屏幕行" class="headerlink" title="实际行与屏幕行"></a>实际行与屏幕行</h3><blockquote>
+<p>与许多文本编辑器不同，Vim 会区分实际行与屏幕行。当 ‘wrap’ 设置被启用时（缺省启用），每个超出窗口宽度的文本行都会被回绕显示，以保证没有文本显示不出来。这样一来，文件中的一行也许会被显示为屏幕上的若干行。可以通过命令模式下执行:set nowrap隐藏超出屏幕的文本</p>
+</blockquote>
+<p>wrap(默认):</p>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_wrap.png" alt="wrap"></p>
+<p>nowrap:</p>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_nowrap.png" alt="vim_nowrap"></p>
+<p>在上面的h/j/k/l/0/^/$等操作前面加上g,则vim会根据屏幕行去做移动。</p>
+<h3 id="基于单词移动"><a href="#基于单词移动" class="headerlink" title="基于单词移动"></a>基于单词移动</h3><ul>
+<li>w/W:正向移动到下一单词的开头</li>
+<li>b/B:反向移动到当前单词/下一单词开头</li>
+<li>e/E:正向移动到当前单词/下一单词结尾</li>
+<li>ge/gE:反向移动到下一单词结尾</li>
+</ul>
+<p>如图所示:</p>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_word_move.png" alt="vim单词移动"></p>
+<p>w和W:</p>
+<ul>
+<li>w(word):一个word包含一串字母、数字或下划线，或者一串非空字符，空行也被认为是一个word.</li>
+<li>W(WORD):一个WORD包含一串非空字符，空行也被认为是一个WORD,WORD的范围比word大</li>
+</ul>
+<p><em>上面小写的命令对应word,大写的对应WORD</em></p>
+<h3 id="移到当前行指定字符"><a href="#移到当前行指定字符" class="headerlink" title="移到当前行指定字符"></a>移到当前行指定字符</h3><ul>
+<li>使用<code>f{char}</code>可以正向移动到当前行下一个char字符，F反向移动</li>
+<li><code>;</code>继续移动到下一个char字符(下一个的方向与f/F的方向一致)</li>
+<li><code>,</code>回到上一个char字符</li>
+<li>使用<code>t{char}</code>可以正向移动到当前行的下一个char字符的前一个字符,<code>T{char}</code>反向移动到上一个char字符的后一个字符,同样也可以使用<code>;</code>和<code>,</code>继续移动</li>
+</ul>
+<h3 id="移到某一行"><a href="#移到某一行" class="headerlink" title="移到某一行"></a>移到某一行</h3><ul>
+<li>G:移到结尾行</li>
+<li>gg:移到首行</li>
+<li>nG:移到具体第n行，n为具体行数，例如10G移到第10行</li>
+<li><code>:n&lt;CR&gt;</code>:在命令模式下，直接输入行号然后按回车也可以跳到第n行</li>
+</ul>
+<h3 id="翻页"><a href="#翻页" class="headerlink" title="翻页"></a>翻页</h3><ul>
+<li>ctrl+f:下翻一页=&gt;forward</li>
+<li>ctrl+d: 下翻半页=&gt;down</li>
+<li>ctrl+b: 上翻一页(对应ctrl+f)=&gt;back</li>
+<li>ctrl+u: 上翻半页(对应ctrl+d)=&gt;up</li>
+</ul>
+<p>还有个实用技巧，按<code>zz</code>可以让当前光标所在行居中</p>
+<h3 id="设置位置标记以快速跳回"><a href="#设置位置标记以快速跳回" class="headerlink" title="设置位置标记以快速跳回"></a>设置位置标记以快速跳回</h3><ul>
+<li><code>m{a-zA-Z}</code>命令会用选定的字母标记当前光标所在位置。</li>
+<li><code>&#39;{mark}</code>命令跳到位置标记所在行，并把光标置于该行第一个非空白字符上</li>
+<li>而`{mark}命令则把光标移动到设置此位置标记时光标所在之处</li>
+</ul>
+<p>例如:我们可以使用<code>mm</code>标记当前光标所在位置，之后不管光标移到何处，只要使用`m即可跳回原来标记处</p>
+<h3 id="在匹配括号中跳转"><a href="#在匹配括号中跳转" class="headerlink" title="在匹配括号中跳转"></a>在匹配括号中跳转</h3><p>% 命令允许我们在一组开、闭括号间跳转,可作用于()、{}以及[]<br><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim%25.png" alt="%匹配括号"></p>
+<h3 id="快速跳转到你最后一次编辑的地方并进入插入模式"><a href="#快速跳转到你最后一次编辑的地方并进入插入模式" class="headerlink" title="快速跳转到你最后一次编辑的地方并进入插入模式"></a>快速跳转到你最后一次编辑的地方并进入插入模式</h3><p><code>gi</code></p>
+<h2 id="删除-amp-替换"><a href="#删除-amp-替换" class="headerlink" title="删除&amp;替换"></a>删除&amp;替换</h2><h3 id="普通模式下"><a href="#普通模式下" class="headerlink" title="普通模式下"></a>普通模式下</h3><ul>
+<li>x:删除单个字符</li>
+<li>s:删除光标所在字符并进入插入模式(substitute)</li>
+<li>daw(delete around word)删除单词(详见下文文本对象)</li>
+<li>dt{char}删除直到char字符</li>
+<li>d$删除到行尾</li>
+<li>d0删除到开头</li>
+<li>dd:删除当前行</li>
+<li>d/{string}:删除光标所在处到string之间的内容</li>
+<li>x跟d前面支持加数字</li>
+<li>cw/W:(change word/WORD)删除光标所在处到当前word/WORD的结尾,并进入插入模式</li>
+</ul>
+<h3 id="插入模式下"><a href="#插入模式下" class="headerlink" title="插入模式下"></a>插入模式下</h3><ul>
+<li>ctrl+h:删除上一个字符</li>
+<li>ctrl+w:删除上一个单词</li>
+<li>ctrl+u:删除行首到光标所在处之间的字符</li>
+</ul>
+<h3 id="可视化模式下"><a href="#可视化模式下" class="headerlink" title="可视化模式下"></a>可视化模式下</h3><p>选中区域后,按d删除该区域,按c删除并进入插入模式</p>
+<p><em>以上这些操作也适用与unix命令行</em></p>
+<h2 id="复制粘贴"><a href="#复制粘贴" class="headerlink" title="复制粘贴"></a>复制粘贴</h2><ul>
+<li>y(yank):复制,例如进入可视化模式选中区域后按y可复制区域内容</li>
+<li>yy:复制一行</li>
+<li>{n}yy:复制n行</li>
+<li>p:把内容粘贴到光标之后</li>
+<li>P:把内容粘贴到光标之前</li>
+</ul>
+<p>注意:使用d删除内容后紧跟着p/P操作,则粘贴的是删除的内容</p>
+<h2 id="查找替换"><a href="#查找替换" class="headerlink" title="查找替换"></a>查找替换</h2><h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><ul>
+<li>使用<code>/</code> 键执行一次查找时，Vim将在整个缓冲区内进行正向查找</li>
+<li>用 <code>?</code> 键则会进行反向查找。</li>
+<li>查找到目标后,使用<code>n</code>移动到下一个目标,<code>N</code>移动到上一个目标</li>
+</ul>
+<h3 id="替换"><a href="#替换" class="headerlink" title="替换"></a>替换</h3><p>普通模式下:</p>
+<ul>
+<li>r:替换单个字符</li>
+<li>R:替换多个字符</li>
+</ul>
+<p>命令模式下:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">:[range]s[ubstitute]/&#123;pattern&#125;/&#123;string&#125;/&#123;flags&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>range表示范围，比如10,20表示10-20行，%表示全部,空则表示当前行</li>
+<li>pattern是要替换的模式,可以是正则表达式，若为空，则表示使用上一次查找的模式</li>
+<li>string是替换后文本</li>
+</ul>
+<p>Flags有几个常用的标志:</p>
+<ul>
+<li>g(global)表示全局范围内执行</li>
+<li>c(confirm)表示确认，可以确认或者拒绝修改</li>
+<li>n(number)报告匹配到的次数而不替换,可以用来查询匹配次数</li>
+</ul>
+<h2 id="文本对象"><a href="#文本对象" class="headerlink" title="文本对象"></a>文本对象</h2><blockquote>
+<p>文本对象允许我们操作括号、被引用的文本、XML标签以及其他文本中的常见结构。文本对象由两个字符组成，第一个字符永远是 i 或是 a。我们一般说，以 i 开头的文本对象会选择分隔符内部的文本，而以 a 开头的文本对象则会选择包括分隔符在内的整个文本。为方便记忆，可以把i想成inner,a想成around</p>
+</blockquote>
+<h3 id="文本对象类型"><a href="#文本对象类型" class="headerlink" title="文本对象类型"></a>文本对象类型</h3><ul>
+<li><code>w</code>:word</li>
+<li><code>W</code>:WORD</li>
+<li><code>s</code>:sentence</li>
+<li><code>p</code>:paragraph</li>
+<li><code>]|[</code>:[] block</li>
+<li><code>)|(|b</code>: block</li>
+<li><code>&gt;|&lt;</code>: &lt;&gt; block</li>
+<li><code>t</code>: tag block</li>
+<li><code>}|{|B</code>:Block</li>
+<li>“|’|`: quoted string</li>
+</ul>
+<p>用法:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[number]&lt;<span class="built_in">command</span>&gt;[text object or motion]</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>number指命令作用在几个文本对象上</li>
+<li>command是指执行的具体命令，例如d(删除)/y(复制)/c(替换)</li>
+</ul>
+<p>以删除为例:</p>
+<ul>
+<li>“dl”: delete character (alias: “x”)</li>
+<li>“diw”:delete inner word</li>
+<li>“daw”:delete a word</li>
+<li>“diW”:delete inner WORD (see |WORD|)</li>
+<li>“daW”:delete a WORD (see |WORD|)</li>
+<li>…以此类推</li>
+</ul>
+<p>又如，以选中区域为例:<br><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_text_object.png" alt="image"></p>
+<p>通过<code>:h text-object</code>可查看文本对象帮助文档</p>
+<h2 id="映射"><a href="#映射" class="headerlink" title="映射"></a>映射</h2><blockquote>
+<p>vim映射可以让用户根据自己的习惯自定义快捷键,使用:map命令可查看定义的全部映射</p>
+</blockquote>
+<h3 id="支持的前缀修饰符"><a href="#支持的前缀修饰符" class="headerlink" title="支持的前缀修饰符"></a>支持的前缀修饰符</h3><ul>
+<li>nore:no recursive表示非递归(默认是递归映射,即map a b;map b c;则按a键实际会执行c,使用非递归模式则只会执行b)</li>
+<li>n:表示在普通模式下生效(不加修饰符时默认为普通模式)</li>
+<li>v:表示在可视模式下生效</li>
+<li>i:表示在插入模式下生效</li>
+<li>c:表示在命令行模式下生效</li>
+</ul>
+<p>例如:</p>
+<ul>
+<li><code>:map - x</code>,然后按-可以删除字符</li>
+<li><code>:map &lt;Ctrl-d&gt; dd</code>使用ctrl+d代替dd</li>
+<li><code>:unmap -</code>可以删除-代表的映射</li>
+<li><code>:mapclear</code>清除所有map(包括用户定义和系统默认的键盘映射)</li>
+<li><code>inoremap ( ()&lt;Left&gt;</code>,插入模式下输入(时自动补全)并移到括号中间)</li>
+</ul>
+<h3 id="mapleader"><a href="#mapleader" class="headerlink" title="mapleader"></a>mapleader</h3><p>可以使用特殊字符串<code>&lt;Leader&gt;</code>去定义一个使用mapleader变量的映射,如果mapleader没有定义或者是空的,则默认使用反斜线\。例如<code>:map &lt;Leader&gt;A  o&lt;Esc&gt;</code>将会像<code>:map \A  o&lt;Esc&gt;</code>一样工作,但使用<code>:let mapleader = &quot;,&quot;</code>后,将像<code>:map ,A  o&lt;Esc&gt;</code>一样工作。</p>
+<p>值得注意的是:</p>
+<ul>
+<li>mapleader的值只在定义时生效,对mapleader做的修改不会对已经定义的映射产生影响。</li>
+<li>当按下<leader>键时,默认情况下只有1000ms的时间去输入其后跟着的命令,可通过<code>timeoutlen</code>配置项修改</leader></li>
+</ul>
+<h3 id="配置map"><a href="#配置map" class="headerlink" title="配置map"></a>配置map</h3><p>一般来说有两种方法配置map:</p>
+<ol>
+<li>每次编辑时使用:map命令配置，单次编辑有效</li>
+<li>将map命令配置到vimrc文件里,每次都生效</li>
+</ol>
+<p>一般情况下应该使用非递归映射,防止与第三方插件配置冲突导致问题</p>
+<h2 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>Vim 的寄存器是一组用于保存文本的简单容器。它们既可像剪贴板那样，剪切、复制和粘贴文本；也可以记录一系列按键操作，把它们录制成宏。可以通过给命令加 “{register} 前缀的方式指定要用的寄存器。若不指明，Vim 将缺省使用无名寄存器。可通过<code>:reg</code>查看所有寄存器内容,通过<code>:reg {name}</code>查看指定寄存器的内容,</p>
+<p>例如,通过<code>&quot;ayy</code>命令,可以把当前行复制到”a寄存器,然后通过<code>&quot;ap</code>,指定粘贴”a寄存器里面的内容</p>
+<h3 id="寄存器分类"><a href="#寄存器分类" class="headerlink" title="寄存器分类"></a>寄存器分类</h3><p>寄存器可分为以下分类:</p>
+<ul>
+<li>无名寄存器(“”):,不指定寄存器时默认使用</li>
+<li>复制专用寄存器(“0):当我们使用 y{motion} 命令时，要复制的文本不仅会被拷贝到无名寄存器中，而且也被拷贝到了复制专用寄存器中，后者可用数字0加以引用。使用 x、s、c{motion} 以及 d{motion} 命令均不会覆盖该寄存器。</li>
+<li>有名寄存器(“a-“z):用小写字母引用有名寄存器，会覆盖该寄存器的原有内容，而换用大写字母的话，则会将新内容添加到该寄存器的原有内容之后。</li>
+<li>黑洞寄存器(“_):,有去无回,例如不会用到删除的内容则可以使用此寄存器,而不是默认覆盖无名寄存器</li>
+<li>系统剪贴板(“+)与选择专用寄存器(“*)</li>
+<li>表达式寄存器(“=)可以用来执行一段Vim脚本，并返回其结果<blockquote>
+<p>在插入模式中，输入 <ctrl-r>= 就可以访问这一寄存器。这条命令会在屏幕的下方显示一个提示符，我们可以在其后输入要执行的表达式。输入表达式后敲一下 <cr>，Vim就会把执行的结果插入到文档的当前位置了。</cr></ctrl-r></p>
+</blockquote>
+</li>
+<li>其他寄存器</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>寄存器</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“%</td>
+<td>当前文件名</td>
+</tr>
+<tr>
+<td>“#</td>
+<td>轮换文件名</td>
+</tr>
+<tr>
+<td>“.</td>
+<td>上次插入的文本</td>
+</tr>
+<tr>
+<td>“:</td>
+<td>上次插入的Ex命令</td>
+</tr>
+<tr>
+<td>“/</td>
+<td>上次查找的模式</td>
+</tr>
+</tbody>
+</table>
+<h2 id="宏"><a href="#宏" class="headerlink" title="宏"></a>宏</h2><blockquote>
+<p>宏可以看成一系列命令的集合,用来【录制】一系列操作，然后用于【回放】,适合针对一系列相似的行、段落,甚至是文件,进行重复性的修改。</p>
+</blockquote>
+<p>我们以下面一段文本为例,我们想给每个链接加上双引号，可以用宏来实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">http://www.a.com</span><br><span class="line">http://www.bb.com</span><br><span class="line">http://www.ccc.com</span><br><span class="line">http://www.dddd.com</span><br><span class="line">http://www.eeeee.com</span><br><span class="line">http://www.ffffff.com</span><br><span class="line">http://www.ggggggg.com</span><br><span class="line">http://www.e.com</span><br></pre></td></tr></table></figure></p>
+<h3 id="录制宏"><a href="#录制宏" class="headerlink" title="录制宏"></a>录制宏</h3><ul>
+<li>使用q来录制和结束录制</li>
+<li>使用q{register}选择要保存的寄存器,把录制的命令保存其中</li>
+<li>使用@{register}回放寄存器中保存的一系列命令</li>
+</ul>
+<p>假如我们使用a寄存器来录制,先把光标移到首行,依次执行一以下命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">qa</span><br><span class="line">I&quot;</span><br><span class="line">&lt;Esc&gt;</span><br><span class="line">$</span><br><span class="line">a&quot;</span><br><span class="line">&lt;Esc&gt;</span><br><span class="line">j</span><br><span class="line">q</span><br></pre></td></tr></table></figure></p>
+<p>录制完可以使用:reg a查看寄存器内容。</p>
+<p>需要注意的是录制宏的过程中需要兼容光标位置,如此例中光标不一定在行首,我们可以使用I让贯光标移到行首并插入</p>
+<h3 id="以串行方式执行宏"><a href="#以串行方式执行宏" class="headerlink" title="以串行方式执行宏"></a>以串行方式执行宏</h3><ul>
+<li>回放一次:@a</li>
+<li>回放n次:n@a</li>
+</ul>
+<p>值得注意的是，以串行方式执行宏,当动作命令失败时，宏将中止执行</p>
+<h3 id="以并行方式执行宏"><a href="#以并行方式执行宏" class="headerlink" title="以并行方式执行宏"></a>以并行方式执行宏</h3><p>先切换到可视化模式并选中要执行到区域,此处是从第二行到文件尾,因此我们可以使用VG,之后通过命令<code>:normal @a</code>指示 Vim 在高亮选区中的每一行上执行这个宏,当其中某一行执行失败时,剩下的行也会继续执行</p>
+<p><em>可视化模式下按:normal {cmd}表示像普通模式一样执行命令</em></p>
+<h2 id="其他技巧"><a href="#其他技巧" class="headerlink" title="其他技巧"></a>其他技巧</h2><h3 id="加减数字"><a href="#加减数字" class="headerlink" title="加减数字"></a>加减数字</h3><blockquote>
+<p><ctrl-a> 和 <ctrl-x>命令分别对数字执行加和减操作。在不带次数执行时，它们会逐个加减，但如果带一个次数前缀，那么就可以用它们加减任意整数。例如，如果我们把光标移到字符5上，执行 10<ctrl-a>就会把它变成15。</ctrl-a></ctrl-x></ctrl-a></p>
+</blockquote>
+<h3 id="转换大小写"><a href="#转换大小写" class="headerlink" title="转换大小写"></a>转换大小写</h3><ul>
+<li>～:单个字符大小写转换</li>
+<li>g~w:单词大小写转换</li>
+<li>gU/uw: 单词转换成大/小写(注意与上面不同的是无论单词里面的字符之前是大写还是小写最后都会转换为大/小写)</li>
+<li>g~$:光标所在处到行尾大小写转换</li>
+<li>gU/u$:光标所在处到行尾转成大写/小写</li>
+<li>g~~:当前行大小写转换(与光标位置无关)<br>*可视化模式下 U转成大写，u转成小写,~大小写转换</li>
+</ul>
+<h3 id="自动补全"><a href="#自动补全" class="headerlink" title="自动补全"></a>自动补全</h3><ul>
+<li><code>Ctrl+n/p</code>:插入模式下唤起自动补全</li>
+<li><code>Ctrl+e</code>终止这次自动补全，其效果是下拉菜单将被清除，并恢复光标前的文本，即调用自动补全前所输入的内容。</li>
+<li><code>Ctrl+d</code>可以在命令模式自动补全</li>
+</ul>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/vim_%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8.png" alt="image"></p>
+<h3 id="分屏"><a href="#分屏" class="headerlink" title="分屏"></a>分屏</h3><ul>
+<li>:vs(垂直分屏)</li>
+<li>:sp(水平分屏)</li>
+<li><ctrl-w>+h/j/k/l切换</ctrl-w></li>
+</ul>
+<h3 id="重复"><a href="#重复" class="headerlink" title="重复"></a>重复</h3><ul>
+<li><code>.</code>重复上一次修改，<code>[count].</code>重复count次</li>
+<li>{n}yy/n{dd}等，表示复制/删除n行</li>
+</ul>
+<h3 id="其他有用命令"><a href="#其他有用命令" class="headerlink" title="其他有用命令"></a>其他有用命令</h3><ul>
+<li><code>:e &lt;path/to/file&gt;</code>: 打开一个文件</li>
+<li><code>:saveas &lt;path/to/file&gt;</code>: 另存为 &lt;path/to/file&gt;</li>
+<li><code>:e!</code>:从磁盘中重新加载文件(撤销所有更改)</li>
+<li><code>:set showcmd</code>:显示命令</li>
+<li><code>:!{cmd}</code>:调用外部命令,例如<code>:!ls</code>可以查看当前文件夹的文件</li>
+<li><code>:ls</code>:列出所有被载入到内存中的缓冲区的列表</li>
+<li><code>:bn/p</code>:切换到下/上一个缓冲区(打开多个文件时有用)</li>
+<li>可视化模式下,<code>&gt;</code>向右缩进,<code>&lt;</code>向左缩进,<code>=</code>,<code>o</code>变换可视化模式的光标端点</li>
+</ul>
+<blockquote>
+<p>注意区分 :!ls 和 :ls 的不同之处。前者调用的是 shell 中的 ls 命令，而 :ls调用的是Vim的内置命令，用来显示缓冲区列表的内容</p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://www.imooc.com/learn/1129" target="_blank" rel="noopener">玩转Vim 从放弃到爱不释手</a></li>
+<li><a href="https://book.douban.com/subject/26967597/" target="_blank" rel="noopener">Vim实用技巧</a></li>
+</ul>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Mail</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Vim</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2020/03/31/Vim实用技巧/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2020/03/01/Nginx信号与热部署/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Nginx信号与热部署</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -225,8 +638,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
