@@ -8,18 +8,41 @@
   <link rel="dns-prefetch" href="http://sndragon.com">
   <title>OAuth2.0介绍与实践 | longerwu的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="longerwu的个人博客">
+  <meta name="description" content="基于Laravel5.5+OAuth2.0实现Github/微博/QQ/微信登录  OAuth2.0是目前业界关于授权的标准协议,使用OAuth,用户可以授权第三方应用获取一些特定的权限而无需输入相应的账号密码，并且可随时收回权限。例如我们常见的QQ登录/微信登录等,背后都采用了OAuth2.0协议。 有关OAuth的更多介绍,可以参考这篇博客 本项目将基于Laravel框架和OAuth2.0实现">
 <meta name="keywords" content="Laravel,OAuth2.0">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OAuth2.0介绍与实践">
 <meta property="og:url" content="http://sndragon.com/2020/04/07/OAuth2-0介绍与实践/index.html">
 <meta property="og:site_name" content="longerwu的个人博客">
-<meta property="og:description" content="longerwu的个人博客">
+<meta property="og:description" content="基于Laravel5.5+OAuth2.0实现Github/微博/QQ/微信登录  OAuth2.0是目前业界关于授权的标准协议,使用OAuth,用户可以授权第三方应用获取一些特定的权限而无需输入相应的账号密码，并且可随时收回权限。例如我们常见的QQ登录/微信登录等,背后都采用了OAuth2.0协议。 有关OAuth的更多介绍,可以参考这篇博客 本项目将基于Laravel框架和OAuth2.0实现">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-06-06T03:17:03.623Z">
+<meta property="og:image" content="https://laravel.com/assets/img/components/logo-laravel.svg">
+<meta property="og:image" content="https://oauth.net/images/oauth-logo-square.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_start.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_github1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_github2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_github3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_github4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_qq1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_qq2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_qq3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_qq4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_wechat1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_wechat2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/charlse_proxy.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/charlse2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_wechat3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_wechat4.png">
+<meta property="og:updated_time" content="2021-01-20T15:40:31.981Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="OAuth2.0介绍与实践">
-<meta name="twitter:description" content="longerwu的个人博客">
+<meta name="twitter:description" content="基于Laravel5.5+OAuth2.0实现Github/微博/QQ/微信登录  OAuth2.0是目前业界关于授权的标准协议,使用OAuth,用户可以授权第三方应用获取一些特定的权限而无需输入相应的账号密码，并且可随时收回权限。例如我们常见的QQ登录/微信登录等,背后都采用了OAuth2.0协议。 有关OAuth的更多介绍,可以参考这篇博客 本项目将基于Laravel框架和OAuth2.0实现">
+<meta name="twitter:image" content="https://laravel.com/assets/img/components/logo-laravel.svg">
   
     <link rel="alternative" href="/atom.xml" title="longerwu的个人博客" type="application/atom+xml">
   
@@ -167,7 +190,118 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="基于Laravel5-5-OAuth2-0实现Github-微博-QQ-微信登录"><a href="#基于Laravel5-5-OAuth2-0实现Github-微博-QQ-微信登录" class="headerlink" title="基于Laravel5.5+OAuth2.0实现Github/微博/QQ/微信登录"></a>基于Laravel5.5+OAuth2.0实现Github/微博/QQ/微信登录</h1><p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"><img src="https://oauth.net/images/oauth-logo-square.png"></p>
+
+<p><a href="https://en.wikipedia.org/wiki/OAuth" target="_blank" rel="noopener">OAuth2.0</a>是目前业界关于授权的标准协议,使用OAuth,用户可以授权第三方应用获取一些特定的权限而无需输入相应的账号密码，并且可随时收回权限。例如我们常见的QQ登录/微信登录等,背后都采用了OAuth2.0协议。</p>
+<p>有关OAuth的更多介绍,可以参考<a href="https://www.ruanyifeng.com/blog/2014/05/oauth_2_0.html" target="_blank" rel="noopener">这篇博客</a></p>
+<p>本项目将基于Laravel框架和OAuth2.0实现Github/微博/QQ/微信登录。</p>
+<a id="more"></a>
+<h2 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h2><p><a href="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/OAuth_results.mp4" target="_blank" rel="noopener">查看视频</a></p>
+<h2 id="运行项目"><a href="#运行项目" class="headerlink" title="运行项目"></a>运行项目</h2><ol>
+<li><p>下载项目</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/SnDragon/laravel-oauth.git</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装依赖</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> laravel-oauth</span><br><span class="line">composer install</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">        listen 80;</span><br><span class="line">        # server_name可以自定义,与配置回调的域名一样即可</span><br><span class="line">        server_name longerwu.oauth.com www.longerwu.com;</span><br><span class="line">        # 替换为对应的项目路径</span><br><span class="line">        root /Users/wuxilong/code/laravel-oauth/public;</span><br><span class="line"></span><br><span class="line">        # 网站默认首页</span><br><span class="line">        index index.php index.html index.htm;</span><br><span class="line"></span><br><span class="line">        # 修改为 Laravel 转发规则，否则PHP无法获取$_GET信息，提示404错误</span><br><span class="line">        location / &#123;</span><br><span class="line">                try_files $uri $uri/ /index.php?$query_string;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location ~ \.php$ &#123;</span><br><span class="line">            fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">            fastcgi_index  index.php;</span><br><span class="line">            fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;</span><br><span class="line">            include        fastcgi_params;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>往hosts增加规则(非本地调试可忽略)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1 longerwu.oauth.com www.longerwu.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行nginx</p>
+</li>
+<li>复制一份<code>.env.example</code>到<code>.env</code>,并对OAuth的相关配置进行修改</li>
+<li>效果验证</li>
+</ol>
+<p>本地访问<code>http://www.longerwu.com/</code>(替换为上面配置的域名),若出现如下效果,则运行成功:<br><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_start.png" alt="运行效果"></p>
+<h2 id="Github接入"><a href="#Github接入" class="headerlink" title="Github接入"></a>Github接入</h2><p>Github接入相对来说比较简单，无需审核,可直接创建。</p>
+<p><a href="https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/" target="_blank" rel="noopener">开发文档</a></p>
+<ol>
+<li>申请应用&amp;配置回调</li>
+</ol>
+<p>打开<a href="https://github.com/settings/developers" target="_blank" rel="noopener">这个地址</a>,点击右上角的<code>New OAuth App</code>按钮,填入相应信息即可获得<code>client_id</code>和<code>client_secret</code></p>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_github1.png" alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_github2.png" alt="image"></p>
+<ol start="2">
+<li><p>将获取到的client_id和client_secret以及回调配置到.env中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GITHUB_CLIENT_ID=xxx</span><br><span class="line">GITHUB_CLIENT_SECRET=xxx</span><br><span class="line">GITHUB_CALLBACK_URL=xxx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>效果验证<br><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_github3.png" alt="image"></p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_github4.png" alt="image"></p>
+<h2 id="微博登录"><a href="#微博登录" class="headerlink" title="微博登录"></a>微博登录</h2><p>微博接入稍微麻烦一点,需要填写开发者资料,认证之后才能申请应用。</p>
+<p><a href="https://open.weibo.com/wiki/%E6%8E%88%E6%9D%83%E6%9C%BA%E5%88%B6" target="_blank" rel="noopener">开发文档</a></p>
+<ol>
+<li><a href="https://open.weibo.com/developers/basicinfo" target="_blank" rel="noopener">填写开发者资料</a></li>
+<li>申请应用&amp;配置回调</li>
+</ol>
+<p>填写应用基本信息:<br><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo1.png" alt="image"></p>
+<p>填写应用高级信息(回调):<br><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo2.png" alt="image"></p>
+<p>添加测试账号:<br><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo3.png" alt="image"></p>
+<ol start="3">
+<li><p>将获取到的client_id和client_secret以及回调配置到.env中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WEIBO_CLIENT_ID=xxx</span><br><span class="line">WEIBO_CLIENT_SECRET=xxx</span><br><span class="line">WEIBO_CALLBACK_URL=xxx</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>效果验证<br><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo4.png" alt="image"></p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_weibo5.png" alt="image"></p>
+<h2 id="QQ互联接入"><a href="#QQ互联接入" class="headerlink" title="QQ互联接入"></a>QQ互联接入</h2><p>QQ登录应该说是我们最常用的登录方式之一,以前只需要在QQ互联申请应用,就算没通过审核也可以进行本地开发调试,可惜最近QQ互联开放平台貌似改了策略，只有备过案的网站才能接入OAuth2.0登录了,不知道后续还会不会放开,目前未备案通过的应用会报100008错误:<br><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_qq1.png" alt="image"></p>
+<p><a href="https://wiki.connect.qq.com/%E5%BC%80%E5%8F%91%E6%94%BB%E7%95%A5_server-side" target="_blank" rel="noopener">开发文档</a></p>
+<ol>
+<li><a href="https://connect.qq.com/devuser.html#/" target="_blank" rel="noopener">完善开发者资料</a></li>
+<li><a href="https://connect.qq.com/manage.html#/" target="_blank" rel="noopener">创建应用</a></li>
+</ol>
+<p>注意,这一步需要填写网站备案号,所以需要先去备案,备案周期由于需要管局审核,可能会比较长(5个工作日以上),个人开发者主办单位名称填自己的名字,填写完相关信息之后等待审核通过即可(一般是一个工作日)</p>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_qq2.png" alt="image"></p>
+<ol start="3">
+<li><p>将获取到的client_id和client_secret以及回调配置到.env中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">QQ_CLIENT_ID=</span><br><span class="line">QQ_CLIENT_SECRET=</span><br><span class="line">QQ_CALLBACK_URL=</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>效果验证<br><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_qq3.png" alt="image"></p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_qq4.png" alt="image"></p>
+<h2 id="微信接入"><a href="#微信接入" class="headerlink" title="微信接入"></a>微信接入</h2><p><a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html" target="_blank" rel="noopener">开发文档</a></p>
+<ol>
+<li>应用申请</li>
+</ol>
+<p>微信授权登录分两种:公众平台和开放平台,其中开放平台一般是给企业申请的，需要上传营业执照啥的，不适合个人开发者开发学习,而公众平台又分两种,订阅号和服务号,服务号一般也是给企业申请的,但订阅号又无法开通网页授权获取用户信息功能。</p>
+<p>好在微信考虑到申请流程可能比较麻烦,为方便开发者,提供了一个沙盒环境,开发者可以在<a href="http://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login" target="_blank" rel="noopener">这里</a>申请微信公众平台测试账号并进行开发</p>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_wechat1.png" alt="image"></p>
+<ol start="2">
+<li><p>回调域名配置<br>要想使用微信的OAuth2.0网页授权,我们还需要配置回调域名(注意这里只需填写域名即可,无需填写完整回调地址),找到<code>网页服务-网页账号-网页授权获取用户基本信息</code>,点击右边的修改按钮,填入域名即可<br><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_wechat2.png" alt="image"></p>
+</li>
+<li><p>修改配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">WECHAT_CLIENT_ID=</span><br><span class="line">WECHAT_CLIENT_SECRET=</span><br><span class="line">WECHAT_CALLBACK_URL=</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>效果验证</p>
+</li>
+</ol>
+<p>这里需要注意的是,微信公众平台的授权登录需要在微信客户端打开,开放平台则可以直接在PC网页打开扫描二维码登录。由于我们使用的是公众平台测试账号,所以也需要在手机打开,如果有线上域名和服务器,则直接部署到线上即可。</p>
+<p>若没有线上环境或者想在本地调试的话,这里提供两种思路:</p>
+<ul>
+<li>电脑安装手机模拟器进行调试</li>
+<li>手机配置代理连接到本地电脑(需要和电脑在同一个局域网内)</li>
+</ul>
+<p>例如Mac可以使用<a href="https://www.charlesproxy.com/" target="_blank" rel="noopener">charles</a>来配置代理,还可以用来抓包。</p>
+<p>charlse配置:</p>
+<p>打开<code>Proxy-Proxy Settings</code>,默认使用8888端口:</p>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/charlse_proxy.png" alt="image"></p>
+<p>手机配置(以苹果手机为例):<br>无线局域网-点击连着的wifi-最底下配置代理改为手动,服务器填电脑的IP,端口填上面charlse配置的端口:</p>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/charlse2.png" alt="image"></p>
+<p>配置完成后手机应该就可以正常访问我们的虚拟站点了。</p>
+<p>用微信打开我们的网站,点微信登录:</p>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_wechat3.png" alt="image"></p>
+<p><img src="https://raw.githubusercontent.com/SnDragon/laravel-oauth/master/images/oauth_wechat4.png" alt="image"></p>
+<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ul>
+<li>代码优化</li>
+<li>制作composer包</li>
+</ul>
+
       
 
       
@@ -329,7 +463,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2020 longerwu
+    		&copy; 2021 longerwu
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -400,7 +534,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">OAuth2.0</a>
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">读写分离</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -409,6 +547,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">postman</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -424,14 +570,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">JDBC</a>
               </li>
              
@@ -440,7 +578,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">OAuth2.0</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">

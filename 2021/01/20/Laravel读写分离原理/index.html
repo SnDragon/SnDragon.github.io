@@ -6,18 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sndragon.com">
-  <title>Archives | longerwu的个人博客</title>
+  <title>Laravel读写分离原理 | longerwu的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="longerwu的个人博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="longerwu的个人博客">
-<meta property="og:url" content="http://sndragon.com/archives/index.html">
+  <meta name="description" content="无论是使用原生SQL查询,查询构建器还是Eloquent模型,执行数据库操作可以大致分为四步:  生成连接对象(5.5之后的版本在这一步不会真正创建数据库连接) 构造SQL 选择读连接还是写连接，建立与数据库的连接 执行SQL">
+<meta name="keywords" content="Laravel,数据库,读写分离">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel读写分离原理">
+<meta property="og:url" content="http://sndragon.com/2021/01/20/Laravel读写分离原理/index.html">
 <meta property="og:site_name" content="longerwu的个人博客">
-<meta property="og:description" content="longerwu的个人博客">
+<meta property="og:description" content="无论是使用原生SQL查询,查询构建器还是Eloquent模型,执行数据库操作可以大致分为四步:  生成连接对象(5.5之后的版本在这一步不会真正创建数据库连接) 构造SQL 选择读连接还是写连接，建立与数据库的连接 执行SQL">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-01-20T15:33:08.896Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="longerwu的个人博客">
-<meta name="twitter:description" content="longerwu的个人博客">
+<meta name="twitter:title" content="Laravel读写分离原理">
+<meta name="twitter:description" content="无论是使用原生SQL查询,查询构建器还是Eloquent模型,执行数据库操作可以大致分为四步:  生成连接对象(5.5之后的版本在这一步不会真正创建数据库连接) 构造SQL 选择读连接还是写连接，建立与数据库的连接 执行SQL">
   
     <link rel="alternative" href="/atom.xml" title="longerwu的个人博客" type="application/atom+xml">
   
@@ -145,36 +147,85 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Laravel读写分离原理" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/20/Laravel读写分离原理/" class="archive-article-date">
-  	<time datetime="2021-01-20T15:31:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-20</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/20/Laravel读写分离原理/">Laravel读写分离原理</a>
+    <h1 class="article-title" itemprop="name">
+      Laravel读写分离原理
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2021/01/20/Laravel读写分离原理/" class="archive-article-date">
+  	<time datetime="2021-01-20T15:31:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>无论是使用原生SQL查询,查询构建器还是Eloquent模型,执行数据库操作可以大致分为四步:</p>
+<ol>
+<li>生成连接对象(5.5之后的版本在这一步不会真正创建数据库连接)</li>
+<li>构造SQL</li>
+<li>选择读连接还是写连接，建立与数据库的连接</li>
+<li>执行SQL</li>
+</ol>
+<a id="more"></a>
+<h2 id="1-生成连接对象"><a href="#1-生成连接对象" class="headerlink" title="1. 生成连接对象"></a>1. 生成连接对象</h2><p>无论是哪种方式,最后都会运行到<code>Illuminate\Database\Connectors\ConnectionFactory::make</code>方法<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">make</span><span class="params">(array $config, $name = null)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 解析和准备DB配置</span></span><br><span class="line">    $config = <span class="keyword">$this</span>-&gt;parseConfig($config, $name);</span><br><span class="line">    <span class="comment">// 如果有配置读写分离则调用createReadWriteConnection方法建立两个连接</span></span><br><span class="line">    <span class="comment">// 这里用到了懒加载到思想，不会真正建立连接，见下文</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>($config[<span class="string">'read'</span>])) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;createReadWriteConnection($config);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 没有配置读写分离则调用createSingleConnection方法建立单个连接</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;createSingleConnection($config);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>createReadWriteConnection方法:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">createReadWriteConnection</span><span class="params">(array $config)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 创建\Illuminate\Database\Connection对象</span></span><br><span class="line">    $connection = <span class="keyword">$this</span>-&gt;createSingleConnection(<span class="keyword">$this</span>-&gt;getWriteConfig($config));</span><br><span class="line">    <span class="comment">// 创建获取读PDO的闭包并赋值给$connection的readPdo属性</span></span><br><span class="line">    <span class="keyword">return</span> $connection-&gt;setReadPdo(<span class="keyword">$this</span>-&gt;createReadPdo($config));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">createSingleConnection</span><span class="params">(array $config)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 这里的pdo是一个闭包，执行闭包才会真正建立连接获取到写PDO</span></span><br><span class="line">    $pdo = <span class="keyword">$this</span>-&gt;createPdoResolver($config);</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据不同的数据库驱动(mysql,pgsql,sqlite等)建立不同的连接</span></span><br><span class="line"><span class="comment">     * 把$pdo闭包对象作为对应的构造函数参数传进去</span></span><br><span class="line"><span class="comment">    **/</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;createConnection(</span><br><span class="line">        $config[<span class="string">'driver'</span>], $pdo, $config[<span class="string">'database'</span>], $config[<span class="string">'prefix'</span>], $config</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实际实现还会根据database是否配置了host选项去做不同解析,这里简化了</span></span><br><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">createPdoResolver</span><span class="params">(array $config)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span> <span class="title">use</span> <span class="params">($config)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;createConnector($config)-&gt;connect($config);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>值得注意的一点是,这里的pdo是一个闭包对象实际上是做了优化了，这里创建Connection对象用到的$pdo/$readPdo对象是通过createPdoResolver获取到的闭包，也就是不会真正去建立PDO对象。</p>
+<p>对比5.1:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">createSingleConnection</span><span class="params">(array $config)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 真正的建立连接</span></span><br><span class="line">    $pdo = <span class="keyword">$this</span>-&gt;createConnector($config)-&gt;connect($config);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;createConnection($config[<span class="string">'driver'</span>], $pdo, $config[<span class="string">'database'</span>], $config[<span class="string">'prefix'</span>], $config);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>5.1在createReadWriteConnection这一步就会同时建立读连接和写连接，假如一个请求是只读的，这意味着写连接是不必要的，而且建立连接后需要等到请求结束才会释放，对于某些耗时的请求意味着写连接被白白占用，甚至导致数据库连接过多的错误，而新版本通过引入闭包实现了懒加载，解决了这个问题。</p>
+</blockquote>
+<h2 id="2-构造SQL"><a href="#2-构造SQL" class="headerlink" title="2. 构造SQL"></a>2. 构造SQL</h2><p>主要是根据链式调用拼接SQL语句，绑定参数等,不是本文重点,这里不展开</p>
+<h2 id="3-选择读连接还是写连接"><a href="#3-选择读连接还是写连接" class="headerlink" title="3. 选择读连接还是写连接"></a>3. 选择读连接还是写连接</h2><p>最新版本会在这一步选择读连接还是写连接并真正与数据库建立连接</p>
+<h3 id="select语句"><a href="#select语句" class="headerlink" title="select语句:"></a>select语句:</h3><p><code>Illuminate\Database\Query\Builder.php</code><br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">runSelect</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 调用第一步获取到的Connection对象去执行查询</span></span><br><span class="line">    <span class="comment">// 这里会传useWritePdo属性指定是使用读连接还是写连接(默认是false,即使用读连接)</span></span><br><span class="line">    <span class="comment">// 可以在查询之前调用useWritePdo方法,手动指定用写连接查询</span></span><br><span class="line">    <span class="comment">// select ... for update也会设置useWritePdo=true,参考lockForUpdate方法</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;connection-&gt;select(<span class="keyword">$this</span>-&gt;toSql(), <span class="keyword">$this</span>-&gt;getBindings(), ! <span class="keyword">$this</span>-&gt;useWritePdo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>Illuminate\Database\Connection.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">select</span><span class="params">($query, $bindings = [], $useReadPdo = true)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;run($query, $bindings, <span class="function"><span class="keyword">function</span> <span class="params">($me, $query, $bindings)</span> <span class="title">use</span> <span class="params">($useReadPdo)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ($me-&gt;pretending()) &#123;</span><br><span class="line">            <span class="keyword">return</span> [];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// For select statements, we'll simply execute the query and return an array</span></span><br><span class="line">        <span class="comment">// of the database result set. Each element in the array will be a single</span></span><br><span class="line">        <span class="comment">// row from the database table, and will either be an array or objects.</span></span><br><span class="line">        $statement = <span class="keyword">$this</span>-&gt;getPdoForSelect($useReadPdo)-&gt;prepare($query);</span><br><span class="line"></span><br><span class="line">        $statement-&gt;execute($me-&gt;prepareBindings($bindings));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> $statement-&gt;fetchAll($me-&gt;getFetchMode());</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到决定使用读连接还是写连接的关键代码是这一句:<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">$this</span>-&gt;getPdoForSelect($useReadPdo)</span><br></pre></td></tr></table></figure></p>
+<p>具体实现:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">protected function getPdoForSelect($useReadPdo = true)</span><br><span class="line">&#123;</span><br><span class="line">    // 根据$useReadPdo去决定调用getReadPdo()还是getPdo()</span><br><span class="line">    return $useReadPdo ? $this-&gt;getReadPdo() : $this-&gt;getPdo();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// getPdo很简单,如果$this-&gt;pdo是闭包(第一次执行的时候),则执行闭包建立与数据库的连接并重新赋值，否则直接返回</span><br><span class="line">public function getPdo()</span><br><span class="line">&#123;</span><br><span class="line">    if ($this-&gt;pdo instanceof Closure) &#123;</span><br><span class="line">        return $this-&gt;pdo = call_user_func($this-&gt;pdo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return $this-&gt;pdo;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 获取读Pdo,不一定就使用读连接</span><br><span class="line">public function getReadPdo()</span><br><span class="line">&#123;</span><br><span class="line">    if ($this-&gt;transactions &gt;= 1) &#123;</span><br><span class="line">        return $this-&gt;getPdo();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if ($this-&gt;getConfig(&apos;sticky&apos;) &amp;&amp; $this-&gt;recordsModified) &#123;</span><br><span class="line">        return $this-&gt;getPdo();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 跟getPdo()类似,用闭包实现懒加载</span><br><span class="line">    if ($this-&gt;readPdo instanceof Closure) &#123;</span><br><span class="line">        return $this-&gt;readPdo = call_user_func($this-&gt;readPdo);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return $this-&gt;readPdo ?: $this-&gt;getPdo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到就算调用了getReadPdo()方法，最终也不一定是使用读连接,以下几种情况会使用写连接:</p>
+<ul>
+<li>当前活跃事务数&gt;0</li>
+<li>配置了sticky属性为true(Laravel5.5引入)且$recordsModified为true(曾经执行过修改语句)</li>
+<li>readPdo为空时(例如没有配置读写分离时不会初始化readPdo)</li>
+</ul>
+<h3 id="修改语句"><a href="#修改语句" class="headerlink" title="修改语句"></a>修改语句</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// delete类似</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">update</span><span class="params">($query, $bindings = [])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;affectingStatement($query, $bindings);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">affectingStatement</span><span class="params">($query, $bindings = [])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;run($query, $bindings, <span class="function"><span class="keyword">function</span> <span class="params">($me, $query, $bindings)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ($me-&gt;pretending()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 通过getPdo方法使用写Pdo</span></span><br><span class="line">        $statement = $me-&gt;getPdo()-&gt;prepare($query);</span><br><span class="line"></span><br><span class="line">        $statement-&gt;execute($me-&gt;prepareBindings($bindings));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 记录修改过</span></span><br><span class="line">        <span class="keyword">$this</span>-&gt;recordsHaveBeenModified(</span><br><span class="line">            ($count = $statement-&gt;rowCount()) &gt; <span class="number">0</span></span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> $count;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// insert或其他语句会执行到statement这里</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">statement</span><span class="params">($query, $bindings = [])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;run($query, $bindings, <span class="function"><span class="keyword">function</span> <span class="params">($me, $query, $bindings)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ($me-&gt;pretending()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        $bindings = $me-&gt;prepareBindings($bindings);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">$this</span>-&gt;recordsHaveBeenModified();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> $me-&gt;getPdo()-&gt;prepare($query)-&gt;execute($bindings);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-执行SQL"><a href="#4-执行SQL" class="headerlink" title="4. 执行SQL"></a>4. 执行SQL</h2><p>这一步就是去调PHP原生的PDO相关方法去执行SQL语句，然后封装结果,这里不再赘述。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -194,426 +245,105 @@
 		</ul>
 	</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
       
-        </div></section>
+
       
+
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/07/05/使用go-mysql-elasticsearch同步MySQL数据到ES/" class="archive-article-date">
-  	<time datetime="2020-07-05T12:55:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-07-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/07/05/使用go-mysql-elasticsearch同步MySQL数据到ES/">使用go-mysql-elasticsearch同步MySQL数据到ES</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ElasticSearch</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">MySQL</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
   </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/06/06/制作自己的composer包/" class="archive-article-date">
-  	<time datetime="2020-06-06T03:18:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/06/06/制作自己的composer包/">制作自己的composer包</a>
-    </h1>
-  
+</div>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">php</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">composer</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2021/01/20/Laravel读写分离原理/" alt="微信分享二维码">
+    </div>
+</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/04/07/OAuth2-0介绍与实践/" class="archive-article-date">
-  	<time datetime="2020-04-07T14:47:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/04/07/OAuth2-0介绍与实践/">OAuth2.0介绍与实践</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">OAuth2.0</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/03/31/Vim实用技巧/" class="archive-article-date">
-  	<time datetime="2020-03-31T13:25:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-31</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/31/Vim实用技巧/">Vim实用技巧</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Vim</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/03/01/Nginx信号与热部署/" class="archive-article-date">
-  	<time datetime="2020-02-29T17:19:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/03/01/Nginx信号与热部署/">Nginx信号与热部署</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/02/29/Postman-Host请求头不生效问题/" class="archive-article-date">
-  	<time datetime="2020-02-29T15:59:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/02/29/Postman-Host请求头不生效问题/">Postman Host请求头不生效问题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">postman</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/02/17/Nginx的server_name和location配置/" class="archive-article-date">
-  	<time datetime="2020-02-17T14:07:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/02/17/Nginx的server_name和location配置/">Nginx的server_name和location配置</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">server</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
+<div class="mask js-mask"></div>
       
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/05/03/Lucene初识及核心类介绍/" class="archive-article-date">
-  	<time datetime="2018-05-03T13:39:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-03</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/05/03/Lucene初识及核心类介绍/">Lucene初识及核心类介绍</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">搜索</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Lucene</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2020/07/05/使用go-mysql-elasticsearch同步MySQL数据到ES/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用go-mysql-elasticsearch同步MySQL数据到ES</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/04/JavaMail实现注册邮箱验证案例/" class="archive-article-date">
-  	<time datetime="2017-03-04T09:01:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-04</time>
-</a>
-        </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/04/JavaMail实现注册邮箱验证案例/">JavaMail实现注册邮箱验证案例</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Java</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Mail</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
+  
+
   
 
 
@@ -637,8 +367,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
