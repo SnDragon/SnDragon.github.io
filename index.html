@@ -154,28 +154,64 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2022/10/24/Go语言第一课学习笔记/">Go语言第一课学习笔记</a>
+      <a class="article-title" href="/2022/10/23/Go语言第一课学习笔记/">Go语言第一课学习笔记</a>
     </h1>
   
 
         
-        <a href="/2022/10/24/Go语言第一课学习笔记/" class="archive-article-date">
-  	<time datetime="2022-10-24T15:49:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-24</time>
+        <a href="/2022/10/23/Go语言第一课学习笔记/" class="archive-article-date">
+  	<time datetime="2022-10-23T15:41:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<p>title: Go语言第一课学习笔记<br>date: 2022-10-23 23:41:04</p>
-<h2 id="tags-“Go”"><a href="#tags-“Go”" class="headerlink" title="tags: [“Go”]"></a>tags: [“Go”]</h2><h2 id="Go历史"><a href="#Go历史" class="headerlink" title="Go历史"></a>Go历史</h2><p>很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。</p>
-<p><img src="https://static001.geekbang.org/resource/image/04/fa/042843f49a53faa6e208c76ef6ed75fa.png?wh=1920x505" alt="image"></p>
+        <h2 id="Go历史"><a href="#Go历史" class="headerlink" title="Go历史"></a>Go历史</h2><p>Go语言之父: <strong>Rob Pike</strong></p>
+<p>很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。</p>
+<p>Go语言发展里程碑:<br><img src="https://static001.geekbang.org/resource/image/04/fa/042843f49a53faa6e208c76ef6ed75fa.png?wh=1920x505" alt="image"></p>
 <p>Go 1.4 引入 internal 包机制，增加了 internal 目录</p>
-<h2 id="设计哲学"><a href="#设计哲学" class="headerlink" title="设计哲学"></a>设计哲学</h2><p>Go 语言的设计哲学总结为五点：简单、显式、组合、并发和面向工程</p>
+<h2 id="设计哲学"><a href="#设计哲学" class="headerlink" title="设计哲学"></a>设计哲学</h2><p>Go 语言的设计哲学总结为五点:</p>
+<ul>
+<li>简单<ul>
+<li>仅有 25 个关键字，主流编程语言最少</li>
+<li>内置垃圾收集，降低开发人员内存管理的心智负担</li>
+<li>首字母大小写决定可见性，无需通过额外关键字修饰</li>
+<li>变量初始为类型零值，避免以随机值作为初值的问题</li>
+<li>内置并发支持，简化并发程序设计</li>
+<li>原生提供完善的工具链，开箱即用</li>
+</ul>
+</li>
+<li>显式<ul>
+<li>显式类型转换</li>
+<li>显式的基于值比较的错误处理方案(返回error,开发者决定如何处理)</li>
+</ul>
+</li>
+<li><p>组合</p>
+<ul>
+<li>类型嵌入(垂直组合,本质上是一种“能力继承”)</li>
+<li>接口类型(水平组合,能力委托,降低耦合)<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// $GOROOT/src/io/ioutil/ioutil.go</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadAll</span><span class="params">(r io.Reader)</span><span class="params">([]<span class="keyword">byte</span>, error)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">函数 <span class="title">ReadAll</span> 通过 <span class="title">io</span>.<span class="title">Reader</span> 这个接口，将 <span class="title">io</span>.<span class="title">Reader</span> 的实现与 <span class="title">ReadAll</span> 所在的包低耦合地水平组合在一起了，从而达到从任意实现 <span class="title">io</span>.<span class="title">Reader</span> 的数据源读取所有数据的目的。</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>并发</p>
+<ul>
+<li>面向多核、原生支持并发</li>
+<li>go关键字轻松创建协程</li>
+<li>goroutine 调度的切换不用陷入（trap）操作系统内核层完成，代价很低。因此，一个 Go 程序中可以创建成千上万个并发的 goroutine</li>
+</ul>
+</li>
+<li>面向工程<ul>
+<li>重新设计编译单元和目标文件格式, 实现 Go 源码快速构建</li>
+<li>如果源文件导入它不使用的包，则程序将无法编译,可以保证在构建程序时不会编译额外的代码，从而最大限度地缩短编译时间</li>
+<li>去除包的循环依赖，循环依赖会在大规模的代码中引发问题</li>
+<li>增加类型别名（type alias），支持大规模代码库的重构</li>
+</ul>
+</li>
+</ul>
 <p>如果说一门编程语言是“自带电池”，则说明这门语言标准库功能丰富，多数功能不需要依赖外部的第三方包或库，Go 语言恰恰就是这类编程语言。</p>
         
-          <a class="article-more-a" href="/2022/10/24/Go语言第一课学习笔记/#more">more >></a>
+          <a class="article-more-a" href="/2022/10/23/Go语言第一课学习笔记/#more">more >></a>
         
       
 
@@ -184,11 +220,22 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Go</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2022/10/24/Go语言第一课学习笔记/">展开全文 >></a>
+          <a class="article-more-a" href="/2022/10/23/Go语言第一课学习笔记/">展开全文 >></a>
         </p>
       
 
@@ -1030,15 +1077,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">JDBC</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Mail</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1054,11 +1101,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
+                <a href="javascript:void(0)" class="js-tag color5">Mail</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1066,11 +1109,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">OAuth2.0</a>
+                <a href="javascript:void(0)" class="js-tag color2">server</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">server</a>
+                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1091,6 +1138,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">OAuth2.0</a>
               </li>
              
               <li class="article-tag-list-item">
