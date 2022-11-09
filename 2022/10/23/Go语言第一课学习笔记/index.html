@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://sndragon.com">
   <title>Go语言第一课学习笔记 | longerwu的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Go历史Go语言之父: Rob Pike 很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。 Go语言发展里程碑: Go 1.4 引入 internal 包机制，增加了 internal 目录 设计哲学Go 语言的设计哲学总结为五点:  简单 仅有 25 个关键字，主流编">
+  <meta name="description" content="Go历史Go语言之父: Rob Pike 很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。 Go语言发展里程碑: Go 1.4 引入 internal 包机制，增加了 internal 目录 设计哲学Go 语言的设计哲学总结为五点:">
 <meta name="keywords" content="Go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go语言第一课学习笔记">
 <meta property="og:url" content="http://sndragon.com/2022/10/23/Go语言第一课学习笔记/index.html">
 <meta property="og:site_name" content="longerwu的个人博客">
-<meta property="og:description" content="Go历史Go语言之父: Rob Pike 很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。 Go语言发展里程碑: Go 1.4 引入 internal 包机制，增加了 internal 目录 设计哲学Go 语言的设计哲学总结为五点:  简单 仅有 25 个关键字，主流编">
+<meta property="og:description" content="Go历史Go语言之父: Rob Pike 很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。 Go语言发展里程碑: Go 1.4 引入 internal 包机制，增加了 internal 目录 设计哲学Go 语言的设计哲学总结为五点:">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/04/fa/042843f49a53faa6e208c76ef6ed75fa.png?wh=1920x505">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/49/1b/49eb7aa0458d8ec6131d9e5661155f1b.jpeg?wh=1920x1080">
@@ -22,10 +22,10 @@
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/9c/77/9c663f2d88e2e53a8184669bf2338077.jpg?wh=1980x1080">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/2d/0b/2da4da70a5yy998bf635209642b5c80b.jpg?wh=1980x1080">
 <meta property="og:image" content="https://static001.geekbang.org/resource/image/22/21/22c37012e48157bdc9a71110bc314421.png?wh=1920x532">
-<meta property="og:updated_time" content="2022-11-09T15:20:31.973Z">
+<meta property="og:updated_time" content="2022-11-09T15:26:37.936Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Go语言第一课学习笔记">
-<meta name="twitter:description" content="Go历史Go语言之父: Rob Pike 很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。 Go语言发展里程碑: Go 1.4 引入 internal 包机制，增加了 internal 目录 设计哲学Go 语言的设计哲学总结为五点:  简单 仅有 25 个关键字，主流编">
+<meta name="twitter:description" content="Go历史Go语言之父: Rob Pike 很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。 Go语言发展里程碑: Go 1.4 引入 internal 包机制，增加了 internal 目录 设计哲学Go 语言的设计哲学总结为五点:">
 <meta name="twitter:image" content="https://static001.geekbang.org/resource/image/04/fa/042843f49a53faa6e208c76ef6ed75fa.png?wh=1920x505">
   
     <link rel="alternative" href="/atom.xml" title="longerwu的个人博客" type="application/atom+xml">
@@ -178,7 +178,7 @@
 <p>很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。</p>
 <p>Go语言发展里程碑:<br><img src="https://static001.geekbang.org/resource/image/04/fa/042843f49a53faa6e208c76ef6ed75fa.png?wh=1920x505" alt="image"></p>
 <p>Go 1.4 引入 internal 包机制，增加了 internal 目录</p>
-<h2 id="设计哲学"><a href="#设计哲学" class="headerlink" title="设计哲学"></a>设计哲学</h2><p>Go 语言的设计哲学总结为五点:</p>
+<h2 id="设计哲学"><a href="#设计哲学" class="headerlink" title="设计哲学"></a>设计哲学</h2><p>Go 语言的设计哲学总结为五点:<br><a id="more"></a></p>
 <ul>
 <li>简单<ul>
 <li>仅有 25 个关键字，主流编程语言最少</li>
@@ -217,7 +217,6 @@
 </li>
 </ul>
 <p>如果说一门编程语言是“自带电池”，则说明这门语言标准库功能丰富，多数功能不需要依赖外部的第三方包或库，Go 语言恰恰就是这类编程语言。</p>
-<a id="more"></a>
 <h2 id="典型目录结构"><a href="#典型目录结构" class="headerlink" title="典型目录结构"></a>典型目录结构</h2><h3 id="可执行程序项目"><a href="#可执行程序项目" class="headerlink" title="可执行程序项目"></a>可执行程序项目</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$tree -F exe-layout </span><br><span class="line">exe-layout</span><br><span class="line">├── cmd/</span><br><span class="line">│   ├── app1/</span><br><span class="line">│   │   └── main.<span class="keyword">go</span></span><br><span class="line">│   └── app2/</span><br><span class="line">│       └── main.<span class="keyword">go</span></span><br><span class="line">├── <span class="keyword">go</span>.mod</span><br><span class="line">├── <span class="keyword">go</span>.sum</span><br><span class="line">├── internal/</span><br><span class="line">│   ├── pkga/</span><br><span class="line">│   │   └── pkg_a.<span class="keyword">go</span></span><br><span class="line">│   └── pkgb/</span><br><span class="line">│       └── pkg_b.<span class="keyword">go</span></span><br><span class="line">├── pkg1/</span><br><span class="line">│   └── pkg1.<span class="keyword">go</span></span><br><span class="line">├── pkg2/</span><br><span class="line">│   └── pkg2.<span class="keyword">go</span></span><br><span class="line">└── vendor/</span><br></pre></td></tr></table></figure>
 <h3 id="库项目"><a href="#库项目" class="headerlink" title="库项目"></a>库项目</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$tree -F lib-layout </span><br><span class="line">lib-layout</span><br><span class="line">├── <span class="keyword">go</span>.mod</span><br><span class="line">├── internal/</span><br><span class="line">│   ├── pkga/</span><br><span class="line">│   │   └── pkg_a.<span class="keyword">go</span></span><br><span class="line">│   └── pkgb/</span><br><span class="line">│       └── pkg_b.<span class="keyword">go</span></span><br><span class="line">├── pkg1/</span><br><span class="line">│   └── pkg1.<span class="keyword">go</span></span><br><span class="line">└── pkg2/</span><br><span class="line">    └── pkg2.<span class="keyword">go</span></span><br></pre></td></tr></table></figure>
 <h2 id="构建演进"><a href="#构建演进" class="headerlink" title="构建演进"></a>构建演进</h2><p>Go 程序的构建过程就是确定包版本、编译包以及将编译后得到的目标文件链接在一起的过程<br>Go 语言的构建模式历经了三个迭代和演化过程:</p>
@@ -559,6 +558,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Mail</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Laravel</a>
               </li>
              
@@ -571,7 +574,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Mail</a>
+                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -583,15 +590,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Spring</a>
+                <a href="javascript:void(0)" class="js-tag color4">OAuth2.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -603,19 +602,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Spring</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">OAuth2.0</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Vim</a>
               </li>
              
               <li class="article-tag-list-item">
