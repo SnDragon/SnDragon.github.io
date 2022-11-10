@@ -18,6 +18,7 @@ Go 1.4 引入 internal 包机制，增加了 internal 目录
 
 ## 设计哲学
 Go 语言的设计哲学总结为五点:
+<!--more-->
 * 简单
     * 仅有 25 个关键字，主流编程语言最少
     * 内置垃圾收集，降低开发人员内存管理的心智负担
@@ -49,7 +50,6 @@ func ReadAll(r io.Reader)([]byte, error)
 
 如果说一门编程语言是“自带电池”，则说明这门语言标准库功能丰富，多数功能不需要依赖外部的第三方包或库，Go 语言恰恰就是这类编程语言。
 
-<!--more-->
 ## 典型目录结构
 ### 可执行程序项目
 ```go
@@ -294,49 +294,6 @@ outerloop:
     }
 }
 ```
-
-## switch
-无论 default 分支出现在什么位置，它都只会在所有 case 都没有匹配上的情况下才会被执行
-
-```go
-func case1() int {
-    println("eval case1 expr")
-    return 1
-}
-
-func case2() int {
-    println("eval case2 expr")
-    return 2
-}
-
-func switchexpr() int {
-    println("eval switch expr")
-    return 1
-}
-
-func main() {
-    switch switchexpr() {
-    case case1():
-        println("exec case1")
-        fallthrough
-    case case2():
-        println("exec case2")
-        fallthrough
-    default:
-        println("exec default")
-    }
-}
-```
-```go
-eval switch expr
-eval case1 expr
-exec case1
-exec case2
-exec default
-```
-由于 fallthrough 的存在，Go 不会对 case2 的表达式做求值操作，而会直接执行 case2 对应的代码分支
-
-
 
 ## receiver
 receiver 参数的基类型本身不能为指针类型或接口类型
