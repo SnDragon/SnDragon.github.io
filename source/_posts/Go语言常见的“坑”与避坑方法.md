@@ -28,7 +28,7 @@ func main() {
 4 5
 4 5
 ```
-<!--more-->
+<!-- more -->
 而不是预期的(由于goroutine调度不一定按这个顺序):
 ```
 0 1
@@ -342,10 +342,182 @@ func (t Time) AddDate(years int, months int, days int) Time {
 解决方案:
 如果增减之后的日期不合法（当月不存在本日），需要做一些特殊处理,可以参考开源库: [go.timeconv](https://github.com/Andrew-M-C/go.timeconv/blob/master/timeconv.go#L18)
 ## defer
-TODO 
+### defer与return的顺序
+```go
+package main
+
+import "fmt"
+
+func deferFunc() int {
+    fmt.Println("defer func called")
+    return 0
+}
+
+func returnFunc() int {
+    fmt.Println("return func called")
+    return 0
+}
+
+func returnAndDefer() int {
+
+    defer deferFunc()
+
+    return returnFunc()
+}
+
+func main() {
+    returnAndDefer()
+}
+```
+输出结果:
+```
+return func called
+defer func called
+```
+结论:return之后的语句先执行，defer后的语句后执行
+
+再看一个例子:
+```go
+package main
+
+import "fmt"
+
+func returnButDefer() (t int) {  //t初始化0， 并且作用域为该函数全域
+
+    defer func() {
+        t = t * 10
+    }()
+
+    return 1
+}
+
+func main() {
+    fmt.Println(returnButDefer())
+}
+```
+> 该returnButDefer()本应的返回值是1，但是在return之后，又被defer的匿名func函数执行，所以t=t*10被执行，最后returnButDefer()返回给上层main()的结果为10
+
+### defer中包含panic
+```go
+package main
+
+import (
+    "fmt"
+)
+
+func main()  {
+
+    defer func() {
+       if err := recover(); err != nil{
+           fmt.Println(err)
+       }else {
+           fmt.Println("fatal")
+       }
+    }()
+
+    defer func() {
+        panic("defer panic")
+    }()
+
+    panic("panic")
+}
+```
+结果:
+```
+defer panic
+```
+panic仅有最后一个可以被revover捕获,defer中若发生panic,会覆盖之前抛出的panic
 ## 并发
+### 共享资源并发访问
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+func main() {
+	var wg sync.WaitGroup
+	intSlice := []int{1, 2, 3, 4, 5}
+	wg.Add(len(intSlice))
+	ans := 0
+	for _, v := range intSlice {
+		v := v
+		go func() {
+			defer wg.Done()
+			ans += v
+		}()
+	}
+	wg.Wait()
+	fmt.Printf("ans:%v", ans)
+	return
+}
+```
+由于ans += v并非原子操作,因此结果不一定是15
+
+解决方案: 引入Atomic/Mutext/Channel等同步原语
+
 ### 副本问题
+```go
+import (
+	"sync"
+	"sync/atomic"
+)
+
+func main() {
+
+	var wg sync.WaitGroup
+
+	ans := int64(0)
+	for i := 0; i < 3; i++ {
+		wg.Add(1)
+		go newGoRoutine(wg, &ans)
+	}
+	wg.Wait()
+}
+
+func newGoRoutine(wg sync.WaitGroup, i *int64) {
+	defer wg.Done()
+	atomic.AddInt64(i, 1)
+	return
+}
+
+```
+结果会死锁,原因是传给newGoRoutine函数的是sync.WaitGroup对象的值,而值传递导致执行wg.Done方法时原始WaitGroup对象相应的state字段不会对应修改
+
+解决方案: 传指针
 
 ### 不可重入导致死锁问题
+```go
+import (
+	"fmt"
+	"sync"
+)
 
+var lock sync.Mutex
 
+func main() {
+	wg := sync.WaitGroup{}
+	wg.Add(10)
+	for i := 0; i < 10; i++ {
+		go func(i int) {
+			defer wg.Done()
+			lock.Lock()
+			defer lock.Unlock()
+			fmt.Printf("goroutine %v get the lock\n", i)
+			callOtherFunc()
+		}(i)
+	}
+	wg.Wait()
+}
+
+func callOtherFunc() {
+	lock.Lock()
+	defer lock.Unlock()
+	fmt.Println("callOtherFunc...")
+}
+```
+上述代码会导致死锁,原因是sync.Mutex不是可重入锁(go原生也没提供可重入锁),因此callOtherFunc里再次获取锁会阻塞,最终导致死锁
+
+解决方案: callOtherFunc不再获取锁,或对sync.Mutex作二次封装支持可重入锁
