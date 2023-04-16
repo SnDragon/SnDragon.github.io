@@ -26,7 +26,11 @@
 <meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/es_basic.jpg">
 <meta property="og:image" content="https://www.elastic.co/guide/cn/elasticsearch/guide/current/images/elas_0203.png">
 <meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/cerebro.jpg">
-<meta property="og:updated_time" content="2023-04-16T08:32:49.322Z">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/es_idex.jpg">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/lucene_idx.jpg">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/query_field_not_indexed.jpg">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/analyzer.jpg">
+<meta property="og:updated_time" content="2023-04-16T14:37:50.780Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初识Elasticsearch">
 <meta name="twitter:description" content="Elasticsearch 是一个分布式、RESTful 风格的搜索和数据分析引擎。 起源Lucene是Doug Cutting(Hadoop之父)于1999年创建的基于Java语言开发的搜索引擎类库,并于2005年成为Apache顶级开源项目,具有高性能、易扩展的特点。但Lucene也存在以下局限:  只能基于Java语言开发 类库的接口学习曲线陡峭 原生并不支持水平扩展  于是Shay Ba">
@@ -304,6 +308,55 @@
 <h4 id="在开发机上运行多个ES实例"><a href="#在开发机上运行多个ES实例" class="headerlink" title="在开发机上运行多个ES实例"></a>在开发机上运行多个ES实例</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bin/elasticsearch -E node.name=node1 -E cluster.name=longerwu-es -E path.data=node1_data -d</span><br><span class="line">bin/elasticsearch -E node.name=node2 -E cluster.name=longerwu-es -E path.data=node2_data -d</span><br></pre></td></tr></table></figure>
 <p>查看集群节点:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET /_cat/nodes</span><br><span class="line"></span><br><span class="line">127.0.0.1 22 97 1 0.71 0.38 0.15 mdi * node1</span><br><span class="line">127.0.0.1 28 97 1 0.71 0.38 0.15 mdi - node2</span><br></pre></td></tr></table></figure></p>
 <h4 id="Cerebro"><a href="#Cerebro" class="headerlink" title="Cerebro"></a>Cerebro</h4><p><a href="https://github.com/lmenezes/cerebro" target="_blank" rel="noopener">Cerebro</a>:一个开源的elasticsearch web管理工具,提供了可视化界面以方便查看ES集群情况<br><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/cerebro.jpg" alt="cerebro"></p>
+<h2 id="倒排索引-Inverted-index"><a href="#倒排索引-Inverted-index" class="headerlink" title="倒排索引(Inverted index)"></a>倒排索引(Inverted index)</h2><h3 id="正排索引vs倒排索引"><a href="#正排索引vs倒排索引" class="headerlink" title="正排索引vs倒排索引"></a>正排索引vs倒排索引</h3><ul>
+<li>正排索引: 文档id到文档内容和单词的关联</li>
+<li>倒排索引: 单词到文档id的关系</li>
+</ul>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/es_idex.jpg" alt="索引"></p>
+<h3 id="倒排索引的核心组成"><a href="#倒排索引的核心组成" class="headerlink" title="倒排索引的核心组成"></a>倒排索引的核心组成</h3><ul>
+<li><p>单词词典（Term Dictionary）：记录所有文档的单词，记录单词到倒排列表的关联关系</p>
+<blockquote>
+<p>单词词典一般比较大，可以通过 B+ 树 或 哈希拉链法实现，以满足高性能的插入与查询</p>
+</blockquote>
+</li>
+<li><p>倒排列表（Posting List）：记录了单词对应的文档结合，由倒排索引项（Posting）组成：</p>
+<ul>
+<li>文档 ID</li>
+<li>词频 TF(Term Frequency)：该单词在文档中出现的次数，用于相关性评分</li>
+<li>位置（Position）：单词在文档中分词的位置。用于语句搜索（Phrase Query）</li>
+<li>偏移（Offset）：记录单词的开始结束位置，实现高亮显示</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/lucene_idx.jpg" alt="倒排索引结构"><br>ES 的 JSON 文档中的每个字段，默认都有自己的倒排索引,可以针对某些字段不做索引(在mapping中设置index为false)</p>
+<ul>
+<li>优点：节省存储空间</li>
+<li>缺点：字段无法被搜索</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">PUT test_inverted_index</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"mappings"</span>: &#123;</span><br><span class="line">    <span class="string">"properties"</span>: &#123;</span><br><span class="line">      <span class="string">"field1"</span>: &#123;</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"text"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">"field2"</span>: &#123;</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"text"</span>,</span><br><span class="line">        <span class="string">"index"</span>: <span class="literal">false</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT test_inverted_index/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"field1"</span>: <span class="string">"hello world"</span>,</span><br><span class="line">  <span class="string">"field2"</span>: <span class="string">"hello world"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET test_inverted_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"query"</span>: &#123;</span><br><span class="line">    <span class="string">"term"</span>: &#123;</span><br><span class="line">      <span class="string">"field1"</span>: <span class="string">"hello"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">GET test_inverted_index/_search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"query"</span>: &#123;</span><br><span class="line">    <span class="string">"term"</span>: &#123;</span><br><span class="line">      <span class="string">"field2"</span>: <span class="string">"hello"</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/query_field_not_indexed.jpg" alt="查询未被索引的字段"></p>
+<h2 id="分词"><a href="#分词" class="headerlink" title="分词"></a>分词</h2><h3 id="Analysis和Analyzer"><a href="#Analysis和Analyzer" class="headerlink" title="Analysis和Analyzer"></a>Analysis和Analyzer</h3><ul>
+<li>Analysis, 也叫分词，是将文本转换为一系列单词的过程。</li>
+<li>Analyzer, 分词器，Analysis是通过Analyzer实现的</li>
+</ul>
+<h3 id="Analyzer组成"><a href="#Analyzer组成" class="headerlink" title="Analyzer组成"></a>Analyzer组成</h3><ol>
+<li>Charater Filter: 针对原始文本处理，例如去掉html</li>
+<li>Tokenizer: 按照规则切分为单词</li>
+<li>Toker Filter: 对切分的单词进行加工，大小写转换，删除stopwords,增加同义词等。</li>
+</ol>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/elk/analyzer.jpg" alt="Analyzer组成"></p>
+<p>ES有很多内置的<a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.1/analysis-analyzers.html" target="_blank" rel="noopener">Analyser</a>,也支持自定义Analyzer</p>
+<h3 id="使用-analyze-API"><a href="#使用-analyze-API" class="headerlink" title="使用_analyze API"></a>使用_analyze API</h3><ul>
+<li><p>直接指定Analyzer进行测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"analyzer"</span>: <span class="string">"standard"</span>,</span><br><span class="line">  <span class="string">"text"</span>: <span class="string">"Elasticsearch Essentials"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"tokens"</span> : [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"token"</span> : <span class="string">"elasticsearch"</span>,</span><br><span class="line">      <span class="string">"start_offset"</span> : 0,</span><br><span class="line">      <span class="string">"end_offset"</span> : 13,</span><br><span class="line">      <span class="string">"type"</span> : <span class="string">"&lt;ALPHANUM&gt;"</span>,</span><br><span class="line">      <span class="string">"position"</span> : 0</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">"token"</span> : <span class="string">"essentials"</span>,</span><br><span class="line">      <span class="string">"start_offset"</span> : 14,</span><br><span class="line">      <span class="string">"end_offset"</span> : 24,</span><br><span class="line">      <span class="string">"type"</span> : <span class="string">"&lt;ALPHANUM&gt;"</span>,</span><br><span class="line">      <span class="string">"position"</span> : 1</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>🈯️定索引的字段进行测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">DELETE analyzer_idx</span><br><span class="line">PUT analyzer_idx</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"mappings"</span>: &#123;</span><br><span class="line">    <span class="string">"properties"</span>: &#123;</span><br><span class="line">      <span class="string">"name"</span>: &#123;</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"text"</span>,</span><br><span class="line">        <span class="string">"analyzer"</span>: <span class="string">"ik_smart"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST analyzer_idx/_analyze</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"field"</span>: <span class="string">"name"</span>,</span><br><span class="line">  <span class="string">"text"</span>: <span class="string">"中华人民共和国国歌"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自定义分词器进行测试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST _analyze</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"tokenizer"</span>: <span class="string">"standard"</span>,</span><br><span class="line">  <span class="string">"filter"</span>: [<span class="string">"uppercase"</span>],</span><br><span class="line">  <span class="string">"text"</span>: <span class="string">"master elasticsearch"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
       
 
@@ -537,7 +590,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Mail</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -550,18 +615,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">读写分离</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -585,6 +638,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Spring</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
               </li>
              
@@ -593,23 +662,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
+                <a href="javascript:void(0)" class="js-tag color4">php</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Spring</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Vim</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">短链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">ES</a>
+                <a href="javascript:void(0)" class="js-tag color4">composer</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -617,11 +674,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">php</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">composer</a>
+                <a href="javascript:void(0)" class="js-tag color3">短链</a>
               </li>
             
             <div class="clearfix"></div>
