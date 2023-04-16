@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/shorturl_mind.png">
 <meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/short_url_flow_chart.png">
 <meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/short_url_redirect.png">
-<meta property="og:updated_time" content="2022-12-14T14:02:00.904Z">
+<meta property="og:updated_time" content="2022-12-14T14:31:13.953Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Go语言开发短地址服务">
 <meta name="twitter:description" content="简介什么是短地址(短链)服务? 可以将原本一大串很长的地址缩短到一个很短的地址，用户访问这个短地址可以重定向到原本的长地址  比较著名的短链域名有腾讯的url.cn，微博的t.cn等，也有很多公司提供了免费/收费的短链接开放API，感兴趣的可以自行网上搜索。 使用场景 提升用户体验, 例如淘宝商品详情url不可避免地会跟着很多参数，相较繁长的字符串, 使用简短的链接分享对用户来说观感更好 体现品">
@@ -253,11 +253,11 @@
 <p>修改configs/shorturl/app.yaml的配置<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">base_url:</span> <span class="attr">http://myurl.cn/</span></span><br><span class="line"><span class="attr">redis_config:</span></span><br><span class="line"><span class="attr">  db_host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></span><br><span class="line"><span class="attr">  db_port:</span> <span class="number">6379</span></span><br><span class="line"><span class="attr">  db_passwd:</span></span><br><span class="line"><span class="attr">  db:</span> <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
 <h3 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h3><p>进入项目根目录,启动服务:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ make run_short_url</span><br><span class="line">go build -o build/shorturl ./cmd/shorturl  &amp;&amp; ./build/shorturl</span><br><span class="line">2022/12/14 20:58:47 resource.go:35: confFile: configs/shorturl/app.yaml</span><br><span class="line">2022/12/14 20:58:47 resource.go:44: app config init succeed, conf: &amp;&#123;BaseHost:127.0.0.1 BasePort:80 RedisConfig:&#123;DBHost:127.0.0.1 DBPort:6379 DBPasswd: DB:0&#125;&#125;</span><br><span class="line">2022/12/14 20:58:47 app.go:40: App run <span class="keyword">in</span> :80...</span><br></pre></td></tr></table></figure></p>
 <h3 id="长链转短链接口"><a href="#长链转短链接口" class="headerlink" title="长链转短链接口"></a>长链转短链接口</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST \</span><br><span class="line">  http://myurl.cn/api/shorten \</span><br><span class="line">  -H <span class="string">'cache-control: no-cache'</span> \</span><br><span class="line">  -H <span class="string">'content-type: application/json'</span> \</span><br><span class="line">  -d <span class="string">'&#123;"url":"https://www.baidu.com?name=SnDragon","expire_seconds":100&#125;'</span></span><br></pre></td></tr></table></figure>
-<p>返回:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;code&quot;: 0,</span><br><span class="line">    &quot;msg&quot;: &quot;ok&quot;,</span><br><span class="line">    &quot;short_url&quot;: &quot;http://myurl.cn/4C99&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>返回:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"code"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"msg"</span>: <span class="string">"ok"</span>,</span><br><span class="line">    <span class="attr">"short_url"</span>: <span class="string">"http://myurl.cn/4C99"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><p>浏览器打开<code>http://myurl.cn/4C99</code></p>
 <p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/short_url_redirect.png" alt="重定向截图" width="800" height="500"></p>
 <h3 id="查看详情"><a href="#查看详情" class="headerlink" title="查看详情"></a>查看详情</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -X GET \</span><br><span class="line">  &apos;http://myurl.cn/api/info?sid=4C99&apos; \</span><br><span class="line">  -H &apos;cache-control: no-cache&apos; \</span><br><span class="line">  -H &apos;postman-token: 82323d30-14b1-bac8-8198-2632fbe008e1&apos;</span><br></pre></td></tr></table></figure>
-<p>返回:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;code&quot;: 0,</span><br><span class="line">    &quot;msg&quot;: &quot;ok&quot;,</span><br><span class="line">    &quot;info&quot;: &#123;</span><br><span class="line">        &quot;origin_url&quot;: &quot;https://www.baidu.com?name=SnDragon&quot;,</span><br><span class="line">        &quot;created_at&quot;: 1671023283,</span><br><span class="line">        &quot;expired_at&quot;: 1671023383,</span><br><span class="line">        &quot;counter&quot;: 1</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>返回:<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"code"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"msg"</span>: <span class="string">"ok"</span>,</span><br><span class="line">    <span class="attr">"info"</span>: &#123;</span><br><span class="line">        <span class="attr">"origin_url"</span>: <span class="string">"https://www.baidu.com?name=SnDragon"</span>,</span><br><span class="line">        <span class="attr">"created_at"</span>: <span class="number">1671023283</span>,</span><br><span class="line">        <span class="attr">"expired_at"</span>: <span class="number">1671023383</span>,</span><br><span class="line">        <span class="attr">"counter"</span>: <span class="number">1</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="仓库地址"><a href="#仓库地址" class="headerlink" title="仓库地址"></a>仓库地址</h3><ul>
 <li><a href="https://github.com/SnDragon/go-treasure-chest" target="_blank" rel="noopener">https://github.com/SnDragon/go-treasure-chest</a></li>
 </ul>
@@ -369,6 +369,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2022/12/14/Redis架构演化之路/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Redis架构演化之路
+        
+      </div>
+    </a>
+  
   
     <a href="/2022/11/11/初识Elasticsearch/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">初识Elasticsearch</div>
@@ -414,7 +423,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2022 longerwu
+    		&copy; 2023 longerwu
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -481,10 +490,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
@@ -494,18 +499,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Mail</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -521,15 +514,27 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">搜索</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Lucene</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">server</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">OAuth2.0</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">短链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Spring</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -549,11 +554,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">server</a>
+                <a href="javascript:void(0)" class="js-tag color1">Redis</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">Spring</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Vim</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">短链</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ES</a>
               </li>
              
               <li class="article-tag-list-item">
