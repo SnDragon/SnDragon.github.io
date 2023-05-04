@@ -6,18 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sndragon.com">
-  <title>Tag: 数据库 | longerwu的个人博客</title>
+  <title>分布式基本概念 | longerwu的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="longerwu的个人博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="longerwu的个人博客">
-<meta property="og:url" content="http://sndragon.com/tags/数据库/index.html">
+  <meta name="description" content="分布式系统是一个硬件或软件组件分布在不同计算机上，彼此之间仅仅通过消息传递进行通信和协调的系统。 CAP理论 对于一个分布式系统而言，无法同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance)。  一致性对某个指定的客户端来说，读操作保证能够返回最新的写操作结果，强调数据正确 可用性非故障的节点在合理的时间内返回合理的响应">
+<meta name="keywords" content="分布式,BASE,CAP,分布式事务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式基本概念">
+<meta property="og:url" content="http://sndragon.com/2023/05/04/分布式基本概念/index.html">
 <meta property="og:site_name" content="longerwu的个人博客">
-<meta property="og:description" content="longerwu的个人博客">
+<meta property="og:description" content="分布式系统是一个硬件或软件组件分布在不同计算机上，彼此之间仅仅通过消息传递进行通信和协调的系统。 CAP理论 对于一个分布式系统而言，无法同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance)。  一致性对某个指定的客户端来说，读操作保证能够返回最新的写操作结果，强调数据正确 可用性非故障的节点在合理的时间内返回合理的响应">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%9845%E8%AE%B2-%E5%AE%8C/assets/CgoCgV6elbmATRwxAAFU68JiQU0596.png">
+<meta property="og:image" content="https://ljchen.net/uploads/3pc-flow.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/objcoding/md-picture/master/img/20220116160157.png">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/1c/33/1cc7514e341fab7bd7044b37285f4433.jpg?wh=1142*785">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/12/13/122bdf34957c6277352ea51c43552213.png?wh=3094*1824">
+<meta property="og:updated_time" content="2023-05-04T10:36:37.243Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="longerwu的个人博客">
-<meta name="twitter:description" content="longerwu的个人博客">
+<meta name="twitter:title" content="分布式基本概念">
+<meta name="twitter:description" content="分布式系统是一个硬件或软件组件分布在不同计算机上，彼此之间仅仅通过消息传递进行通信和协调的系统。 CAP理论 对于一个分布式系统而言，无法同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance)。  一致性对某个指定的客户端来说，读操作保证能够返回最新的写操作结果，强调数据正确 可用性非故障的节点在合理的时间内返回合理的响应">
+<meta name="twitter:image" content="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%9845%E8%AE%B2-%E5%AE%8C/assets/CgoCgV6elbmATRwxAAFU68JiQU0596.png">
   
     <link rel="alternative" href="/atom.xml" title="longerwu的个人博客" type="application/atom+xml">
   
@@ -145,68 +153,299 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-分布式基本概念" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2021" class="archive-year">2021</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2021/01/20/Laravel读写分离原理/" class="archive-article-date">
-  	<time datetime="2021-01-20T15:31:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-01-20</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2021/01/20/Laravel读写分离原理/">Laravel读写分离原理</a>
+    <h1 class="article-title" itemprop="name">
+      分布式基本概念
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2023/05/04/分布式基本概念/" class="archive-article-date">
+  	<time datetime="2023-05-04T09:16:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>分布式系统是一个硬件或软件组件分布在不同计算机上，彼此之间仅仅通过消息传递进行通信和协调的系统。</p>
+<h2 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h2><blockquote>
+<p>对于一个分布式系统而言，无法同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance)。</p>
+</blockquote>
+<h3 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h3><p>对某个指定的客户端来说，读操作保证能够返回最新的写操作结果，强调<strong>数据正确</strong></p>
+<h3 id="可用性"><a href="#可用性" class="headerlink" title="可用性"></a>可用性</h3><p>非故障的节点在<strong>合理</strong>的时间内返回合理的响应（不是错误和超时的响应）。<br>强调的是服务可用，但不保证数据正确。</p>
+<h3 id="分区容错性"><a href="#分区容错性" class="headerlink" title="分区容错性"></a>分区容错性</h3><p>当节点间出现任意数量的消息丢失或高延迟(网络分区)的时候，系统仍然在继续工作。</p>
+<p>强调的是集群对分区故障的容错能力<br><a id="more"></a></p>
+<blockquote>
+<p>在不存在网络分区的情况下，也就是分布式系统正常运行时（这也是系统在绝大部分时候所处的状态），就是说在不需要 P 时，C 和 A 能够同时保证。只有当发生分区故障的时候，也就是说需要 P 时，才会在 C 和 A 之间做出选择。而且如果读操作会读到旧数据，影响到了系统运行或业务运行（也就是说会有负面的影响），推荐选择 C，否则选 A。</p>
+</blockquote>
+<h2 id="ACID与分布式事务"><a href="#ACID与分布式事务" class="headerlink" title="ACID与分布式事务"></a>ACID与分布式事务</h2><h3 id="ACID"><a href="#ACID" class="headerlink" title="ACID"></a>ACID</h3><p>事务需要具备的4个基本特性:</p>
+<ul>
+<li>原子性（Atomicity）：一个事务（transaction）中的所有操作，或者全部完成，或者全部不完成，不会结束在中间某个环节。事务在执行过程中发生错误，会被回滚（Rollback）到事务开始前的状态，就像这个事务从来没有执行过一样。即，事务不可分割、不可约简。</li>
+<li>一致性（Consistency）：在事务开始之前和事务结束以后，数据库的完整性没有被破坏。这表示写入的资料必须完全符合所有的预设约束、触发器、级联回滚等。</li>
+<li>事务隔离（Isolation）：数据库允许多个并发事务同时对其数据进行读写和修改的能力，隔离性可以防止多个事务并发执行时由于交叉执行而导致数据的不一致。事务隔离分为不同级别，包括未提交读（Read uncommitted）、提交读（read committed）、可重复读（repeatable read）和串行化（Serializable）。</li>
+<li>持久性（Durability）：事务处理结束后，对数据的修改就是永久的，即便系统故障也不会丢失</li>
+</ul>
+<blockquote>
+<p>分布式系统涉及多个节点间的操作。加锁、时间序列等机制，只能保证单个节点上操作的 ACID 特性，无法保证节点间操作的 ACID 特性。</p>
+</blockquote>
+<h3 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h3><h4 id="2PC-二阶段提交协议"><a href="#2PC-二阶段提交协议" class="headerlink" title="2PC(二阶段提交协议)"></a>2PC(二阶段提交协议)</h4><p>角色: 协调者+参与者</p>
+<ul>
+<li>第一阶段（提交请求，又称投票阶段）</li>
+<li>第二阶段（提交执行阶段，又称完成阶段）<br><img src="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%9845%E8%AE%B2-%E5%AE%8C/assets/CgoCgV6elbmATRwxAAFU68JiQU0596.png" alt="两阶段提交"></li>
+</ul>
+<blockquote>
+<p>二阶段提交协议最早是用来实现数据库的分布式事务的，不过现在最常用的协议是 XA 协议。这个协议是 X/Open 国际联盟基于二阶段提交协议提出的，也叫作 X/Open Distributed Transaction Processing（DTP）模型，比如 MySQL 就是通过 MySQL XA 实现了分布式事务。</p>
+</blockquote>
+<ul>
+<li>优点:尽量保证了数据的<strong>强一致性</strong></li>
+<li>缺点：<ol>
+<li>单点故障问题，协调者挂了，尤其在第二阶段的时候参与者资源都锁着时候影响更大。</li>
+<li>性能问题: 所有节点在执行时是同步阻塞的</li>
+<li>数据不一致问题，在第二个阶段，如果发生局部网络问题，一部分事务参与者收到了提交消息，另一部分事务参与者没收到提交消息，那么就会导致节点间数据的不一致问题。</li>
+</ol>
+</li>
+</ul>
+<h4 id="3PC-三阶段提交协议"><a href="#3PC-三阶段提交协议" class="headerlink" title="3PC(三阶段提交协议)"></a>3PC(三阶段提交协议)</h4><blockquote>
+<p>在两阶段提交的基础上增加了CanCommit阶段，并引入了超时机制。一旦事务参与者迟迟没有收到协调者的Commit请求，就会自动进行本地commit，这样相对有效地解决了协调者单点故障的问题。<br><img src="https://ljchen.net/uploads/3pc-flow.png" alt="三阶段提交"></p>
+</blockquote>
+<ul>
+<li>CanCommit: 只负责对操作条件的校验，不做其它</li>
+<li>PreCommit: 负责锁资源、执行、写redo和undo日志，但不提交</li>
+<li>DoCommit: 正常完成操作，释放资源</li>
+</ul>
+<blockquote>
+<p>从两阶段提交到三阶段提交，通过拆分了prepare后，可以在cancommit阶段就能最大概率快速确定该次事务是否能够执行。一旦所有参与者都返回yes后，才通知各个参与者锁定资源；这样就避免了两阶段提交中，一上来各自就开始锁定资源，然后发现某个参与者有问题后又通知各自在rollback操作中去释放资源的补救措施。</p>
+</blockquote>
+<p>优点：</p>
+<ol>
+<li>参与者超时机制，不会再傻等。</li>
+<li>增加询问阶段不会直接锁资源</li>
+<li>解决协调者和个别参与者一起挂了之后，选择上线不知该提交还是回滚的问题</li>
+</ol>
+<p>缺点</p>
+<ol>
+<li>多了一步、耗时更多</li>
+<li>网络分区情况下还是有数据不一致问题</li>
+</ol>
+<h4 id="TCC（Try-Confirm-Cancel）"><a href="#TCC（Try-Confirm-Cancel）" class="headerlink" title="TCC（Try-Confirm-Cancel）"></a>TCC（Try-Confirm-Cancel）</h4><p>TCC 是 Try（预留）、Confirm（确认）、Cancel（撤销） 3 个操作的简称，它包含了预留、确认或撤销这 2 个阶段。</p>
+<p><img src="https://raw.githubusercontent.com/objcoding/md-picture/master/img/20220116160157.png" alt="TCC"></p>
+<blockquote>
+<p>TCC 本质上是<strong>补偿事务</strong>，它的核心思想是针对每个操作都要注册一个与其对应的确认操作和补偿操作（也就是撤销操作）。 它是一个业务层面的协议，你也可以将 TCC 理解为编程模型，TCC 的 3 个操作是需要在业务代码中编码实现的，为了实现一致性，确认操作和补偿操作必须是等幂的，因为这 2 个操作可能会失败重试。另外，TCC 不依赖于数据库的事务，而是在业务中实现了分布式事务，这样能减轻数据库的压力，但对业务代码的入侵性也更强，实现的复杂度也更高</p>
+</blockquote>
+<p> 优点：</p>
+<ol>
+<li>基于业务，不需要占用阻塞数据库宝贵资源</li>
+<li>基于业务也更加灵活</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li>业务侵入性大</li>
+<li>实现比较麻烦</li>
+<li>需要保证cc的幂等<h3 id="SAGA事务"><a href="#SAGA事务" class="headerlink" title="SAGA事务"></a>SAGA事务</h3></li>
+</ol>
+<h2 id="BASE理论"><a href="#BASE理论" class="headerlink" title="BASE理论"></a>BASE理论</h2><ul>
+<li>基本可用（Basically Available）：分布式系统在出现不可预知故障时，允许牺牲部分可用性(如响应时间/功能降级等)</li>
+<li>软状态（Soft State）：允许系统中的数据存在中间状态，并认为该中间状态的存在不会影响系统的整体可用性</li>
+<li>最终一致性（Eventually Consistent）：系统中所有的数据副本，在经过一段时间的同步后，最终能够到达一个一致的状态。</li>
+</ul>
+<p>基本可用实现方法:</p>
+<ol>
+<li>流量错峰（不同地区售票时间错峰出售）</li>
+<li>异步处理（买票排队，基于队列先收到用户买票请求，排队异步处理，延迟响应）</li>
+<li>服务降级（看到非实时数据，采用缓存数据提供服务）</li>
+<li>过载保护（熔断/限流，直接拒绝掉一部分请求，或者当请求队列满了，移除一部分请求，保证整体系统可用）</li>
+<li>故障隔离（出现故障，做到故障隔离，避免影响其他服务）</li>
+<li>弹性扩容（基于Metric和Monitor实现系统态势感知，做到弹性伸缩）</li>
+</ol>
+<h2 id="分布式协议与算法"><a href="#分布式协议与算法" class="headerlink" title="分布式协议与算法"></a>分布式协议与算法</h2><p><img src="https://static001.geekbang.org/resource/image/1c/33/1cc7514e341fab7bd7044b37285f4433.jpg?wh=1142*785" alt="分布式算法的四度空间"></p>
+<h3 id="拜占庭容错"><a href="#拜占庭容错" class="headerlink" title="拜占庭容错"></a>拜占庭容错</h3><p>拜占庭将军问题（Byzantine Generals Problem），是由莱斯利·兰波特在其同名论文中提出的分布式对等网络通信容错问题。</p>
+<blockquote>
+<p>在分布式计算中，不同的计算机通过通讯交换信息达成共识而按照同一套协作策略行动。但有时候，系统中的成员计算机可能<strong>出错而发送错误的信息</strong>，用于传递信息的通讯网络也可能导致信息损坏，使得网络中不同的成员关于全体协作的策略得出不同结论，从而破坏系统<strong>一致性</strong></p>
+</blockquote>
+<p>核心点: 除了存在故障行为，还存在恶意行为</p>
+<p>拜占庭容错（Byzantine Fault Tolerance，BFT），就是指能容忍拜占庭错误了。而非拜占庭容错，又叫故障容错（Crash Fault Tolerance，CFT），解决的是分布式系统中存在故障，但不存在恶意节点的共识问题，比如进程崩溃、服务器硬件故障等。</p>
+<ul>
+<li>一般而言，在可信环境（比如企业内网）中，系统具有故障容错能力就可以了，常见的算法有二阶段提交协议（2PC）、TCC（Try-Confirm-Cancel）、Paxos 算法、ZAB 协议、Raft 算法、Gossip 协议、Quorum NWR 算法。</li>
+<li>而在不可信的环境（比如有人做恶）中，这时系统需要具备拜占庭容错能力，常见的拜占庭容错算法有 POW 算法、PBFT 算法。</li>
+</ul>
+<h3 id="3种一致性"><a href="#3种一致性" class="headerlink" title="3种一致性"></a>3种一致性</h3><ul>
+<li>强一致性：保证写操作完成后，任何后续访问都能读到更新后的值。</li>
+<li>弱一致性：写操作完成后，系统不能保证后续的访问都能读到更新后的值。</li>
+<li>最终一致性：保证如果对某个对象没有新的写操作了，最终所有后续访问都能读到相同的最近更新的值。</li>
+</ul>
+<blockquote>
+<p>Paxos、Raft 能实现线性一致性，而 ZooKeeper 基于读性能的考虑，它通过 ZAB 协议提供的是最终一致性。</p>
+</blockquote>
+<h3 id="共识与一致性"><a href="#共识与一致性" class="headerlink" title="共识与一致性"></a>共识与一致性</h3><p>共识（Consensus）和一致性（Consistency）是两个完全不同的概念。</p>
+<ul>
+<li>共识：各节点就指定值（Value）达成共识，而且达成共识后的值，就不再改变了。</li>
+<li>一致性：是指写操作完成后，能否从各节点上读到最新写入的数据，如果立即能读到，就是强一致性，如果最终能读到，就是最终一致性。</li>
+</ul>
+<p><img src="https://static001.geekbang.org/resource/image/12/13/122bdf34957c6277352ea51c43552213.png?wh=3094*1824" alt="思维导图"></p>
+<p>参考资料:</p>
+<ul>
+<li><a href="https://ljchen.net/2019/08/25/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%8D%8F%E8%AE%AE/" target="_blank" rel="noopener">分布式事务协议</a></li>
+<li><a href="https://blog.csdn.net/bjweimengshu/article/details/86698036" target="_blank" rel="noopener">分布式事务：深入理解什么是2PC、3PC及TCC协议</a></li>
+<li><a href="https://time.geekbang.org/column/article/199663" target="_blank" rel="noopener">分布式协议与算法实战</a></li>
+</ul>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Laravel</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">分布式</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">BASE</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">读写分离</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CAP</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式事务</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2023/05/04/分布式基本概念/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2023/05/04/初识Zookeeper/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">初识Zookeeper</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -229,9 +468,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
