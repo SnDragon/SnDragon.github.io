@@ -124,6 +124,17 @@ ConnectionLossException 。另外 Curator 为常见的分布式协同服务提�
 为了避免羊群效应每个锁请求者 watch 它前面的锁请求者。每次锁被释放，只会有一个锁请求者会被通知到。这样做还让锁的分配具有**公平性**，锁定的分配遵循先到先得的原则。
 
 ![zk-lock](https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/zk/zk_lock.jpg)
+1. create EPHEMERAL_SEQUENTIAL 节点 /lock/xxx-0000000003
+2. 获取所有已经创建的子节点, 但不注册 watcher /lock/xxx-0000000001 /lock/xxx-0000000002 /lock/xxx-0000000003
+3. 如果发现自己是最小的那个, 则客户端已经获得了锁
+4. 如果不是最小的, 则通过调用 exists() 前一个节点 /lock/xxx-0000000002, 并注册 watcher
+5. 当 watcher 收到前一个节点(/lock/xxx-0000000002) node delete 事件时, 则说明自己获取了锁
+
+缺点:
+1. 性能问题
+> 因为每次在创建锁和释放锁的过程中，都要动态创建、销毁瞬时节点来实现锁功能。ZK中创建和删除节点只能通过Leader服务器来执行，然后将数据同步到所有的Follower机器上。
+2. 并发问题
+> 由于网络抖动，客户端与ZK集群的session连接断了，那么zk以为客户端挂了，就会删除临时节点，这时候其他客户端就可以获取到分布式锁了。就可能产生并发问题。这个问题不常见是因为zk有重试机制，一旦zk集群检测不到客户端的心跳，就会重试
 
 ## 核心原理
 ### zxid
