@@ -6,27 +6,30 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sndragon.com">
-  <title>Go语言第一课学习笔记 | sndragon的个人博客</title>
+  <title>Paxos算法 | sndragon的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Go历史Go语言之父: Rob Pike 很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。 Go语言发展里程碑: Go 1.4 引入 internal 包机制，增加了 internal 目录 设计哲学Go 语言的设计哲学总结为五点:">
-<meta name="keywords" content="Go">
+  <meta name="description" content="Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有高度容错特性的共识（consensus）算法。包含 2 个部分：  一个是 Basic Paxos 算法，描述的是多节点之间如何就某个值（提案 Value）达成共识； 另一个是 Multi-Paxos 思想，描述的是执行多个 Basic Paxos 实例，就一系列值达成共识  Basic Paxos问题有多个客户端">
+<meta name="keywords" content="分布式协议,Paxos">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Go语言第一课学习笔记">
-<meta property="og:url" content="http://sndragon.com/2022/10/23/Go语言第一课学习笔记/index.html">
+<meta property="og:title" content="Paxos算法">
+<meta property="og:url" content="http://sndragon.com/2023/05/09/Paxos算法/index.html">
 <meta property="og:site_name" content="sndragon的个人博客">
-<meta property="og:description" content="Go历史Go语言之父: Rob Pike 很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。 Go语言发展里程碑: Go 1.4 引入 internal 包机制，增加了 internal 目录 设计哲学Go 语言的设计哲学总结为五点:">
+<meta property="og:description" content="Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有高度容错特性的共识（consensus）算法。包含 2 个部分：  一个是 Basic Paxos 算法，描述的是多节点之间如何就某个值（提案 Value）达成共识； 另一个是 Multi-Paxos 思想，描述的是执行多个 Basic Paxos 实例，就一系列值达成共识  Basic Paxos问题有多个客户端">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://static001.geekbang.org/resource/image/04/fa/042843f49a53faa6e208c76ef6ed75fa.png?wh=1920x505">
-<meta property="og:image" content="https://static001.geekbang.org/resource/image/49/1b/49eb7aa0458d8ec6131d9e5661155f1b.jpeg?wh=1920x1080">
-<meta property="og:image" content="https://static001.geekbang.org/resource/image/45/d3/45bdecc5fa873e06893d6658e447a8d3.jpeg?wh=1920x1080">
-<meta property="og:image" content="https://static001.geekbang.org/resource/image/9c/77/9c663f2d88e2e53a8184669bf2338077.jpg?wh=1980x1080">
-<meta property="og:image" content="https://static001.geekbang.org/resource/image/2d/0b/2da4da70a5yy998bf635209642b5c80b.jpg?wh=1980x1080">
-<meta property="og:image" content="https://static001.geekbang.org/resource/image/22/21/22c37012e48157bdc9a71110bc314421.png?wh=1920x532">
-<meta property="og:updated_time" content="2022-11-10T15:46:25.036Z">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/93/67/93a9fa0a75c23971066dc791389b8567.jpg?wh=1142*424">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/77/42/77be9903f7cbe980e5a6e77412d2ad42.jpg?wh=1142*620">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/64/54/640219532d0fcdffc08dbd1b3b3f0454.jpg?wh=1142*456">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/ec/24/ecf9a5872201e875a2e0417c32ec2d24.jpg?wh=1142*439">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/70/89/70de602cb4b52de7545f05c5485deb89.jpg?wh=1142*434">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/f8/45/f836c40636d26826fc04a51a5945d545.jpg?wh=1142*430">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/aa/e0/aafabff1fe2a26523e9815805ccca6e0.jpg?wh=1142*643">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/af/f6/af3d6a291d960ace59a88898abb74ef6.jpg?wh=1142*653">
+<meta property="og:image" content="https://static001.geekbang.org/resource/image/3c/54/3cd72a4a138fe1cde52aedd1b897f954.jpg?wh=1142*637">
+<meta property="og:updated_time" content="2023-05-09T16:25:23.212Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go语言第一课学习笔记">
-<meta name="twitter:description" content="Go历史Go语言之父: Rob Pike 很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。 Go语言发展里程碑: Go 1.4 引入 internal 包机制，增加了 internal 目录 设计哲学Go 语言的设计哲学总结为五点:">
-<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/04/fa/042843f49a53faa6e208c76ef6ed75fa.png?wh=1920x505">
+<meta name="twitter:title" content="Paxos算法">
+<meta name="twitter:description" content="Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有高度容错特性的共识（consensus）算法。包含 2 个部分：  一个是 Basic Paxos 算法，描述的是多节点之间如何就某个值（提案 Value）达成共识； 另一个是 Multi-Paxos 思想，描述的是执行多个 Basic Paxos 实例，就一系列值达成共识  Basic Paxos问题有多个客户端">
+<meta name="twitter:image" content="https://static001.geekbang.org/resource/image/93/67/93a9fa0a75c23971066dc791389b8567.jpg?wh=1142*424">
   
     <link rel="alternative" href="/atom.xml" title="sndragon的个人博客" type="application/atom+xml">
   
@@ -154,178 +157,65 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Go语言第一课学习笔记" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Paxos算法" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Go语言第一课学习笔记
+      Paxos算法
     </h1>
   
 
         
-        <a href="/2022/10/23/Go语言第一课学习笔记/" class="archive-article-date">
-  	<time datetime="2022-10-23T15:41:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-23</time>
+        <a href="/2023/05/09/Paxos算法/" class="archive-article-date">
+  	<time datetime="2023-05-09T03:10:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-09</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Go历史"><a href="#Go历史" class="headerlink" title="Go历史"></a>Go历史</h2><p>Go语言之父: <strong>Rob Pike</strong></p>
-<p>很多 Go 语言初学者经常称这门语言为 Golang，其实这是不对的：“Golang”仅应用于命名 Go 语言官方网站，而且当时没有用 go.com 纯粹是这个域名被占用了而已。</p>
-<p>Go语言发展里程碑:<br><img src="https://static001.geekbang.org/resource/image/04/fa/042843f49a53faa6e208c76ef6ed75fa.png?wh=1920x505" alt="image"></p>
-<p>Go 1.4 引入 internal 包机制，增加了 internal 目录</p>
-<h2 id="设计哲学"><a href="#设计哲学" class="headerlink" title="设计哲学"></a>设计哲学</h2><p>Go 语言的设计哲学总结为五点:<br><a id="more"></a></p>
+        <p>Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有高度容错特性的<strong>共识（consensus）</strong>算法。<br>包含 2 个部分：</p>
 <ul>
-<li>简单<ul>
-<li>仅有 25 个关键字，主流编程语言最少</li>
-<li>内置垃圾收集，降低开发人员内存管理的心智负担</li>
-<li>首字母大小写决定可见性，无需通过额外关键字修饰</li>
-<li>变量初始为类型零值，避免以随机值作为初值的问题</li>
-<li>内置并发支持，简化并发程序设计</li>
-<li>原生提供完善的工具链，开箱即用</li>
+<li>一个是 Basic Paxos 算法，描述的是多节点之间如何就某个值（提案 Value）达成共识；</li>
+<li>另一个是 Multi-Paxos 思想，描述的是执行多个 Basic Paxos 实例，就一系列值达成共识</li>
 </ul>
-</li>
-<li>显式<ul>
-<li>显式类型转换</li>
-<li>显式的基于值比较的错误处理方案(返回error,开发者决定如何处理)</li>
-</ul>
-</li>
-<li><p>组合</p>
+<h2 id="Basic-Paxos"><a href="#Basic-Paxos" class="headerlink" title="Basic Paxos"></a>Basic Paxos</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><img src="https://static001.geekbang.org/resource/image/93/67/93a9fa0a75c23971066dc791389b8567.jpg?wh=1142*424" alt="paxos problem"><br>有多个客户端（比如客户端 1、2）访问系统，试图创建同一个只读变量（比如 X），客户端 1 试图创建值为 3 的 X，客户端 2 试图创建值为 7 的 X，要如何达成共识，实现各节点上 X 值的一致？</p>
+<a id="more"></a>
+<h3 id="三种角色"><a href="#三种角色" class="headerlink" title="三种角色"></a>三种角色</h3><p>在 Basic Paxos 中，有提议者（Proposer）、接受者（Acceptor）、学习者（Learner）三种角色，他们之间的关系如下：<br><img src="https://static001.geekbang.org/resource/image/77/42/77be9903f7cbe980e5a6e77412d2ad42.jpg?wh=1142*620" alt="paxos role"></p>
 <ul>
-<li>类型嵌入(垂直组合,本质上是一种“能力继承”)</li>
-<li>接口类型(水平组合,能力委托,降低耦合)<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// $GOROOT/src/io/ioutil/ioutil.go</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadAll</span><span class="params">(r io.Reader)</span><span class="params">([]<span class="keyword">byte</span>, error)</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">函数 <span class="title">ReadAll</span> 通过 <span class="title">io</span>.<span class="title">Reader</span> 这个接口，将 <span class="title">io</span>.<span class="title">Reader</span> 的实现与 <span class="title">ReadAll</span> 所在的包低耦合地水平组合在一起了，从而达到从任意实现 <span class="title">io</span>.<span class="title">Reader</span> 的数据源读取所有数据的目的。</span></span><br></pre></td></tr></table></figure>
-</li>
+<li>提议者（Proposer）：提议一个值，用于投票表决。一般是集群中收到客户端请求的节点，发起<strong>二阶段提交</strong>，进行共识协商；</li>
+<li>接受者（Acceptor）：对每个提议的值进行投票，并存储接受的值，比如 A、B、C 三个节点。 一般来说，集群中的所有节点都在扮演接受者的角色，参与共识协商，并接受和存储数据。</li>
+<li>学习者（Learner）：被告知投票的结果，接受达成共识的值，存储保存，不参与投票的过程。一般来说，学习者是数据备份节点，比如“Master-Slave”模型中的 Slave，被动地接受数据，容灾备份。</li>
 </ul>
-</li>
-<li><p>并发</p>
-<ul>
-<li>面向多核、原生支持并发</li>
-<li>go关键字轻松创建协程</li>
-<li>goroutine 调度的切换不用陷入（trap）操作系统内核层完成，代价很低。因此，一个 Go 程序中可以创建成千上万个并发的 goroutine</li>
-</ul>
-</li>
-<li>面向工程<ul>
-<li>重新设计编译单元和目标文件格式, 实现 Go 源码快速构建</li>
-<li>如果源文件导入它不使用的包，则程序将无法编译,可以保证在构建程序时不会编译额外的代码，从而最大限度地缩短编译时间</li>
-<li>去除包的循环依赖，循环依赖会在大规模的代码中引发问题</li>
-<li>增加类型别名（type alias），支持大规模代码库的重构</li>
-</ul>
-</li>
-</ul>
-<p>如果说一门编程语言是“自带电池”，则说明这门语言标准库功能丰富，多数功能不需要依赖外部的第三方包或库，Go 语言恰恰就是这类编程语言。</p>
-<h2 id="典型目录结构"><a href="#典型目录结构" class="headerlink" title="典型目录结构"></a>典型目录结构</h2><h3 id="可执行程序项目"><a href="#可执行程序项目" class="headerlink" title="可执行程序项目"></a>可执行程序项目</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$tree -F exe-layout </span><br><span class="line">exe-layout</span><br><span class="line">├── cmd/</span><br><span class="line">│   ├── app1/</span><br><span class="line">│   │   └── main.<span class="keyword">go</span></span><br><span class="line">│   └── app2/</span><br><span class="line">│       └── main.<span class="keyword">go</span></span><br><span class="line">├── <span class="keyword">go</span>.mod</span><br><span class="line">├── <span class="keyword">go</span>.sum</span><br><span class="line">├── internal/</span><br><span class="line">│   ├── pkga/</span><br><span class="line">│   │   └── pkg_a.<span class="keyword">go</span></span><br><span class="line">│   └── pkgb/</span><br><span class="line">│       └── pkg_b.<span class="keyword">go</span></span><br><span class="line">├── pkg1/</span><br><span class="line">│   └── pkg1.<span class="keyword">go</span></span><br><span class="line">├── pkg2/</span><br><span class="line">│   └── pkg2.<span class="keyword">go</span></span><br><span class="line">└── vendor/</span><br></pre></td></tr></table></figure>
-<h3 id="库项目"><a href="#库项目" class="headerlink" title="库项目"></a>库项目</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$tree -F lib-layout </span><br><span class="line">lib-layout</span><br><span class="line">├── <span class="keyword">go</span>.mod</span><br><span class="line">├── internal/</span><br><span class="line">│   ├── pkga/</span><br><span class="line">│   │   └── pkg_a.<span class="keyword">go</span></span><br><span class="line">│   └── pkgb/</span><br><span class="line">│       └── pkg_b.<span class="keyword">go</span></span><br><span class="line">├── pkg1/</span><br><span class="line">│   └── pkg1.<span class="keyword">go</span></span><br><span class="line">└── pkg2/</span><br><span class="line">    └── pkg2.<span class="keyword">go</span></span><br></pre></td></tr></table></figure>
-<h2 id="构建演进"><a href="#构建演进" class="headerlink" title="构建演进"></a>构建演进</h2><p>Go 程序的构建过程就是确定包版本、编译包以及将编译后得到的目标文件链接在一起的过程<br>Go 语言的构建模式历经了三个迭代和演化过程:</p>
-<ul>
-<li>GOPATH</li>
-<li>1.5 版本的 Vendor 机制</li>
-<li>Go Module</li>
-</ul>
-<h3 id="使用最小版本选择进行包依赖版本选择"><a href="#使用最小版本选择进行包依赖版本选择" class="headerlink" title="使用最小版本选择进行包依赖版本选择"></a>使用最小版本选择进行包依赖版本选择</h3><p><img src="https://static001.geekbang.org/resource/image/49/1b/49eb7aa0458d8ec6131d9e5661155f1b.jpeg?wh=1920x1080" alt="image"></p>
-<p>A 明明说只要求 C v1.1.0，B 明明说只要求 C v1.3.0。所以 Go 会在该项目依赖项的所有版本中，选出符合项目整体要求的“最小版本”。这个例子中，C v1.3.0 是符合项目整体要求的版本集合中的版本最小的那个，于是 Go 命令选择了 C v1.3.0，而不是最新最大的 C v1.7.0。并且，Go 团队认为“最小版本选择”为 Go 程序实现持久的和可重现的构建提供了最佳的方案。</p>
-<h3 id="GO111MODULE变量"><a href="#GO111MODULE变量" class="headerlink" title="GO111MODULE变量"></a>GO111MODULE变量</h3><p><img src="https://static001.geekbang.org/resource/image/45/d3/45bdecc5fa873e06893d6658e447a8d3.jpeg?wh=1920x1080" alt="image"></p>
-<h3 id="包依赖常用命令"><a href="#包依赖常用命令" class="headerlink" title="包依赖常用命令"></a>包依赖常用命令</h3><ul>
-<li><p>列出所有依赖:</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> list -m all</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查询依赖包版本:</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$<span class="keyword">go</span> list -m -versions github.com/sirupsen/logrus</span><br><span class="line">github.com/sirupsen/logrus v0<span class="number">.1</span><span class="number">.0</span> v0<span class="number">.1</span><span class="number">.1</span> v0<span class="number">.2</span><span class="number">.0</span> v0<span class="number">.3</span><span class="number">.0</span> v0<span class="number">.4</span><span class="number">.0</span> v0<span class="number">.4</span><span class="number">.1</span> v0<span class="number">.5</span><span class="number">.0</span> v0<span class="number">.5</span><span class="number">.1</span> v0<span class="number">.6</span><span class="number">.0</span> v0<span class="number">.6</span><span class="number">.1</span> v0<span class="number">.6</span><span class="number">.2</span> v0<span class="number">.6</span><span class="number">.3</span> v0<span class="number">.6</span><span class="number">.4</span> v0<span class="number">.6</span><span class="number">.5</span> v0<span class="number">.6</span><span class="number">.6</span> v0<span class="number">.7</span><span class="number">.0</span> v0<span class="number">.7</span><span class="number">.1</span> v0<span class="number">.7</span><span class="number">.2</span> v0<span class="number">.7</span><span class="number">.3</span> v0<span class="number">.8</span><span class="number">.0</span> v0<span class="number">.8</span><span class="number">.1</span> v0<span class="number">.8</span><span class="number">.2</span> v0<span class="number">.8</span><span class="number">.3</span> v0<span class="number">.8</span><span class="number">.4</span> v0<span class="number">.8</span><span class="number">.5</span> v0<span class="number">.8</span><span class="number">.6</span> v0<span class="number">.8</span><span class="number">.7</span> v0<span class="number">.9</span><span class="number">.0</span> v0<span class="number">.10</span><span class="number">.0</span> v0<span class="number">.11</span><span class="number">.0</span> v0<span class="number">.11</span><span class="number">.1</span> v0<span class="number">.11</span><span class="number">.2</span> v0<span class="number">.11</span><span class="number">.3</span> v0<span class="number">.11</span><span class="number">.4</span> v0<span class="number">.11</span><span class="number">.5</span> v1<span class="number">.0</span><span class="number">.0</span> v1<span class="number">.0</span><span class="number">.1</span> v1<span class="number">.0</span><span class="number">.3</span> v1<span class="number">.0</span><span class="number">.4</span> v1<span class="number">.0</span><span class="number">.5</span> v1<span class="number">.0</span><span class="number">.6</span> v1<span class="number">.1</span><span class="number">.0</span> v1<span class="number">.1</span><span class="number">.1</span> v1<span class="number">.2</span><span class="number">.0</span> v1<span class="number">.3</span><span class="number">.0</span> v1<span class="number">.4</span><span class="number">.0</span> v1<span class="number">.4</span><span class="number">.1</span> v1<span class="number">.4</span><span class="number">.2</span> v1<span class="number">.5</span><span class="number">.0</span> v1<span class="number">.6</span><span class="number">.0</span> v1<span class="number">.7</span><span class="number">.0</span> v1<span class="number">.7</span><span class="number">.1</span> v1<span class="number">.8</span><span class="number">.0</span> v1<span class="number">.8</span><span class="number">.1</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>降级依赖包版本:</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/sirupsen/logrus@v1<span class="number">.7</span><span class="number">.0</span></span><br><span class="line"><span class="keyword">go</span> mod edit -require=github.com/sirupsen/logrus@v1<span class="number">.7</span><span class="number">.0</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>go mod vendor<br>go mod vendor 命令在 vendor 目录下，创建了一份这个项目的依赖包的副本，并且通过 vendor/modules.txt 记录了 vendor 下的 module 以及版本</p>
-</li>
-</ul>
-<p>如果我们要基于 vendor 构建，而不是基于本地缓存的 Go Module 构建，我们需要在 go build 后面加上 -mod=vendor 参数。</p>
-<p>在 Go 1.14 及以后版本中，如果 Go 项目的顶层目录下存在 vendor 目录，那么 go build 默认也会优先基于 vendor 构建，除非你给 go build 传入 -mod=mod 的参数。</p>
-<h2 id="监听操作系统信号"><a href="#监听操作系统信号" class="headerlink" title="监听操作系统信号"></a>监听操作系统信号</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">osChan := <span class="built_in">make</span>(<span class="keyword">chan</span> os.Signal, <span class="number">1</span>)</span><br><span class="line">signal.Notify(osChan, syscall.SIGINT, syscall.SIGTERM)</span><br><span class="line">&lt;-osChan</span><br></pre></td></tr></table></figure>
-<h2 id="初始化顺序"><a href="#初始化顺序" class="headerlink" title="初始化顺序"></a>初始化顺序</h2><p>Go 在包中按照“常量 -&gt; 变量 -&gt; init 函数”的顺序先对 pkg3 包进行初始化</p>
-<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>包级变量只能使用带有 var 关键字的变量声明形式，不能使用短变量声明形式</p>
-<h3 id="变量声明选择"><a href="#变量声明选择" class="headerlink" title="变量声明选择"></a>变量声明选择</h3><p><img src="https://static001.geekbang.org/resource/image/9c/77/9c663f2d88e2e53a8184669bf2338077.jpg?wh=1980x1080" alt="image"></p>
-<h3 id="利用工具检测变量遮蔽问题"><a href="#利用工具检测变量遮蔽问题" class="headerlink" title="利用工具检测变量遮蔽问题"></a>利用工具检测变量遮蔽问题</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> install golang.org/x/tools/<span class="keyword">go</span>/analysis/passes/shadow/cmd/shadow@latest</span><br><span class="line"><span class="keyword">go</span> vet -vettool=$(which shadow) -strict xxx.<span class="keyword">go</span></span><br></pre></td></tr></table></figure>
-<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><p>Go 语言在常量方面的创新包括下面这几点：</p>
-<ul>
-<li>支持无类型常量</li>
-<li>支持隐式自动转型</li>
-<li>可用于实现枚举。</li>
-</ul>
+<h3 id="重点"><a href="#重点" class="headerlink" title="重点"></a>重点</h3><ol>
+<li>Basic Paxos 是通过<strong>二阶段提交</strong>的方式来达成共识的。</li>
+<li>除了共识，Basic Paxos 还实现了<strong>容错</strong>，在少于一半的节点出现故障时，集群也能工作。它不像分布式事务算法那样，必须要所有节点都同意后才提交操作，因为“所有节点都同意”这个原则，在出现节点故障的时候会导致整个集群不可用。也就是说，“大多数节点都同意”的原则，赋予了 Basic Paxos 容错的能力，让它能够容忍少于一半的节点的故障。</li>
+<li>本质上而言，提案编号的大小代表着优先级，根据提案编号的大小，接受者保证三个承诺，具体来说：如果准备请求的提案编号，小于等于接受者已经响应的准备请求的提案编号，那么接受者将承诺不响应这个准备请求；如果接受请求中的提案的提案编号，小于接受者已经响应的准备请求的提案编号，那么接受者将承诺不通过这个提案；如果接受者之前有通过提案，那么接受者将承诺，会在准备请求的响应中，包含已经通过的最大编号的提案信息。</li>
+</ol>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><h4 id="准备（Prepare）阶段"><a href="#准备（Prepare）阶段" class="headerlink" title="准备（Prepare）阶段"></a>准备（Prepare）阶段</h4><p>在准备请求中不需要指定提议的值，只需要携带提案编号即可。<br><img src="https://static001.geekbang.org/resource/image/64/54/640219532d0fcdffc08dbd1b3b3f0454.jpg?wh=1142*456" alt="paxos prepare"><br><img src="https://static001.geekbang.org/resource/image/ec/24/ecf9a5872201e875a2e0417c32ec2d24.jpg?wh=1142*439" alt=""></p>
+<h4 id="接受（Accept）阶段"><a href="#接受（Accept）阶段" class="headerlink" title="接受（Accept）阶段"></a>接受（Accept）阶段</h4><p>客户端 1、2 在收到大多数节点的准备响应之后，会分别发送接受请求：<br><img src="https://static001.geekbang.org/resource/image/70/89/70de602cb4b52de7545f05c5485deb89.jpg?wh=1142*434" alt="Paxos Accept"></p>
+<p><img src="https://static001.geekbang.org/resource/image/f8/45/f836c40636d26826fc04a51a5945d545.jpg?wh=1142*430" alt=""></p>
 <blockquote>
-<p>隐式转型说的就是，对于无类型常量参与的表达式求值，Go 编译器会根据上下文中的类型信息，把无类型常量自动转换为相应的类型后，再参与求值计算，这一转型动作是隐式进行的</p>
+<p>如果集群中有学习者，当接受者通过了一个提案时，就通知给所有的学习者。当学习者发现大多数的接受者都通过了某个提案，那么它也通过该提案，接受该提案的值</p>
 </blockquote>
-<p>位于同一行的 iota 即便出现多次，多个 iota 的值也是一样</p>
-<p>如果我们要略过 iota = 0，从 iota = 1 开始正式定义枚举常量，我们可以效仿下面标准库中的代码：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// $GOROOT/src/syscall/net_js.go</span></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    _ = <span class="literal">iota</span></span><br><span class="line">    IPV6_V6ONLY  <span class="comment">// 1</span></span><br><span class="line">    SOMAXCONN    <span class="comment">// 2</span></span><br><span class="line">    SO_ERROR     <span class="comment">// 3</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
-<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><h4 id="内部表示"><a href="#内部表示" class="headerlink" title="内部表示"></a>内部表示</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// $GOROOT/src/reflect/value.go</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// StringHeader是一个string的运行时表示</span></span><br><span class="line"><span class="keyword">type</span> StringHeader <span class="keyword">struct</span> &#123;</span><br><span class="line">    Data <span class="keyword">uintptr</span></span><br><span class="line">    Len  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="迭代形式"><a href="#迭代形式" class="headerlink" title="迭代形式"></a>迭代形式</h4><p>Go 有两种迭代形式：常规 for 迭代与 for range 迭代<br>通过这两种形式的迭代对字符串进行操作得到的结果是不同的。</p>
+<h2 id="Multi-Paxos"><a href="#Multi-Paxos" class="headerlink" title="Multi Paxos"></a>Multi Paxos</h2><p>兰伯特提到的 Multi-Paxos 是一种思想，不是算法。而 Multi-Paxos 算法是一个统称，它是指基于 Multi-Paxos 思想，通过多个 Basic Paxos 实例实现一系列值的共识的算法（比如 Chubby 的 Multi-Paxos 实现、Raft 算法等）</p>
+<h3 id="问题-1"><a href="#问题-1" class="headerlink" title="问题"></a>问题</h3><p><img src="https://static001.geekbang.org/resource/image/aa/e0/aafabff1fe2a26523e9815805ccca6e0.jpg?wh=1142*643" alt=""></p>
+<p>如果我们直接通过多次执行 Basic Paxos 实例，来实现一系列值的共识，就会存在这样几个问题：</p>
 <ul>
-<li>经过常规 for 迭代后，我们获取到的是字符串里字符的 UTF-8 编码中的一个字节</li>
-<li>通过 for range 迭代，我们每轮迭代得到的是字符串中 Unicode 字符的码点值，以及该字符在字符串中的偏移值</li>
+<li>如果多个提议者同时提交提案，可能出现因为提案编号冲突，在准备阶段没有提议者接收到大多数准备响应，<strong>协商失败</strong>，需要重新协商。如，一个 5 节点的集群，如果 3 个节点作为提议者同时提案，就可能发生因为没有提议者接收大多数响应（比如 1 个提议者接收到 1 个准备响应，另外 2 个提议者分别接收到 2 个准备响应）而准备失败，需要重新协商。</li>
+<li>2 轮 RPC 通讯（准备阶段和接受阶段）往返消息多、耗<strong>性能</strong>、延迟大。</li>
 </ul>
-<h3 id="比较类型"><a href="#比较类型" class="headerlink" title="比较类型"></a>比较类型</h3><p>函数类型、map 类型自身，以及切片类型是不能作为 map 的 key 类型的。</p>
-<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p>map 可以自动扩容，map 中数据元素的 value 位置可能在这一过程中发生变化，所以 Go 不允许获取 map 中 value 的地址，这个约束是在编译期间就生效的。</p>
-<h3 id="递归定义"><a href="#递归定义" class="headerlink" title="递归定义"></a>递归定义</h3><p>Go 语言不支持在结构体类型定义中，递归地放入其自身类型字段的定义方式, 但可以拥有自身类型的指针类型、以自身类型为元素类型的切片类型，以及以自身类型作为 value 类型的 map 类型的字段</p>
-<p>原因:</p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><h4 id="领导者"><a href="#领导者" class="headerlink" title="领导者"></a>领导者</h4><p>通过引入领导者节点，领导者节点作为唯一提议者，这样就不存在多个提议者同时提交提案的情况，也就不存在提案冲突的情况了：<br><img src="https://static001.geekbang.org/resource/image/af/f6/af3d6a291d960ace59a88898abb74ef6.jpg?wh=1142*653" alt=""></p>
 <blockquote>
-<p>一个类型，它所占用的大小是固定的，因此一个结构体定义好的时候，其大小是固定的。<br>但是，如果结构体里面套结构体，那么在计算该结构体占用大小的时候，就会成死循环。但如果是指针、切片、map等类型，其本质都是一个int大小(指针，4字节或者8字节，与操作系统有关)，因此该结构体的大小是固定的，记得老师前几节课讲类型的时候说过，类型就能决定内存占用的大小。因此，结构体是可以接口自身类型的指针类型、以自身类型为元素类型的切片类型，以及以自身类型作为 value 类型的 map 类型的字段，而自己本身不行。</p>
+<p>在论文中，兰伯特没有说如何选举领导者，需要我们在实现 Multi-Paxos 算法的时候自己实现。 比如在 Chubby 中，主节点（也就是领导者节点）是通过执行 Basic Paxos 算法，进行投票选举产生的。</p>
 </blockquote>
-<h3 id="内存对齐-出于对处理器存取数据效率的考虑"><a href="#内存对齐-出于对处理器存取数据效率的考虑" class="headerlink" title="内存对齐:出于对处理器存取数据效率的考虑"></a>内存对齐:出于对处理器存取数据效率的考虑</h3><p>对于各种基本数据类型来说，它的变量的内存地址值必须是其类型本身大小的整数倍</p>
-<p>对于结构体而言，它的变量的内存地址，只要是它最长字段长度与系统对齐系数两者之间较小的那个的整数倍就可以了。但对于结构体类型来说，我们还要让它每个字段的内存地址都严格满足内存对齐要求。</p>
-<p>在日常定义结构体时，一定要注意结构体中字段顺序，尽量合理排序，降低结构体对内存空间的占</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span> &#123;</span><br><span class="line">    b <span class="keyword">byte</span></span><br><span class="line">    i <span class="keyword">int64</span></span><br><span class="line">    u <span class="keyword">uint16</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> S <span class="keyword">struct</span> &#123;</span><br><span class="line">    b <span class="keyword">byte</span></span><br><span class="line">    u <span class="keyword">uint16</span></span><br><span class="line">    i <span class="keyword">int64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> t T</span><br><span class="line">    <span class="built_in">println</span>(unsafe.Sizeof(t)) <span class="comment">// 24</span></span><br><span class="line">    <span class="keyword">var</span> s S</span><br><span class="line">    <span class="built_in">println</span>(unsafe.Sizeof(s)) <span class="comment">// 16</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="label"><a href="#label" class="headerlink" title="label"></a>label</h2><p>带 label 的 continue 语句，通常出现于嵌套循环语句中，被用于跳转到外层循环并继续执行外层循环语句的下一个迭代，比如下面这段代码：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> sl = [][]<span class="keyword">int</span>&#123;</span><br><span class="line">        &#123;<span class="number">1</span>, <span class="number">34</span>, <span class="number">26</span>, <span class="number">35</span>, <span class="number">78</span>&#125;,</span><br><span class="line">        &#123;<span class="number">3</span>, <span class="number">45</span>, <span class="number">13</span>, <span class="number">24</span>, <span class="number">99</span>&#125;,</span><br><span class="line">        &#123;<span class="number">101</span>, <span class="number">13</span>, <span class="number">38</span>, <span class="number">7</span>, <span class="number">127</span>&#125;,</span><br><span class="line">        &#123;<span class="number">54</span>, <span class="number">27</span>, <span class="number">40</span>, <span class="number">83</span>, <span class="number">81</span>&#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">outerloop:</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(sl); i++ &#123;</span><br><span class="line">        <span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="built_in">len</span>(sl[i]); j++ &#123;</span><br><span class="line">            <span class="keyword">if</span> sl[i][j] == <span class="number">13</span> &#123;</span><br><span class="line">                fmt.Printf(<span class="string">"found 13 at [%d, %d]\n"</span>, i, j)</span><br><span class="line">                <span class="keyword">continue</span> outerloop</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> gold = <span class="number">38</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> sl = [][]<span class="keyword">int</span>&#123;</span><br><span class="line">        &#123;<span class="number">1</span>, <span class="number">34</span>, <span class="number">26</span>, <span class="number">35</span>, <span class="number">78</span>&#125;,</span><br><span class="line">        &#123;<span class="number">3</span>, <span class="number">45</span>, <span class="number">13</span>, <span class="number">24</span>, <span class="number">99</span>&#125;,</span><br><span class="line">        &#123;<span class="number">101</span>, <span class="number">13</span>, <span class="number">38</span>, <span class="number">7</span>, <span class="number">127</span>&#125;,</span><br><span class="line">        &#123;<span class="number">54</span>, <span class="number">27</span>, <span class="number">40</span>, <span class="number">83</span>, <span class="number">81</span>&#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">outerloop:</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(sl); i++ &#123;</span><br><span class="line">        <span class="keyword">for</span> j := <span class="number">0</span>; j &lt; <span class="built_in">len</span>(sl[i]); j++ &#123;</span><br><span class="line">            <span class="keyword">if</span> sl[i][j] == gold &#123;</span><br><span class="line">                fmt.Printf(<span class="string">"found gold at [%d, %d]\n"</span>, i, j)</span><br><span class="line">                <span class="keyword">break</span> outerloop</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="receiver"><a href="#receiver" class="headerlink" title="receiver"></a>receiver</h2><p>receiver 参数的基类型本身不能为指针类型或接口类型</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> field <span class="keyword">struct</span> &#123;</span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *field)</span> <span class="title">print</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(p.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    data1 := []*field&#123;&#123;<span class="string">"one"</span>&#125;, &#123;<span class="string">"two"</span>&#125;, &#123;<span class="string">"three"</span>&#125;&#125;</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> data1 &#123;</span><br><span class="line">        <span class="keyword">go</span> v.<span class="built_in">print</span>()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    data2 := []field&#123;&#123;<span class="string">"four"</span>&#125;, &#123;<span class="string">"five"</span>&#125;, &#123;<span class="string">"six"</span>&#125;&#125;</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> data2 &#123;</span><br><span class="line">        <span class="keyword">go</span> v.<span class="built_in">print</span>()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">one</span><br><span class="line">two</span><br><span class="line">three</span><br><span class="line">six</span><br><span class="line">six</span><br><span class="line">six</span><br></pre></td></tr></table></figure>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">type</span> field <span class="keyword">struct</span> &#123;</span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *field)</span> <span class="title">print</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(p.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    data1 := []*field&#123;&#123;<span class="string">"one"</span>&#125;, &#123;<span class="string">"two"</span>&#125;, &#123;<span class="string">"three"</span>&#125;&#125;</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> data1 &#123;</span><br><span class="line">        <span class="keyword">go</span> (*field).<span class="built_in">print</span>(v)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    data2 := []field&#123;&#123;<span class="string">"four"</span>&#125;, &#123;<span class="string">"five"</span>&#125;, &#123;<span class="string">"six"</span>&#125;&#125;</span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> data2 &#123;</span><br><span class="line">        <span class="keyword">go</span> (*field).<span class="built_in">print</span>(&amp;v)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    time.Sleep(<span class="number">3</span> * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Go 语言规定，<em>T 类型的方法集合包含所有以 </em>T 为 receiver 参数类型的方法，以及所有以 T 为 receiver 参数类型的方法。</p>
-<h3 id="T-vs-T"><a href="#T-vs-T" class="headerlink" title="T vs *T"></a>T vs *T</h3><p>选择 receiver 参数类型的三个原则:</p>
-<ul>
-<li>如果 Go 方法要把对 receiver 参数代表的类型实例的修改，反映到原类型实例上，那么我们应该选择T 作为 receiver 参数的类型。</li>
-<li>如果 receiver 参数类型的 size 较大，以值拷贝形式传入就会导致较大的性能开销，这时我们选择 *T 作为 receiver 类型可能更好些。</li>
-<li>如果 T 类型需要实现某个接口，那我们就要使用 T 作为 receiver 参数的类型，来满足接口类型方法集合中的所有方法。</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">type</span> T1 <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(T1)</span> <span class="title">T1M1</span><span class="params">()</span></span>   &#123; <span class="built_in">println</span>(<span class="string">"T1's M1"</span>) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*T1)</span> <span class="title">PT1M2</span><span class="params">()</span></span> &#123; <span class="built_in">println</span>(<span class="string">"PT1's M2"</span>) &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> T2 <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(T2)</span> <span class="title">T2M1</span><span class="params">()</span></span>   &#123; <span class="built_in">println</span>(<span class="string">"T2's M1"</span>) &#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*T2)</span> <span class="title">PT2M2</span><span class="params">()</span></span> &#123; <span class="built_in">println</span>(<span class="string">"PT2's M2"</span>) &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> T <span class="keyword">struct</span> &#123;</span><br><span class="line">    T1</span><br><span class="line">    *T2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    t := T&#123;</span><br><span class="line">        T1: T1&#123;&#125;,</span><br><span class="line">        T2: &amp;T2&#123;&#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dumpMethodSet(t)</span><br><span class="line">    dumpMethodSet(&amp;t)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">main.T<span class="string">'s method set:</span></span><br><span class="line"><span class="string">- PT2M2</span></span><br><span class="line"><span class="string">- T1M1</span></span><br><span class="line"><span class="string">- T2M1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">*main.T'</span>s method set:</span><br><span class="line">- PT1M2</span><br><span class="line">- PT2M2</span><br><span class="line">- T1M1</span><br><span class="line">- T2M1</span><br></pre></td></tr></table></figure>
-<p> T 和 *T 类型的方法集合是有差别的：</p>
-<ul>
-<li>类型 T 的方法集合 = T1 的方法集合 + *T2 的方法集合类型 </li>
-<li><em>T 的方法集合 = </em>T1 的方法集合 + *T2 的方法集合</li>
-<li>结构体类型的方法集合包含嵌入的接口类型的方法集合；</li>
-<li>当结构体类型 T 包含嵌入字段 E 时，<em>T 的方法集合不仅包含类型 E 的方法集合，还要包含类型 </em>E 的方法集合。</li>
-</ul>
-<h2 id="Go1-17新特性"><a href="#Go1-17新特性" class="headerlink" title="Go1.17新特性"></a>Go1.17新特性</h2><ul>
-<li><p>支持将切片转换为数组指针,转换后的数组==长度==不能大于原切片的长度</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b := []<span class="keyword">int</span>&#123;<span class="number">11</span>, <span class="number">12</span>, <span class="number">13</span>&#125;</span><br><span class="line">p := (*[<span class="number">3</span>]<span class="keyword">int</span>)(b) <span class="comment">// 将切片转换为数组类型指针</span></span><br><span class="line">p[<span class="number">1</span>] = p[<span class="number">1</span>] + <span class="number">10</span></span><br><span class="line">fmt.Printf(<span class="string">"%v\n"</span>, b) <span class="comment">// [11 22 13]</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>Go Module 构建模式的变化:修剪的 module 依赖图(pruned module graph)<br><img src="https://static001.geekbang.org/resource/image/2d/0b/2da4da70a5yy998bf635209642b5c80b.jpg?wh=1980x1080" alt="image"><br>go get 已经不再被用来安装某个命令的可执行文件了 -&gt; go install xxx@version</p>
-</li>
-<li>Go 编译器的变化<ul>
-<li>基于寄存器的调用惯例:在 AMD64 架构下率先实现了从基于堆栈的调用惯例到基于寄存器的调用惯例的切换。</li>
-<li>//go:build 形式的构建约束指示符<br><img src="https://static001.geekbang.org/resource/image/22/21/22c37012e48157bdc9a71110bc314421.png?wh=1920x532" alt="image"><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//go:build linux &amp;&amp; (386 || amd64 || arm || arm64 || mips64 || mips64le || ppc64 || ppc64le)</span><br><span class="line">//go:build linux &amp;&amp; (mips64 || mips64le)</span><br><span class="line">//go:build linux &amp;&amp; (ppc64 || ppc64le)</span><br><span class="line">//go:build linux &amp;&amp; !386 &amp;&amp; !arm</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="并发模型"><a href="#并发模型" class="headerlink" title="并发模型"></a>并发模型</h2><p>传统语言的并发模型是基于对内存的共享的, 一个符合 CSP 模型的并发程序应该是一组通过输入输出原语连接起来的 P 的集合</p>
-<p>Goroutine 调度器的任务也就明确了：将 Goroutine 按照一定算法放到不同的操作系统线程中去执行。</p>
-<p>如果 G 被阻塞在某个 channel 操作或网络 I/O 操作上时，M 可以不被阻塞，这避免了大量创建 M 导致的开销。但如果 G 因慢系统调用而阻塞，那么 M 也会一起阻塞，但在阻塞前会与 P 解绑，P 会尝试与其他 M 绑定继续运行其他 G。但若没有现成的 M，Go 运行时会建立新的 M，这也是系统调用可能导致系统线程数量增加的原因</p>
-<h3 id="无缓冲-channel-的惯用法"><a href="#无缓冲-channel-的惯用法" class="headerlink" title="无缓冲 channel 的惯用法:"></a>无缓冲 channel 的惯用法:</h3><ul>
-<li>用作信号传递(1 对 1 通知信号和 1 对 n 通知)</li>
-<li>用于替代锁机制</li>
-</ul>
-<h3 id="带缓冲-channel-的惯用法"><a href="#带缓冲-channel-的惯用法" class="headerlink" title="带缓冲 channel 的惯用法:"></a>带缓冲 channel 的惯用法:</h3><ul>
-<li>用作消息队列</li>
-<li>用作计数信号量（counting semaphore）</li>
-</ul>
-<h3 id="sync包"><a href="#sync包" class="headerlink" title="sync包"></a>sync包</h3><p>sync 包提供了 Go 语言的一系列低级同步原语。Channel 机制也是建立在低级同步原语的基础之上的，因此也叫做高级同步原语。在一些追求高性能的场景下，直接使用低级同步原语可以获得更好的性能。</p>
-<ul>
-<li>读写锁适合应用在具有一定并发量且读多写少的场合</li>
-<li>atomic 包更适合一些对性能十分敏感、并发量较大且读多写少的场合</li>
-</ul>
+<h4 id="优化-Basic-Paxos-执行"><a href="#优化-Basic-Paxos-执行" class="headerlink" title="优化 Basic Paxos 执行"></a>优化 Basic Paxos 执行</h4><p>当领导者处于稳定状态时，省掉准备阶段，直接进入接受阶段”这个优化机制，优化 Basic Paxos 执行。也就是说，领导者节点上，序列中的命令是最新的，不再需要通过准备请求来发现之前被大多数节点通过的提案，领导者可以独立指定提案中的值。这时，领导者在提交命令时，可以省掉准备阶段，直接进入到接受阶段：</p>
+<p><img src="https://static001.geekbang.org/resource/image/3c/54/3cd72a4a138fe1cde52aedd1b897f954.jpg?wh=1142*637" alt=""></p>
+<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><p>Basic Paxos 是经过证明的，而 Multi-Paxos 是一种思想，缺失实现算法的必须编程细节，这就导致，Multi-Paxos 的最终算法实现，是建立在一个未经证明的基础之上的，正确性是个问号。</p>
+<p>在实际使用时，不推荐你设计和实现新的 Multi-Paxos 算法，而是建议优先考虑 Raft 算法，因为 Raft 的正确性是经过证明的。</p>
 
       
 
@@ -360,7 +250,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Go</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">分布式协议</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Paxos</a>
         		</li>
       		
 		</ul>
@@ -416,7 +310,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2022/10/23/Go语言第一课学习笔记/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2023/05/09/Paxos算法/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -430,18 +324,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2022/11/10/Go语言常见的“坑”与避坑方法/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Go语言常见的“坑”与避坑方法
-        
-      </div>
-    </a>
   
-  
-    <a href="/2021/01/20/Laravel读写分离原理/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Laravel读写分离原理</div>
+    <a href="/2023/05/04/分布式基本概念/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">分布式基本概念</div>
       <i class="icon-circle-right"></i>
     </a>
   
