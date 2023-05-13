@@ -1,6 +1,6 @@
 ---
 title: Paxos算法
-date: 2023-05-09 11:10:44
+date: 2023-05-06 11:10:44
 tags: ["分布式协议", "Paxos"]
 ---
 Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有高度容错特性的**共识（consensus）**算法。
