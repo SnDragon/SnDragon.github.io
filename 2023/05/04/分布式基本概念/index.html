@@ -16,16 +16,16 @@
 <meta property="og:site_name" content="sndragon的个人博客">
 <meta property="og:description" content="分布式系统是一个硬件或软件组件分布在不同计算机上，彼此之间仅仅通过消息传递进行通信和协调的系统。 CAP理论 对于一个分布式系统而言，无法同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance)。  一致性对某个指定的客户端来说，读操作保证能够返回最新的写操作结果，强调数据正确 可用性非故障的节点在合理的时间内返回合理的响应">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%9845%E8%AE%B2-%E5%AE%8C/assets/CgoCgV6elbmATRwxAAFU68JiQU0596.png">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/41122af7-4cc2-48a2-b78c-c0ea2f40d03b.png">
 <meta property="og:image" content="https://ljchen.net/uploads/3pc-flow.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/objcoding/md-picture/master/img/20220116160157.png">
-<meta property="og:image" content="https://static001.geekbang.org/resource/image/1c/33/1cc7514e341fab7bd7044b37285f4433.jpg?wh=1142*785">
-<meta property="og:image" content="https://static001.geekbang.org/resource/image/12/13/122bdf34957c6277352ea51c43552213.png?wh=3094*1824">
-<meta property="og:updated_time" content="2023-05-04T10:36:37.243Z">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/2039ed55-425b-4f35-9f1d-c614f20dad12.png">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/a11a9d72-8a5d-4689-9ba1-3c772603b7d5.jpg">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/ab04f0d8-b623-49b6-82ca-df3f3aa15946.png">
+<meta property="og:updated_time" content="2023-11-11T15:21:33.865Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式基本概念">
 <meta name="twitter:description" content="分布式系统是一个硬件或软件组件分布在不同计算机上，彼此之间仅仅通过消息传递进行通信和协调的系统。 CAP理论 对于一个分布式系统而言，无法同时满足一致性（Consistency）、可用性（Availability）和分区容错性（Partition Tolerance)。  一致性对某个指定的客户端来说，读操作保证能够返回最新的写操作结果，强调数据正确 可用性非故障的节点在合理的时间内返回合理的响应">
-<meta name="twitter:image" content="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%9845%E8%AE%B2-%E5%AE%8C/assets/CgoCgV6elbmATRwxAAFU68JiQU0596.png">
+<meta name="twitter:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/41122af7-4cc2-48a2-b78c-c0ea2f40d03b.png">
   
     <link rel="alternative" href="/atom.xml" title="sndragon的个人博客" type="application/atom+xml">
   
@@ -197,7 +197,7 @@
 <h3 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h3><h4 id="2PC-二阶段提交协议"><a href="#2PC-二阶段提交协议" class="headerlink" title="2PC(二阶段提交协议)"></a>2PC(二阶段提交协议)</h4><p>角色: 协调者+参与者</p>
 <ul>
 <li>第一阶段（提交请求，又称投票阶段）</li>
-<li>第二阶段（提交执行阶段，又称完成阶段）<br><img src="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%88%86%E5%B8%83%E5%BC%8F%E6%8A%80%E6%9C%AF%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E6%88%9845%E8%AE%B2-%E5%AE%8C/assets/CgoCgV6elbmATRwxAAFU68JiQU0596.png" alt="两阶段提交"></li>
+<li>第二阶段（提交执行阶段，又称完成阶段）<br><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/41122af7-4cc2-48a2-b78c-c0ea2f40d03b.png"></li>
 </ul>
 <blockquote>
 <p>二阶段提交协议最早是用来实现数据库的分布式事务的，不过现在最常用的协议是 XA 协议。这个协议是 X/Open 国际联盟基于二阶段提交协议提出的，也叫作 X/Open Distributed Transaction Processing（DTP）模型，比如 MySQL 就是通过 MySQL XA 实现了分布式事务。</p>
@@ -234,7 +234,7 @@
 <li>网络分区情况下还是有数据不一致问题</li>
 </ol>
 <h4 id="TCC（Try-Confirm-Cancel）"><a href="#TCC（Try-Confirm-Cancel）" class="headerlink" title="TCC（Try-Confirm-Cancel）"></a>TCC（Try-Confirm-Cancel）</h4><p>TCC 是 Try（预留）、Confirm（确认）、Cancel（撤销） 3 个操作的简称，它包含了预留、确认或撤销这 2 个阶段。</p>
-<p><img src="https://raw.githubusercontent.com/objcoding/md-picture/master/img/20220116160157.png" alt="TCC"></p>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/2039ed55-425b-4f35-9f1d-c614f20dad12.png"></p>
 <blockquote>
 <p>TCC 本质上是<strong>补偿事务</strong>，它的核心思想是针对每个操作都要注册一个与其对应的确认操作和补偿操作（也就是撤销操作）。 它是一个业务层面的协议，你也可以将 TCC 理解为编程模型，TCC 的 3 个操作是需要在业务代码中编码实现的，为了实现一致性，确认操作和补偿操作必须是等幂的，因为这 2 个操作可能会失败重试。另外，TCC 不依赖于数据库的事务，而是在业务中实现了分布式事务，这样能减轻数据库的压力，但对业务代码的入侵性也更强，实现的复杂度也更高</p>
 </blockquote>
@@ -263,7 +263,7 @@
 <li>故障隔离（出现故障，做到故障隔离，避免影响其他服务）</li>
 <li>弹性扩容（基于Metric和Monitor实现系统态势感知，做到弹性伸缩）</li>
 </ol>
-<h2 id="分布式协议与算法"><a href="#分布式协议与算法" class="headerlink" title="分布式协议与算法"></a>分布式协议与算法</h2><p><img src="https://static001.geekbang.org/resource/image/1c/33/1cc7514e341fab7bd7044b37285f4433.jpg?wh=1142*785" alt="分布式算法的四度空间"></p>
+<h2 id="分布式协议与算法"><a href="#分布式协议与算法" class="headerlink" title="分布式协议与算法"></a>分布式协议与算法</h2><p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/a11a9d72-8a5d-4689-9ba1-3c772603b7d5.jpg"></p>
 <h3 id="拜占庭容错"><a href="#拜占庭容错" class="headerlink" title="拜占庭容错"></a>拜占庭容错</h3><p>拜占庭将军问题（Byzantine Generals Problem），是由莱斯利·兰波特在其同名论文中提出的分布式对等网络通信容错问题。</p>
 <blockquote>
 <p>在分布式计算中，不同的计算机通过通讯交换信息达成共识而按照同一套协作策略行动。但有时候，系统中的成员计算机可能<strong>出错而发送错误的信息</strong>，用于传递信息的通讯网络也可能导致信息损坏，使得网络中不同的成员关于全体协作的策略得出不同结论，从而破坏系统<strong>一致性</strong></p>
@@ -287,7 +287,7 @@
 <li>共识：各节点就指定值（Value）达成共识，而且达成共识后的值，就不再改变了。</li>
 <li>一致性：是指写操作完成后，能否从各节点上读到最新写入的数据，如果立即能读到，就是强一致性，如果最终能读到，就是最终一致性。</li>
 </ul>
-<p><img src="https://static001.geekbang.org/resource/image/12/13/122bdf34957c6277352ea51c43552213.png?wh=3094*1824" alt="思维导图"></p>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/ab04f0d8-b623-49b6-82ca-df3f3aa15946.png"></p>
 <p>参考资料:</p>
 <ul>
 <li><a href="https://ljchen.net/2019/08/25/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%8D%8F%E8%AE%AE/" target="_blank" rel="noopener">分布式事务协议</a></li>
@@ -539,6 +539,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Mail</a>
               </li>
              
@@ -555,6 +559,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">搜索</a>
               </li>
              
@@ -563,19 +571,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Go</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">server</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">OAuth2.0</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -587,6 +583,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">OAuth2.0</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
@@ -595,7 +595,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Raft</a>
+                <a href="javascript:void(0)" class="js-tag color2">Spring</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -603,11 +603,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ZAB</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Zookeeper</a>
+                <a href="javascript:void(0)" class="js-tag color5">Raft</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -615,31 +611,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Spring</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">分布式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">php</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">composer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -655,11 +627,39 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ElasticSearch</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">MySQL</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">短链</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ZAB</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Zookeeper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ES</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">php</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">composer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
             
             <div class="clearfix"></div>
