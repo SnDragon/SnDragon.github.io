@@ -22,19 +22,19 @@ Raft 算法支持领导者（Leader）、跟随者（Follower）和候选人（C
 ## 选举领导者
 在初始状态下，集群中所有的节点都是跟随者的状态。
 <!-- more -->
-<img src="https://static001.geekbang.org/resource/image/5b/a2/5b391fd6cb9ed54ba77b0b96efed75a2.jpg?wh=1142*905" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/4e718c2e-0891-4efa-b53e-481e66724a4c.jpg" width="50%" height="50%" />
 
 每个节点等待领导者节点心跳信息的超时时间间隔是随机的,最先没有等到领导者的心跳信息的节点会增加自己的任期编号，并推举自己为候选人，先给自己投上一张选票，然后向其他节点发送请求投票 RPC 消息，请它们选举自己为领导者。
 
-<img src="https://static001.geekbang.org/resource/image/aa/9c/aac5704d69f142ead5e92d33f893a69c.jpg?wh=1142*962" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/1c4c5261-b209-4c01-a5d1-70319acf426b.jpg" width="50%" height="50%" />
 
 如果其他节点接收到候选人 A 的请求投票 RPC 消息，在编号为 1 的这届任期内，也还没有进行过投票，那么它将把选票投给节点 A，并增加自己的任期编号。
 
-<img src="https://static001.geekbang.org/resource/image/a4/95/a4bb6d1fa7c8c48106a4cf040b7b1095.jpg?wh=1142*1121" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/ea9c1d73-4296-44b1-9327-e8faeda0f5bb.jpg" width="50%" height="50%" />
 
 如果候选人在选举超时时间内赢得了大多数的选票，那么它就会成为本届任期内新的领导者。当选领导者后，他将周期性地发送心跳消息，通知其他服务器我是领导者，阻止跟随者发起新的选举，篡权。
 
-<img src="https://static001.geekbang.org/resource/image/0a/91/0a626f52c2e2a147c59c862b148be691.jpg?wh=1142*1036" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/a0bcb8ef-c378-4739-bdd4-3dfbb9b094e0.jpg" width="50%" height="50%" />
 
 ### RPC
 在 Raft 算法中，服务器节点间的沟通联络采用的是远程过程调用（RPC），在领导者选举中，需要用到这样两类的 RPC：
@@ -53,7 +53,7 @@ Raft 算法中的领导者也是有任期的，每个任期由单调递增的数
 3. 在一次选举中，赢得大多数选票的候选人，将晋升为领导者,保证了一个给定的任期内最多只有一个领导者。
 4. 在一个任期内，领导者一直都会是领导者，直到它自身出现问题（比如宕机），或者因为网络延迟，其他节点发起一轮新的选举。
 5. 在一次选举中，每一个服务器节点最多会对一个任期编号投出一张选票，并且按照“先来先服务”的原则进行投票。比如节点 C 的任期编号为 3，先收到了 1 个包含任期编号为 4 的投票请求（来自节点 A），然后又收到了 1 个包含任期编号为 4 的投票请求（来自节点 B）。那么节点 C 将会把唯一一张选票投给节点 A，当再收到节点 B 的投票请求 RPC 消息时，对于编号为 4 的任期，已没有选票可投了。
-<img src="https://static001.geekbang.org/resource/image/33/84/3373232d5c10813c7fc87f2fd4a12d84.jpg?wh=1142*855" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/7956e4f9-5a82-4958-8964-f36b9ddd40be.jpg" width="50%" height="50%" />
 6. 日志完整性高的跟随者（也就是最后一条日志项对应的任期编号值更大，索引号更大），拒绝投票给日志完整性低的候选人。比如节点 B 的任期编号为 3，节点 C 的任期编号是 4，节点 B 的最后一条日志项对应的任期编号为 3，而节点 C 为 2，那么当节点 C 请求节点 B 投票给自己时，节点 B 将拒绝投票。即只有日志较完整的节点（也就是日志完整度不比半数节点低的节点），才能当选领导者
 
 
@@ -77,7 +77,7 @@ Raft 算法中的领导者也是有任期的，每个任期由单调递增的数
 
 日志项是一种数据格式，它主要包含用户指定的数据，也就是指令（Command），还包含一些附加信息，比如索引值（Log index）、任期编号（Term）。
 
-<img src="https://static001.geekbang.org/resource/image/d5/6d/d5c7b0b95b4289c10c9e0817c71f036d.jpg?wh=1142*750" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/acfa940f-6b4d-4978-a225-d38f68e597d2.jpg" width="50%" height="50%" />
 
 可以把 Raft 的日志复制理解成一个优化后的二阶段提交（将二阶段优化成了一阶段），减少了一半的往返消息，也就是降低了一半的消息延迟。
 
@@ -88,7 +88,7 @@ Raft 算法中的领导者也是有任期的，每个任期由单调递增的数
 
 因此，当其他节点接受领导者的心跳消息，或者新的日志复制 RPC 消息后，就会将这条日志项应用到它的状态机。而这个优化，降低了处理客户端请求的延迟，将二阶段提交优化为了一段提交，降低了一半的消息延迟。
 
-<img src="https://static001.geekbang.org/resource/image/b8/29/b863dc8546a78c272c965d6e05afde29.jpg?wh=1142*475" width="70%" height="70%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/62c51664-5fe4-4926-a79c-10852c8b57bd.jpg" width="70%" height="70%" />
 
 1. 接收到客户端请求后，领导者基于客户端请求中的指令，创建一个新日志项，并附加到本地日志中。
 2. 领导者通过日志复制 RPC，将新的日志项复制到其他的服务器。
@@ -112,19 +112,19 @@ Raft与Multi-Paxos的不同：
 
 假设我们有一个由节点 A、B、C 组成的 Raft 集群，现在我们需要增加数据副本数，增加 2 个副本（也就是增加 2 台服务器），扩展为由节点 A、B、C、D、E， 5 个节点组成的新集群：
 
-<img src="https://static001.geekbang.org/resource/image/85/04/853b678cb8a088ce1bc9f91fc62bde04.jpg?wh=1142*400" width="70%" height="70%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/470ebee6-4d04-4851-8eda-ae5c699fefb1.jpg" width="70%" height="70%" />
 
 可能会同时出现 2 个领导者。比如在进行成员变更时，节点 A、B 和 C 之间发生了分区错误，节点 A、B 组成旧配置中的“大多数”，也就是变更前的 3 节点集群中的“大多数”，那么这时的领导者（节点 A）依旧是领导者。另一方面，节点 C 和新节点 D、E 组成了新配置的“大多数”，也就是变更后的 5 节点集群中的“大多数”，它们可能会选举出新的领导者（比如节点 C）。那么这时，就出现了同时存在 2 个领导者的情况。
 
-<img src="https://static001.geekbang.org/resource/image/82/9e/827a4616e65633015c1f77f3425b1a9e.jpg?wh=1142*293" width="70%" height="70%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/e13a48a1-0285-4537-b661-80c9b7273894.jpg" width="70%" height="70%" />
 
 ### 解决方案:单节点变更
 单节点变更，就是通过一次变更一个节点实现成员变更。如果需要变更多个节点，那你需要执行多次单节点变更。
 
 不管旧的集群配置是怎么组成的，旧配置的“大多数”和新配置的“大多数”都会有一个节点是重叠的。
-<img src="https://static001.geekbang.org/resource/image/5f/b8/5fe7c8d90857737d7314263eae2166b8.jpg?wh=1142*906" width="70%" height="70%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/98b4dfbe-4888-4670-aa83-949c2af65725.jpg" width="70%" height="70%" />
 
-<img src="https://static001.geekbang.org/resource/image/4a/27/4a00b7e1b89922cd9f785c6f153aca27.jpg?wh=1142*899" width="70%" height="70%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/c78b88c0-43b8-43a2-9e71-2d941d88966a.jpg" width="70%" height="70%" />
 
 > 单节点变更是利用“一次变更一个节点，不会同时存在旧配置和新配置 2 个‘大多数’”的特性，实现成员变更。
 

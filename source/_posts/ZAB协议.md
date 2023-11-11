@@ -12,7 +12,7 @@ Raft 出来的比较晚，直到 2013 年才正式提出，而ZooKeeper是在200
 
 ## ZAB 是如何实现操作的顺序性的？
 <!-- more -->
-<img src="https://static001.geekbang.org/resource/image/77/6f/770c39b4ea339799bc3ca4a0b0d8266f.jpg?wh=1142*478" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/ccec1929-eecb-4847-8c5b-75b29a50e3b7.jpg" width="50%" height="50%" />
 
 在 ZAB 中，写操作必须在主节点上执行。如果客户端访问的节点是备份节点，它会将写请求转发给主节点。
 当主节点接收到写请求后，它会基于写请求中的指令（也就是 X，Y），来创建一个提案（Proposal），并使用一个唯一的 ID,即事务标识符（Transaction ID，也就是 zxid） 来标识这个提案。
@@ -24,11 +24,11 @@ Raft 出来的比较晚，直到 2013 年才正式提出，而ZooKeeper是在200
 
 在创建完提案之后，主节点会基于 **TCP 协议**，并按照顺序将提案广播到其他节点。这样就能保证先发送的消息，会先被收到，保证了消息接收的顺序性。
 
-<img src="https://static001.geekbang.org/resource/image/e5/96/e525af146900c892e0c002affa77d496.jpg?wh=1142*403" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/a7da7dde-9f9e-4f32-b36d-8029f88fb994.jpg" width="50%" height="50%" />
 
 当主节点接收到指定提案的“大多数”的确认响应后，该提案将处于提交状态（Committed），主节点会通知备份节点提交该提案。
 
-<img src="https://static001.geekbang.org/resource/image/1d/19/1d3950b6d91845789cce1f0569969419.jpg?wh=1142*423" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/d09e1aab-6311-4a5c-b873-ef2df6379d28.jpg" width="50%" height="50%" />
 
 主节点提交提案是有顺序性的。主节点根据事务标识符大小，按照顺序提交提案，如果前一个提案未提交，此时主节点是不会提交后一个提案的。也就是说，指令 X 一定会在指令 Y 之前提交。
 
@@ -57,7 +57,7 @@ ZAB 支持 3 种成员身份：
 * LEADING ：领导者状态，意味着当前节点是领导者。
 * OBSERVING： 观察者状态，意味着当前节点是观察者。
 
-<img src="https://www.runoob.com/wp-content/uploads/2020/09/vote-01.png" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/5f013063-bfc4-47d9-bc03-561380616b39.png" width="50%" height="50%" />
 
 
 1. 当跟随者检测到连接领导者节点的读操作等待超时了，跟随者会变更节点状态，将自己的节点状态变更成 LOOKING，然后发起领导者选举
@@ -106,7 +106,7 @@ ZAB 定义了 4 种状态，来标识节点的运行状态。
 
 举个例子：当发生分区故障了，C 与 A（领导者）、B 网络不通了，那么 C 将设置自己的状态为 LOOKING，此时在 C 节点上既不能执行读操作，也不能执行写操作。
 
-<img src="https://static001.geekbang.org/resource/image/22/ad/22dfaa624590885c4b8406deb445afad.jpg?wh=1142*456" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/9c45b23c-52a9-48f1-b64d-79ecde019d18.jpg" width="50%" height="50%" />
 
 其次，当大多数节点进入到广播阶段的时候，领导者才能提交提案，因为提案提交，需要来自大多数节点的确认。
 
@@ -114,12 +114,12 @@ ZAB 定义了 4 种状态，来标识节点的运行状态。
 
 ### 写操作
 
-<img src="https://static001.geekbang.org/resource/image/c7/8a/c77c241713b154673e15083fd063428a.jpg?wh=1142*948" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/44c76959-7a1e-47a6-94d1-42b4a31cb409.jpg" width="50%" height="50%" />
 
 ### 读操作
 相比写操作，读操作的处理要简单很多，因为接收到读请求的节点，只需要查询本地数据，然后响应数据给客户端就可以了。
 
-<img src="https://static001.geekbang.org/resource/image/f4/6d/f405d2a81f374e6e63b49c469506f26d.jpg?wh=1142*652" width="50%" height="50%" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/1b681077-64de-4dfc-9d92-569378576081.jpg" width="50%" height="50%" />
 
 ## ZAB 和 Raft 的异同
 * 领导者选举：ZAB 采用的“见贤思齐、相互推荐”的快速领导者选举（Fast Leader Election），Raft 采用的是“一张选票、先到先得”的自定义算法。Raft 的领导者选举，需要通讯的消息数更少，选举也更快。

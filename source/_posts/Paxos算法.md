@@ -10,13 +10,15 @@ Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有
 
 ## Basic Paxos
 ### 问题
-![paxos problem](https://static001.geekbang.org/resource/image/93/67/93a9fa0a75c23971066dc791389b8567.jpg?wh=1142*424)
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/e3753a4a-9f88-4a7e-9d02-7cb66bf6a10c.jpg" />
+
 有多个客户端（比如客户端 1、2）访问系统，试图创建同一个只读变量（比如 X），客户端 1 试图创建值为 3 的 X，客户端 2 试图创建值为 7 的 X，要如何达成共识，实现各节点上 X 值的一致？
 
 <!-- more -->
 ### 三种角色
 在 Basic Paxos 中，有提议者（Proposer）、接受者（Acceptor）、学习者（Learner）三种角色，他们之间的关系如下：
-![paxos role](https://static001.geekbang.org/resource/image/77/42/77be9903f7cbe980e5a6e77412d2ad42.jpg?wh=1142*620)
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/3a1f1d35-9e42-4d03-9ca4-a8ded0b752a6.jpg" />
+
 
 * 提议者（Proposer）：提议一个值，用于投票表决。一般是集群中收到客户端请求的节点，发起**二阶段提交**，进行共识协商；
 * 接受者（Acceptor）：对每个提议的值进行投票，并存储接受的值，比如 A、B、C 三个节点。 一般来说，集群中的所有节点都在扮演接受者的角色，参与共识协商，并接受和存储数据。
@@ -30,13 +32,13 @@ Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有
 ### 例子
 #### 准备（Prepare）阶段
 在准备请求中不需要指定提议的值，只需要携带提案编号即可。
-![paxos prepare](https://static001.geekbang.org/resource/image/64/54/640219532d0fcdffc08dbd1b3b3f0454.jpg?wh=1142*456)
-![](https://static001.geekbang.org/resource/image/ec/24/ecf9a5872201e875a2e0417c32ec2d24.jpg?wh=1142*439)
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/d5835844-a9e8-42d3-a473-916c77eda179.jpg" />
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/14f8c3b2-92c2-411e-aade-5c9400a30964.jpg" />
 #### 接受（Accept）阶段
 客户端 1、2 在收到大多数节点的准备响应之后，会分别发送接受请求：
-![Paxos Accept](https://static001.geekbang.org/resource/image/70/89/70de602cb4b52de7545f05c5485deb89.jpg?wh=1142*434)
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/b28ad373-fc7e-4e46-93f7-431b3936caee.jpg" />
 
-![](https://static001.geekbang.org/resource/image/f8/45/f836c40636d26826fc04a51a5945d545.jpg?wh=1142*430)
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/fd39aa35-48cc-4a80-a8b4-8d3747985200.jpg" />
 
 > 如果集群中有学习者，当接受者通过了一个提案时，就通知给所有的学习者。当学习者发现大多数的接受者都通过了某个提案，那么它也通过该提案，接受该提案的值
 
@@ -44,7 +46,7 @@ Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有
 兰伯特提到的 Multi-Paxos 是一种思想，不是算法。而 Multi-Paxos 算法是一个统称，它是指基于 Multi-Paxos 思想，通过多个 Basic Paxos 实例实现一系列值的共识的算法（比如 Chubby 的 Multi-Paxos 实现、Raft 算法等）
 
 ### 问题
-![](https://static001.geekbang.org/resource/image/aa/e0/aafabff1fe2a26523e9815805ccca6e0.jpg?wh=1142*643)
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/45fa7666-1a73-4f21-a739-bccc41348353.jpg" />
 
 如果我们直接通过多次执行 Basic Paxos 实例，来实现一系列值的共识，就会存在这样几个问题：
 * 如果多个提议者同时提交提案，可能出现因为提案编号冲突，在准备阶段没有提议者接收到大多数准备响应，**协商失败**，需要重新协商。如，一个 5 节点的集群，如果 3 个节点作为提议者同时提案，就可能发生因为没有提议者接收大多数响应（比如 1 个提议者接收到 1 个准备响应，另外 2 个提议者分别接收到 2 个准备响应）而准备失败，需要重新协商。
@@ -53,13 +55,14 @@ Paxos算法是Leslie Lamport于1990年提出的一种基于消息传递且具有
 ### 解决方案
 #### 领导者
 通过引入领导者节点，领导者节点作为唯一提议者，这样就不存在多个提议者同时提交提案的情况，也就不存在提案冲突的情况了：
-![](https://static001.geekbang.org/resource/image/af/f6/af3d6a291d960ace59a88898abb74ef6.jpg?wh=1142*653)
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/36c8cb5a-2eaa-42b4-9fba-6bd99b5c452f.jpg" />
+
 > 在论文中，兰伯特没有说如何选举领导者，需要我们在实现 Multi-Paxos 算法的时候自己实现。 比如在 Chubby 中，主节点（也就是领导者节点）是通过执行 Basic Paxos 算法，进行投票选举产生的。
 
 #### 优化 Basic Paxos 执行
 当领导者处于稳定状态时，省掉准备阶段，直接进入接受阶段”这个优化机制，优化 Basic Paxos 执行。也就是说，领导者节点上，序列中的命令是最新的，不再需要通过准备请求来发现之前被大多数节点通过的提案，领导者可以独立指定提案中的值。这时，领导者在提交命令时，可以省掉准备阶段，直接进入到接受阶段：
 
-![](https://static001.geekbang.org/resource/image/3c/54/3cd72a4a138fe1cde52aedd1b897f954.jpg?wh=1142*637)
+<img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/fe28d489-62ef-483c-b40c-3bd2af98dcca.jpg" />
 
 ### 注意点
 Basic Paxos 是经过证明的，而 Multi-Paxos 是一种思想，缺失实现算法的必须编程细节，这就导致，Multi-Paxos 的最终算法实现，是建立在一个未经证明的基础之上的，正确性是个问号。
