@@ -6,20 +6,33 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://sndragon.com">
-  <title>Nginx的server_name和location配置 | sndragon的个人博客</title>
+  <title>初识Pulsar | sndragon的个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Nginx是目前最流行的Web服务器,由于具备高性能、高可靠以及支持热部署等特性被人们所青睐。Nginx用途广泛,其可作为静态资源服务器，也可充当代理服务器(HTTP/TCP/UDP/MAIL等)，还可以用来实现一些简单的API服务。Nginx主要是通过其配置文件(一般名为nginx.conf)来控制它的行为，本文主要介绍其http模块下的 server_name和location这两条指令的配置">
-<meta name="keywords" content="nginx,server">
+  <meta name="description" content="Apache Pulsar 是 Apache 软件基金会顶级项目，是下一代云原生分布式消息流平台，集消息、存储、轻量化函数式计算为一体，采用计算与存储分离架构设计，支持多租户、持久化存储、多机房跨区域数据复制，具有强一致性、高吞吐、低延时及高可扩展性等流数据存储特性，被看作是云原生时代实时消息流传输、存储和计算最佳解决方案。  主要特性: 具备高一致、高可靠、高并发特性 采用服务和存储分离架构">
+<meta name="keywords" content="MQ,Pulsar">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Nginx的server_name和location配置">
-<meta property="og:url" content="http://sndragon.com/2020/02/17/Nginx的server_name和location配置/index.html">
+<meta property="og:title" content="初识Pulsar">
+<meta property="og:url" content="http://sndragon.com/2023/11/11/初识Pulsar/index.html">
 <meta property="og:site_name" content="sndragon的个人博客">
-<meta property="og:description" content="Nginx是目前最流行的Web服务器,由于具备高性能、高可靠以及支持热部署等特性被人们所青睐。Nginx用途广泛,其可作为静态资源服务器，也可充当代理服务器(HTTP/TCP/UDP/MAIL等)，还可以用来实现一些简单的API服务。Nginx主要是通过其配置文件(一般名为nginx.conf)来控制它的行为，本文主要介绍其http模块下的 server_name和location这两条指令的配置">
+<meta property="og:description" content="Apache Pulsar 是 Apache 软件基金会顶级项目，是下一代云原生分布式消息流平台，集消息、存储、轻量化函数式计算为一体，采用计算与存储分离架构设计，支持多租户、持久化存储、多机房跨区域数据复制，具有强一致性、高吞吐、低延时及高可扩展性等流数据存储特性，被看作是云原生时代实时消息流传输、存储和计算最佳解决方案。  主要特性: 具备高一致、高可靠、高并发特性 采用服务和存储分离架构">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2022-10-24T15:48:14.916Z">
+<meta property="og:image" content="https://pulsar.apache.org/img/logo-black.svg">
+<meta property="og:image" content="https://main.qcloudimg.com/raw/8fa46c108d316e3cc3bf299b0be7e775.svg">
+<meta property="og:image" content="https://qcloudimg.tencent-cloud.cn/image/document/5b8f3d165b3977616064fbd95ff003f5.png">
+<meta property="og:image" content="https://qcloudimg.tencent-cloud.cn/image/document/5f9022df4eedd6d45684269fe27050d9.png">
+<meta property="og:image" content="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/pulsar/pulsar-write.png">
+<meta property="og:image" content="https://qcloudimg.tencent-cloud.cn/image/document/b3ecbf43626e9bafb76e2ed5b94e580c.png">
+<meta property="og:image" content="https://qcloudimg.tencent-cloud.cn/image/document/501d7847c71e3f8fd01aebc06fad6a12.png">
+<meta property="og:image" content="https://qcloudimg.tencent-cloud.cn/image/document/38665c07c06e7ba8dcf96ee32150df37.png">
+<meta property="og:image" content="https://qcloudimg.tencent-cloud.cn/image/document/c1f9c9cf1f5d59c18f2f86641de63438.png">
+<meta property="og:image" content="https://qcloudimg.tencent-cloud.cn/image/document/e40f4037ac99d92f6053c81f4a683e88.png">
+<meta property="og:image" content="https://qcloudimg.tencent-cloud.cn/image/document/46ee55c0a3649881282f494e146c3ba5.png">
+<meta property="og:image" content="https://qcloudimg.tencent-cloud.cn/image/document/d0766ee852ec8e8c88451c779c7f8c71.png">
+<meta property="og:updated_time" content="2023-11-11T15:37:38.187Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Nginx的server_name和location配置">
-<meta name="twitter:description" content="Nginx是目前最流行的Web服务器,由于具备高性能、高可靠以及支持热部署等特性被人们所青睐。Nginx用途广泛,其可作为静态资源服务器，也可充当代理服务器(HTTP/TCP/UDP/MAIL等)，还可以用来实现一些简单的API服务。Nginx主要是通过其配置文件(一般名为nginx.conf)来控制它的行为，本文主要介绍其http模块下的 server_name和location这两条指令的配置">
+<meta name="twitter:title" content="初识Pulsar">
+<meta name="twitter:description" content="Apache Pulsar 是 Apache 软件基金会顶级项目，是下一代云原生分布式消息流平台，集消息、存储、轻量化函数式计算为一体，采用计算与存储分离架构设计，支持多租户、持久化存储、多机房跨区域数据复制，具有强一致性、高吞吐、低延时及高可扩展性等流数据存储特性，被看作是云原生时代实时消息流传输、存储和计算最佳解决方案。  主要特性: 具备高一致、高可靠、高并发特性 采用服务和存储分离架构">
+<meta name="twitter:image" content="https://pulsar.apache.org/img/logo-black.svg">
   
     <link rel="alternative" href="/atom.xml" title="sndragon的个人博客" type="application/atom+xml">
   
@@ -147,211 +160,209 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-Nginx的server_name和location配置" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-初识Pulsar" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Nginx的server_name和location配置
+      初识Pulsar
     </h1>
   
 
         
-        <a href="/2020/02/17/Nginx的server_name和location配置/" class="archive-article-date">
-  	<time datetime="2020-02-17T14:07:53.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-17</time>
+        <a href="/2023/11/11/初识Pulsar/" class="archive-article-date">
+  	<time datetime="2023-11-11T15:28:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-11</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a href="http://nginx.org/" target="_blank" rel="noopener">Nginx</a>是目前最流行的Web服务器,由于具备高性能、高可靠以及支持热部署等特性被人们所青睐。Nginx用途广泛,其可作为静态资源服务器，也可充当代理服务器(HTTP/TCP/UDP/MAIL等)，还可以用来实现一些简单的API服务。Nginx主要是通过其配置文件(一般名为<code>nginx.conf</code>)来控制它的行为，本文主要介绍其http模块下的 <code>server_name</code>和<code>location</code>这两条指令的配置。<br><a id="more"></a></p>
-<h2 id="server指令块与虚拟主机"><a href="#server指令块与虚拟主机" class="headerlink" title="server指令块与虚拟主机"></a>server指令块与虚拟主机</h2><p>虚拟主机是一种在单一主机或主机群上运行多个网站或服务的技术，可以用来解决IP地址资源有限而网站数目日益增多的问题。实现方式主要有以下三种:</p>
-<ul>
-<li>基于域名(Name-based)</li>
-<li>基于IP地址(IP-based)</li>
-<li>基于Port端口(Port-based)</li>
+        <p><img src="https://pulsar.apache.org/img/logo-black.svg" alt=""></p>
+<blockquote>
+<p>Apache Pulsar 是 Apache 软件基金会顶级项目，是下一代云原生分布式消息流平台，集消息、存储、轻量化函数式计算为一体，采用计算与存储分离架构设计，支持多租户、持久化存储、多机房跨区域数据复制，具有强一致性、高吞吐、低延时及高可扩展性等流数据存储特性，被看作是云原生时代实时消息流传输、存储和计算最佳解决方案。</p>
+</blockquote>
+<h4 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性:"></a>主要特性:</h4><ul>
+<li>具备高一致、高可靠、高并发特性</li>
+<li>采用服务和存储分离架构，支持水平动态扩容</li>
+<li>支持百万级消息主题</li>
+<li>非常低的消息发布和端到端的延迟</li>
+<li>支持多种订阅模式：独占（exclusive）、共享（shared）、灾备（failover）</li>
+<li>一个 Serverless 的轻量级计算框架 Functions 提供了原生的流数据处理</li>
+<li>支持多集群，能够无缝的基于地理位置进行跨集群的备份</li>
 </ul>
-<p>其中使用最广泛无疑是基于域名的方式,不同的域名通过DNS最终可以解析到相同的IP地址,在对应的机器上我们可以使用Nginx等Web服务器软件对不同的域名请求进行相应的处理。这里再提及一点,我们平时访问一个网站，是通过DNS将其解析到某一个IP上,我们的客户端(通常是浏览器)最终是和这个IP对应的机器建立连接，从而发送请求的。那么Nginx等服务器是如何知道一个请求对应的是哪个域名的呢？</p>
-<p>答案在于HTTP协议中的Host请求头,其值为我们要访问的域名。这里需要注意的是,在HTTP/1.0中是不支持Host请求头字段的,所以HTTP/1.0是不支持虚拟主机技术的，而根据<a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html" target="_blank" rel="noopener">rfc2616规范</a>HTTP/1.1协议中客户端发送的请求必须带上Host这个请求头,否则服务器必须返回<code>400 Bad Request</code>响应。</p>
-<p>而nginx正是通过http模块下的server指令块来配置虚拟主机。</p>
-<h2 id="server-name指令"><a href="#server-name指令" class="headerlink" title="server_name指令"></a>server_name指令</h2><h3 id="配置语法"><a href="#配置语法" class="headerlink" title="配置语法:"></a>配置语法:</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	server_name name ...;</span><br><span class="line">Default:	</span><br><span class="line">server_name &quot;&quot;;</span><br><span class="line">Context: server</span><br></pre></td></tr></table></figure>
-<h3 id="server-name形式"><a href="#server-name形式" class="headerlink" title="server_name形式"></a>server_name形式</h3><p>sever_name指令后面的参数值可以是以下几种:</p>
+<a id="more"></a>
+<h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><p><strong>数据强一致</strong></p>
+<p>Pulsar 版采用 BookKeeper 一致性协议 实现数据强一致性（类似 RAFT 算法），将消息数据备份写到不同物理机上，并且要求是同步刷盘。当某台物理机出故障时，后台数据复制机制能够对数据快速迁移，保证用户数据备份可用。<br><strong>高性能低延迟</strong></p>
+<p>Pulsar能够高效支持百万级消息生产和消费，海量消息堆积且消息堆积容量不设上限，支撑了腾讯计费所有场景；性能方面，单集群 QPS 超过10万，同时在时耗方面有保护机制来保证低延迟，帮助您轻松满足业务性能需求。<br><strong>百万级 Topic</strong></p>
+<p>Pulsar计算与存储架构的分离设计，使得 Pulsar可以轻松支持百万级消息主题。相比于市场上其他 MQ 产品，整个集群不会因为 Topic 数量增加而导致性能急剧下降。<br><strong>丰富的消息类型</strong></p>
+<p>Pulsar提供丰富的消息类型，涵盖普通消息、顺序消息（全局顺序 / 分区顺序）、分布式事务消息、定时消息，满足各种严苛场景下的高级特性需求。<br><strong>消费者数量无限制</strong></p>
+<p>不同于 Kafka 的消息消费模式，Pulsar的消费者数量不受限于 Topic 的分区个数，并且会按照一定的算法均衡每个消费者的消息量，业务可按需启动对应的消费者数量。<br><strong>多协议接入</strong></p>
+<p>Pulsar的 API 支持 Java、C++、Go 等多语言，并且支持 HTTP 协议，可扩展更多语言的接入，另外还支持开源RocketMQ、RabbitMQ客户端的接入。如果用户只是利用消息队列的基础功能进行消息的生产和消费，可以不用修改代码就完成到 Pulsar的迁移。<br><strong>隔离控制</strong></p>
+<p>提供按租户对 Topic 进行隔离的机制，同时可精确管控各个租户的生产和消费速率，保证租户之间互不影响，消息的处理不会出现资源竞争的现象。</p>
+<h4 id="物理分区与逻辑分区"><a href="#物理分区与逻辑分区" class="headerlink" title="物理分区与逻辑分区:"></a>物理分区与逻辑分区:</h4><p><img src="https://main.qcloudimg.com/raw/8fa46c108d316e3cc3bf299b0be7e775.svg" alt="image"></p>
+<p>物理分区：计算与存储耦合，容错需要拷贝物理分区，扩容需要迁移物理分区来达到负载均衡。<br>逻辑分区：物理“分片”，计算层与存储层隔离，这种结构使得 Apache Pulsar 具备以下优点。</p>
 <ul>
-<li>精确的域名,例如<code>www.example.com</code></li>
-<li>通配符名称,可用*表示任意多字符(类似Linux  Shell中的*),但是通配符必须在域名的最前面或者最后面,例如<code>*.example.com</code>、<code>www.example.*</code></li>
-<li>正则表达式,最前面是一个波浪号~,例如<code>~^www\d+\.example\.com$</code>表示可以匹配以www开头，后跟一个到多个数字，然后以.example.com结尾的域名</li>
+<li>Broker 和 Bookie 相互独立，方便实现独立的扩展以及独立的容错。</li>
+<li>Broker 无状态，便于快速上、下线，更加适合于云原生场景。</li>
+<li>分区存储不受限于单个节点存储容量。</li>
+<li>分区数据分布均匀，单个分区数据量突出不会使整个集群出现木桶效应。</li>
+<li>存储不足扩容时，能迅速利用新增节点平摊存储负载。</li>
 </ul>
-<p>除了以上几种形式，还有下面几种表示特殊含义的域名:</p>
+<h3 id="消息-ID-生成规则"><a href="#消息-ID-生成规则" class="headerlink" title="消息 ID 生成规则"></a>消息 ID 生成规则</h3><p>在 Pulsar 中，每条消息都有自己的 ID（即 MessageID），MessageID 由四部分组成：ledgerId:entryID:partition-index:batch-index。其中：</p>
 <ul>
-<li><code>.example.com</code>,相当于<code>*.example.com</code>+<code>example.com</code></li>
-<li>“”,可以匹配没有带Host头的请求</li>
-<li>国际化域名(用得不多,了解即可),用ASCII码表示，例如<code>xn--e1afmkfd.xn--80akhbyknj4f</code>可表示<code>пример.испытание</code></li>
-<li><code>_</code>、<code>__</code>或者<code>!@#</code>等无效的域名，可以理解为其可以匹配任意域名，但是优先级最低，最常见的用法是用来设置默认的server,即当一个请求的Host没有命中其他规则时，会采用默认server的配置。配置如下:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80  default_server;</span><br><span class="line">    server_name  _;</span><br><span class="line">    return       444;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>partition-index：指分区的编号，在非分区 topic 的时候为 -1。</li>
+<li>batch-index：在非批量消息的时候为 -1。<br>消息 ID 的生成规则由 Pulsar 的消息存储机制决定，Pulsar 中消息存储原理图如下</li>
+</ul>
+<p><img src="https://qcloudimg.tencent-cloud.cn/image/document/5b8f3d165b3977616064fbd95ff003f5.png" alt="image"></p>
+<blockquote>
+<p>如上图所示，在 Pulsar中，一个 Topic 的每一个分区会对应一系列的 ledger，其中只有一个 ledger 处于 open 状态即可写状态，而每个 ledger 只会存储与之对应的分区下的消息。</p>
+</blockquote>
+<p>Pulsar 在存储消息时，会先找到当前分区使用的 ledger ，然后生成当前消息对应的 entry ID，entry ID 在同一个 ledger 内是递增的。每个 ledger 存在的时长或保存的 entry 个数超过阈值后会进行切换，新的消息会存储到同一个 partition 中的下一个 ledger 中。</p>
+<ul>
+<li>批量生产消息情况下，一个 entry 中可能包含多条消息。</li>
+<li>非批量生产的情况下，一个 entry 中包含一条消息（producer 端可以配置这个参数，默认是批量的）。</li>
+</ul>
+<p>Ledger 只是一个逻辑概念，是数据的一种逻辑组装维度，并没有对应的实体。而 bookie 只会按照 entry 维度进行写入、查找、获取。</p>
+<h4 id="分片机制详解：Ledger-和-Entry"><a href="#分片机制详解：Ledger-和-Entry" class="headerlink" title="分片机制详解：Ledger 和 Entry"></a>分片机制详解：Ledger 和 Entry</h4><blockquote>
+<p>Pulsar 中的消息数据以 ledger 的形式存储在 BookKeeper 集群的 bookie 存储节点上。Ledger 是一个只追加的数据结构，并且只有一个写入器，这个写入器负责多个 bookie 的写入。Ledger 的条目会被复制到多个 bookie 中，同时会写入相关的数据来保证数据的一致性。<br> BookKeeper 需要保存的数据包括：</p>
+<ul>
+<li>Journals<ul>
+<li>journals 文件里存储了 BookKeeper 的事务日志，在任何针对 ledger 的更新发生前，都会先将这个更新的描述信息持久化到这个 journal 文件中。</li>
+<li>BookKeeper 提供有单独的 sync 线程根据当前 journal 文件的大小来作 journal 文件的 rolling。</li>
+</ul>
+</li>
+<li>EntryLogFile<ul>
+<li>存储真正数据的文件，来自不同 ledger 的 entry 数据先缓存在内存buffer中，然后批量flush到EntryLogFile中。</li>
+<li>默认情况下，所有ledger的数据都是聚合然后顺序写入到同一个EntryLog文件中，避免磁盘随机写。</li>
+</ul>
+</li>
+<li>Index 文件<ul>
+<li>所有 Ledger 的 entry 数据都写入相同的 EntryLog 文件中，为了加速数据读取，会作 ledgerId + entryId 到文件 offset 的映射，这个映射会缓存在内存中，称为 IndexCache。</li>
+<li>IndexCache 容量达到上限时，会被 sync 线程 flush 到磁盘中。</li>
+</ul>
 </li>
 </ul>
-<h3 id="server-name匹配顺序"><a href="#server-name匹配顺序" class="headerlink" title="server_name匹配顺序"></a>server_name匹配顺序</h3><p>当需要决定采用哪个server块的配置处理请求时,会根据以下的顺序查找:</p>
+</blockquote>
+<p>三类数据文件的读写交互如下图：</p>
+<p><img src="https://qcloudimg.tencent-cloud.cn/image/document/5f9022df4eedd6d45684269fe27050d9.png" alt="image"></p>
+<p><strong>Entry 数据写入</strong></p>
 <ol>
-<li>精确匹配</li>
-<li>以*开头的最长通配符名称</li>
-<li>以*结尾的最长通配符名称</li>
-<li>根据在配置文件出现的顺序第一个匹配上的正则表示式名称</li>
-<li>默认配置，在listen指令中指明了default_server的server块，若无，为配置文件中第一个声明的server块</li>
-</ol>
-<p>示例,假设nginx只有以下server配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"># 这里主要是方便下面输出结果可以直接在浏览器显示</span><br><span class="line">default_type  text/plain;</span><br><span class="line"># 这里使用geo指令主要是为了输出$,直接在return输出$会报错</span><br><span class="line"># 参见https://stackoverflow.com/questions/57466554/how-do-i-escape-in-nginx-variables</span><br><span class="line">geo $dollar &#123;</span><br><span class="line">    default &quot;$&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name ~^www\.a\..*$;</span><br><span class="line">    return 200 &quot;~^www\.a\..*$dollar&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name ~^.*a\..*$;</span><br><span class="line">    return 200 &quot;~^.*a\..*$dollar&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name www.code.a.*;</span><br><span class="line">    return 200 &quot;www.code.a.*&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name *.a.com;</span><br><span class="line">    return 200 &quot;*.a.com&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">    listen       80;</span><br><span class="line">    server_name  www.a.com;</span><br><span class="line">    return 200 &quot;www.a.com&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在hosts文件上加上以下配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1 www.a.com www.code.a.com www.code.a.cn www.a.oa.com dev.a.cn www.b.com</span><br></pre></td></tr></table></figure></p>
-<p>我们可以直接用浏览器访问或者借助curl工具来进行测试,测试结果如下,可对照上面的查找顺序进行分析:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">input</th>
-<th style="text-align:center">output</th>
-<th style="text-align:center">匹配类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><a href="http://www.a.com" target="_blank" rel="noopener">http://www.a.com</a></td>
-<td style="text-align:center"><a href="http://www.a.com" target="_blank" rel="noopener">www.a.com</a></td>
-<td style="text-align:center">精确匹配</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://www.code.a.com" target="_blank" rel="noopener">http://www.code.a.com</a></td>
-<td style="text-align:center">*.a.com</td>
-<td style="text-align:center">前导*匹配</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://www.code.a.cn" target="_blank" rel="noopener">http://www.code.a.cn</a></td>
-<td style="text-align:center"><a href="http://www.code.a." target="_blank" rel="noopener">www.code.a.</a>*</td>
-<td style="text-align:center">后导*匹配</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://www.a.oa.com" target="_blank" rel="noopener">http://www.a.oa.com</a></td>
-<td style="text-align:center"><code>~^www\.a\..*$</code></td>
-<td style="text-align:center">正则匹配</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://dev.a.cn" target="_blank" rel="noopener">http://dev.a.cn</a></td>
-<td style="text-align:center"><code>~^.*a\..*$</code></td>
-<td style="text-align:center">正则匹配</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://www.b.com" target="_blank" rel="noopener">http://www.b.com</a></td>
-<td style="text-align:center"><code>~^www\.a\..*$</code></td>
-<td style="text-align:center">默认匹配</td>
-</tr>
-</tbody>
-</table>
-<p>值得说明的是，由于上面的配置没有显示指定默认server,所以会默认匹配到第一个配置,假如我们在配置最后再添加如下配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80 default_server;</span><br><span class="line">    server_name _;</span><br><span class="line">    return 200 &quot;default_server&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>重启后，再访问<a href="http://www.b.com,会输出default_server,其他访问结果不变。注意这里的`default_server`是配置在`listen`指令下的。" target="_blank" rel="noopener">http://www.b.com,会输出default_server,其他访问结果不变。注意这里的`default_server`是配置在`listen`指令下的。</a></p>
-<p>关于listen指令,有几点需要注意的地方:</p>
-<ol>
-<li>如果server指令块里没有指定listen指令,则根据运行nginx的用户不同，默认监听的端口也不同,root用户启动默认监听80端口，否则默认监听8000端口</li>
-<li><p>如果配置了listen且只指定了IP,则监听端口为80,此时操作系统可能会不允许非root用户启动nginx，提示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx: [emerg] bind() to 127.0.0.1:80 failed (13: Permission denied)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>以上说的配置查找规则前提是请求需要跟listen指令配置的IP跟端口相匹配<br>关于以上注意事项，这里举两个例子:</p>
-</li>
+<li>数据首先会同时写入 Journal（写入 Journal 的数据会实时落到磁盘）和 Memtable（读写缓存）。</li>
+<li>写入 Memtable 之后，对写入请求进行响应。</li>
+<li>Memtable 写满之后，会 flush 到 Entry Logger 和 Index cache，Entry Logger 中保存数据，Index cache 中保存数据的索引信息，</li>
+<li>后台线程将 Entry Logger 和 Index cache 数据落到磁盘。<br><strong>Entry 数据读取</strong></li>
 </ol>
 <ul>
-<li>假设运行nginx的是非root用户,且上面最后我们加的配置里listen指令没有指定80端口,即：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen default_server;</span><br><span class="line">    server_name _;</span><br><span class="line">    return 200 &quot;default_server&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<li>Tailing read 请求：直接从 Memtable 中读取 Entry。</li>
+<li>Catch-up read（滞后消费）请求：先读取 Index信息，然后索引从 Entry Logger 文件读取 Entry。<br><strong>数据一致性保证：LastLogMark</strong></li>
+<li>写入的 EntryLog 和 Index 都是先缓存在内存中，再根据一定的条件周期性的 flush 到磁盘，这就造成了从内存到持久化到磁盘的时间间隔，如果在这间隔内 BookKeeper 进程崩溃，在重启后，我们需要根据 journal 文件内容来恢复，这个 LastLogMark 就记录了从 journal 中什么位置开始恢复。</li>
+<li>它其实是存在内存中，当 IndexCache 被 flush 到磁盘后其值会被更新，LastLogMark 也会周期性持久化到磁盘文件，供 Bookkeeper 进程启动时读取来从 journal 中恢复。</li>
+<li>LastLogMark 一旦被持久化到磁盘，即意味着在其之前的 Index 和 EntryLog 都已经被持久化到了磁盘，那么 journal 在这 LastLogMark 之前的数据都可以被清除了。</li>
 </ul>
-<p>这时访问<a href="http://www.b.com,由于上面这个server监听的是8000端口，跟请求的80端口不匹配,结果将会变回`~^www\.a\..*`" target="_blank" rel="noopener">http://www.b.com,由于上面这个server监听的是8000端口，跟请求的80端口不匹配,结果将会变回`~^www\.a\..*`</a>  </p>
+<h4 id="消息副本与存储机制"><a href="#消息副本与存储机制" class="headerlink" title="消息副本与存储机制"></a>消息副本与存储机制</h4><p>Pulsar 中每个分区 Topic 的消息数据以 ledger 的形式存储在 BookKeeper 集群的 bookie 存储节点上，每个 ledger 包含一组 entry，而 bookie 只会按照 entry 维度进行写入、查找、获取。</p>
+<blockquote>
+<p>批量生产消息的情况下，一个 entry 中可能包含多条消息，所以 entry 和消息并不一定是一一对应的。</p>
+</blockquote>
+<p>edger 和 entry 分别对应不同的元数据。</p>
 <ul>
-<li>假设最后的默认server配置改成如下配置(注意端口前有IP):<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 公网IP:80 default_server;</span><br><span class="line">    server_name _;</span><br><span class="line">    return 200 &quot;default_server&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<li>ledger 的元数据存储在 zk 上。</li>
+<li>entry 除了消息数据部分之外，还包含元数据，entry 的数据存储在 bookie 存储节点上。</li>
 </ul>
-<p>这时如果是在公网访问的话，不管访问上面的哪个域名都会返回”default_server”，理由是不设置IP的话nginx默认会监听该机器的所有IP的特定端口,设置了的话只会监听该IP的特定端口。<br>本地访问同理，不能匹配到listen了公网IP的server。</p>
-<h2 id="location-配置"><a href="#location-配置" class="headerlink" title="location 配置"></a>location 配置</h2><p>了解完server_name和listen的配置规则，我们知道了一个请求过来会对应哪个server。接下来我们要讨论的是某个server下不同请求URI对应的location配置查找规则。</p>
-<h3 id="配置语法-1"><a href="#配置语法-1" class="headerlink" title="配置语法"></a>配置语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Syntax:	location [ = | ~ | ~* | ^~ ] uri &#123; ... &#125;</span><br><span class="line">location @name &#123; ... &#125;</span><br><span class="line">Default: —</span><br><span class="line">Context: server, location</span><br></pre></td></tr></table></figure>
-<p>根据配置语法我们知道location可以有以下几种形式:</p>
+<p><img src="https://longerwu-1252728875.cos.ap-guangzhou.myqcloud.com/blogs/pulsar/pulsar-write.png" alt="image"></p>
+<p>每个 ledger 在创建的时候，会在现有的 BookKeeper 集群中的可写状态的 bookie 候选节点列表中，选用 ensemble size 对应个数的 bookie 节点，如果没有足够的候选节点则会抛出 BKNotEnoughBookiesExceptio 异常。选出候选节点后，将这些信息组成 <entry id,="" ensembles=""> 元组，存储到 ledger 的元数据里的 ensembles 中。</entry></p>
+<p><strong>消息写入流程</strong><br><img src="https://qcloudimg.tencent-cloud.cn/image/document/b3ecbf43626e9bafb76e2ed5b94e580c.png" alt="image"></p>
+<p>客户端在写入消息时，每个 entry 会向 ledger 当前使用的 ensemble 列表中的 Qw 个 bookie 节点发送写入请求，当收到 Qa 个写确认后，即认为当前消息写入存储成功。同时会通过 LAP（lastAddPushed）和 LAC（LastAddConfirmed）分别标识当前推送的位置和已经收到存储确认的位置。<br>每个正在推送的 entry 中的 LAC 元数据值，为当前时刻创建发送 entry 请求时，已经收到最新的确认位置值。LAC 所在位置及之前的消息对读客户端是可见的。</p>
+<p><strong>消息副本分布</strong><br>每个 entry 写入时，会根据当前消息的 entry id 和当前使用的 ensembles 列表的开始 entry id（即key值），计算出在当前 entry 需要使用 ensemble 列表中由哪组 Qw 个 bookie 节点进行写入。之后，broker 会向这些 bookie 节点发送写请求，当收到 Qa 个写确认后，即认为当前消息写入存储成功。这时至少能够保证 Qa 个消息的副本个数。</p>
+<p><img src="https://qcloudimg.tencent-cloud.cn/image/document/501d7847c71e3f8fd01aebc06fad6a12.png" alt="image"></p>
+<h4 id="订阅模式"><a href="#订阅模式" class="headerlink" title="订阅模式"></a>订阅模式</h4><p><img src="https://qcloudimg.tencent-cloud.cn/image/document/38665c07c06e7ba8dcf96ee32150df37.png" alt="image"></p>
+<p><strong>独占模式（Exclusive）</strong></p>
+<p><strong>Exclusive 独占模式（默认模式）</strong>：一个 Subscription 只能与一个 Consumer 关联，只有这个 Consumer 可以接收到 Topic 的全部消息，如果该 Consumer 出现故障了就会停止消费。<br>Exclusive 订阅模式下，同一个 Subscription 里只有一个 Consumer 能消费 Topic，如果多个 Consumer 订阅则会报错，适用于全局有序消费的场景。</p>
+<p><img src="https://qcloudimg.tencent-cloud.cn/image/document/c1f9c9cf1f5d59c18f2f86641de63438.png" alt="image"></p>
+<p><strong>共享模式（Shared）</strong><br>消息通过 round robin 轮询机制（也可以自定义）分发给不同的消费者，并且每个消息仅会被分发给一个消费者。当消费者断开连接，所有被发送给他，但没有被确认的消息将被重新安排，分发给其它存活的消费者。<br><img src="https://qcloudimg.tencent-cloud.cn/image/document/e40f4037ac99d92f6053c81f4a683e88.png" alt="image"></p>
+<p><strong>灾备模式（Failover）</strong><br>当存在多个 consumer 时，将会按字典顺序排序，第一个 consumer 被初始化为唯一接受消息的消费者。当第一个 consumer 断开时，所有的消息（未被确认和后续进入的）将会被分发给队列中的下一个 consumer。</p>
+<p><img src="https://qcloudimg.tencent-cloud.cn/image/document/46ee55c0a3649881282f494e146c3ba5.png" alt="image"></p>
+<p><strong>KEY 共享模式（Key_Shared）</strong></p>
+<p>当存在多个 Consumer 时，将根据消息的 Key 进行分发，Key 相同的消息只会被分发到同一个消费者。<br><img src="https://qcloudimg.tencent-cloud.cn/image/document/d0766ee852ec8e8c88451c779c7f8c71.png" alt="image"></p>
+<blockquote>
+<p>Key_Shared 本身在使用上存在一定的限制条件，由于其工程实现复杂度较高，在社区版本迭代中，不断有对 Key_Shared 的功能进行改进以及优化，整体稳定性相较 Exclusive,Failover 和 Shared 这三种订阅类型偏弱。如果上述三种订阅类型能满足业务需要，可以优先选用上述三种订阅类型。</p>
+</blockquote>
+<p><strong>什么时候才考虑用 Key_Shared 订阅模式</strong></p>
+<p>如是普通的生产消费场景，建议直接选用 Shared 模式即可。<br>若需要让相同 Key 的消息分给同一个消费者，这个时候 Shared 订阅模式无法满足用户需求。有两种方式可以选择：</p>
 <ul>
-<li>=,精确匹配</li>
-<li>～,正则匹配,大小写敏感</li>
-<li>～*,正则匹配, 大小写不敏感</li>
-<li>^~，忽略正则表达式的前缀匹配</li>
-<li>没有修饰符,前缀匹配</li>
-<li>@，命名location,可用来做内部重定向</li>
+<li>选择 Key_Shared 订阅模式。</li>
+<li>通过多分区主题 + Failover 订阅模式实现。</li>
+</ul>
+<p><strong>什么场景下适合用 Key_Shared 订阅</strong></p>
+<p>Key 数量多且每个 Key 的消息分布相对均匀<br>消费处理速度快，无消息堆积的情况<br>如果在生产过程中不能保证上面的两个条件同时满足，建议用 【多分区主题 + Failover 订阅】</p>
+<p>多分区主题 + Failover 订阅示例</p>
+<ul>
+<li>在该模式下，每个分区同时只会分配给一个消费者实例。若消费者数量多于分区数量，超出数量的消费者无法参与消息，可以通过扩容分区数量不小于消费者数量解决。</li>
+<li>在设计 Key 的时候尽量保证 Key 分布均匀。</li>
+<li>Failover 模式下不支持延时消息。</li>
 </ul>
 <blockquote>
-<p>其中=和^~修饰符都可以认为是特殊形式的前缀匹配</p>
+<p>Pulsar 内部可以保证单个分区内的消息有序，即如果创建1分区的 Topic 则可以保证全局有序。<br>单分区的 Topic 会在性能上弱于多分区 Topic，如果希望兼顾性能与有序性， 可以参见 订阅模式 使用 Key-shared 模式进行消费，实现局部有序，标记同一个 key 让需要有序的消息落在同一分区即可。</p>
 </blockquote>
-<h3 id="匹配过程"><a href="#匹配过程" class="headerlink" title="匹配过程"></a>匹配过程</h3><p>根据请求的URI和location的配置,查找请求对应的location过程如下:</p>
-<ol>
-<li>将请求URI标准化,包括将”%xx”形式编码的文本进行解码，解析相对路径”.”和”..”,以及合并两个或多个相邻的”/“成单个”/“</li>
-<li>根据请求URI找到并记录匹配上的最长前缀匹配，这里有两个特殊的场景:<ol>
-<li>找到了=修饰的精确匹配,结束查找,采用它的配置</li>
-<li>如果该步骤最终记录下的前缀以^~修饰，则采用它的配置，不会进行后续的查找步骤</li>
-</ol>
+<h4 id="定时和延时消息"><a href="#定时和延时消息" class="headerlink" title="定时和延时消息"></a>定时和延时消息</h4><ul>
+<li>定时消息：消息在发送至服务端后，实际业务并不希望消费端马上收到这条消息，而是推迟到某个时间点被消费，这类消息统称为定时消息。</li>
+<li>延时消息：消息在发送至服务端后，实际业务并不希望消费端马上收到这条消息，而是推迟一段时间后再被消费，这类消息统称为延时消息。<blockquote>
+<p>实际上，定时消息可以看成是延时消息的一种特殊用法，其实现的最终效果和延时消息是一致的。</p>
+</blockquote>
 </li>
-<li>根据在配置文件出现的顺序，检查相应的正则匹配，若有一个匹配上，则应用该配置，且不会继续检查后续的正则配置</li>
-<li>若第3步没有找到匹配上的正则匹配，则采用第2步中找到的最长前缀匹配对应的配置</li>
-</ol>
-<p>根据上面的查找过程，可以得到一些配置优化点：</p>
-<ul>
-<li>对于经常要访问的路径，可以使用精确匹配或^=修饰的匹配,可以避免进行正则匹配检查</li>
-<li>如果一定要用到正则表达式，可以把最经常被访问的location规则配置在最前面，因为正则匹配命中一个就不会继续验证后续的匹配规则</li>
 </ul>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>假设有如下配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80 default_server;</span><br><span class="line">    server_name _;</span><br><span class="line">    # A</span><br><span class="line">    location = / &#123;</span><br><span class="line">            return 200 &quot;A&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # B</span><br><span class="line">    location / &#123;</span><br><span class="line">            return 200 &quot;B&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # C</span><br><span class="line">    location /docs &#123;</span><br><span class="line">            return 200 &quot;C&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # D</span><br><span class="line">    location ^~ /imgs &#123;</span><br><span class="line">            return 200 &quot;D&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    # E</span><br><span class="line">    location ~* \.(gif|jpg|png)$ &#123;</span><br><span class="line">            return 200 &quot;E&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # F</span><br><span class="line">    location ~ /a/.*$ &#123;</span><br><span class="line">            return 200 &quot;F&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>测试结果如下:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">input</th>
-<th style="text-align:center">output</th>
-<th style="text-align:center">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><a href="http://127.0.0.1" target="_blank" rel="noopener">http://127.0.0.1</a></td>
-<td style="text-align:center">A</td>
-<td style="text-align:center">匹配到A跟B,精确匹配优先级较高</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://127.0.0.1/test" target="_blank" rel="noopener">http://127.0.0.1/test</a></td>
-<td style="text-align:center">B</td>
-<td style="text-align:center">只匹配到B</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://127.0.0.1/docs/1" target="_blank" rel="noopener">http://127.0.0.1/docs/1</a></td>
-<td style="text-align:center">C</td>
-<td style="text-align:center">匹配到B跟C,C前缀比B长</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://127.0.0.1/docs/2.jpg" target="_blank" rel="noopener">http://127.0.0.1/docs/2.jpg</a></td>
-<td style="text-align:center">E</td>
-<td style="text-align:center">匹配到B、C、E，正则匹配比普通前缀匹配优先级高</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://127.0.0.1/imgs/1" target="_blank" rel="noopener">http://127.0.0.1/imgs/1</a></td>
-<td style="text-align:center">D</td>
-<td style="text-align:center">只匹配到B、D,D前缀比B长</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://127.0.0.1/imgs/1.jpg" target="_blank" rel="noopener">http://127.0.0.1/imgs/1.jpg</a></td>
-<td style="text-align:center">D</td>
-<td style="text-align:center">匹配到B、D、E，由于D是最长匹配且有^~修饰符，所以不会再检查正则匹配</td>
-</tr>
-<tr>
-<td style="text-align:center"><a href="http://127.0.0.1/docs/a/1" target="_blank" rel="noopener">http://127.0.0.1/docs/a/1</a></td>
-<td style="text-align:center">F</td>
-<td style="text-align:center">匹配到B、C、F</td>
-</tr>
-</tbody>
-</table>
-<p>关于最后一条测试结果,需要注意的是，<code>/a/.*$</code>这个正则表达式,并不要求请求URI以<code>/a</code>开头，这也是很容易疏漏的地方,若想匹配以<code>/a</code>开头的请求，应改为<code>^/a/.*$</code>,此时最后一条测试结果会变为C</p>
-<h3 id="location-name的用法"><a href="#location-name的用法" class="headerlink" title="location @name的用法"></a>location @name的用法</h3><p><code>@</code>前缀可以用来定义一个命名的location,该location不处理正常的外部请求,一般用来供内部重定向使用。它们不能嵌套,也不能包含嵌套的location。<br>例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">location /try &#123;</span><br><span class="line">    try_files $uri $uri/ @name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location /error &#123;</span><br><span class="line">    error_page 404 = @name;</span><br><span class="line">    return 404;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">location @name &#123;</span><br><span class="line">    return 200 &quot;@name&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这时访问<code>/try</code>或者<code>/error</code>都会返回”@name”</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文主要介绍了nginx关于<code>server_name</code>和<code>location</code>的配置以及匹配规则,并举例说明。<code>server_name</code>和<code>location</code>指令是nginx中非常重要的两条指令，掌握这两条指令对于我们配置nginx以及排查问题都是非常重要的，希望本文能帮到大家。</p>
-<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
-<li><a href="http://nginx.org/en/docs/http/request_processing.html" target="_blank" rel="noopener">How nginx processes a request</a></li>
-<li><a href="http://nginx.org/en/docs/http/server_names.html" target="_blank" rel="noopener">Server names</a></li>
-<li><a href="http://nginx.org/en/docs/http/ngx_http_core_module.html#location" target="_blank" rel="noopener">Module ngx_http_core_module</a></li>
-<li><a href="https://stackoverflow.com/questions/57466554/how-do-i-escape-in-nginx-variables" target="_blank" rel="noopener">How do I escape $ in nginx variables</a></li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">String value = <span class="string">"message content"</span>;</span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//需要先将显式的时间转换为 Timestamp</span></span><br><span class="line">      <span class="keyword">long</span> timeStamp = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>).parse(<span class="string">"2020-11-11 00:00:00"</span>).getTime();</span><br><span class="line">      <span class="comment">//通过调用 producer 的 deliverAt 方法来实现定时消息</span></span><br><span class="line">        MessageId msgId = producer.newMessage()</span><br><span class="line">                .value(value.getBytes())</span><br><span class="line">                .deliverAt(timeStamp)</span><br><span class="line">                .send();</span><br><span class="line">&#125; <span class="keyword">catch</span> (ParseException e) &#123;</span><br><span class="line">        <span class="comment">//TODO 添加对 Timestamp 解析失败的处理方法</span></span><br><span class="line">        e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>延时消息通过生产者produce的 deliverAfter() 方法实现</p>
+</blockquote>
+<p>使用说明和限制</p>
+<ul>
+<li>使用定时或延迟消息时，建议与普通消息使用不同的 Topic 来管理，即定时与延迟消息发送到一个固定的 Topic，普通消息发送到另一个 Topic 中，方便后续的管理与维护，增加稳定性。</li>
+<li>使用定时和延时两种类型的消息时，请确保客户端的机器时钟和服务端的机器时钟（所有地域均为UTC+8 北京时间）保持一致，否则会有时差。</li>
+<li>定时和延时消息在精度上会有1秒左右的偏差。</li>
+<li>定时和延时消息不支持 batch 模式（批量发送），batch 模式会引起消息堆积，保险起见，请在创建 producer 的时候把 enableBatch 参数设为 false。</li>
+<li>定时和延时消息的消费模式仅支持使用 ==Shared 模式==进行消费，否则会失去定时或延时效果（Key-shared 也不支持）。</li>
+<li>关于定时和延时消息的时间范围，最大均为10天。<br>使用定时消息时，设置的时刻在当前时刻以后才会有定时效果，否则消息将被立即发送给消费者。</li>
+<li>设定定时时间后，TTL 的时间依旧会从发送消息的时间点开始算消息的最长保留时间；例如定时到2天后发送，消息最长保留（TTL）如果设置为1天的话，则消息在1天后会被删除，这个时候要确保 TTL 的时间要大于延时的时间，即 TTL 设置成大于等于2天，否则 TTL 到期时，消息会被删除。延时消息同理。</li>
+</ul>
+<h4 id="消息重试与死信机制"><a href="#消息重试与死信机制" class="headerlink" title="消息重试与死信机制"></a>消息重试与死信机制</h4><blockquote>
+<p>重试 Topic 是一种为了确保消息被正常消费而设计的 Topic 。当某些消息第一次被消费者消费后，没有得到正常的回应，则会进入重试 Topic 中，当重试达到一定次数后，停止重试，投递到死信 Topic 中。<br>当消息进入到死信队列中，表示 Pulsar已经无法自动处理这批消息，一般这时就需要人为介入来处理这批消息。您可以通过编写专门的客户端来订阅死信 Topic，处理这批之前处理失败的消息。</p>
+</blockquote>
+<blockquote>
+<p>您创建的消费者使用某个订阅名以共享模式订阅了一个 Topic 后，如果开启了 enableRetry 属性，就会自动订阅这个订阅名对应的重试队列。</p>
+</blockquote>
+<p><strong>主动重试</strong><br>当消费者在某个时间没有成功消费某条消息，如果想重新消费到这条消息时，消费者可以发送一条取消确认消息到 Pulsar服务端，Pulsar会将这条消息重新发给消费者。 这种方式重试时不会产生新的消息，所以也不能自定义重试间隔。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">    Message msg = consumer.receive();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// Do something with the message</span></span><br><span class="line">        System.out.printf(<span class="string">"Message received: %s"</span>, <span class="keyword">new</span> String(msg.getData()));</span><br><span class="line">        <span class="comment">// Acknowledge the message so that it can be deleted by the message broker</span></span><br><span class="line">        consumer.acknowledge(msg);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="comment">// Message failed to process, redeliver later</span></span><br><span class="line">        consumer.negativeAcknowledge(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="消息压缩"><a href="#消息压缩" class="headerlink" title="消息压缩"></a>消息压缩</h3><h4 id="Pulsar-大消息处理"><a href="#Pulsar-大消息处理" class="headerlink" title="Pulsar 大消息处理"></a>Pulsar 大消息处理</h4><p>Pulsar 的消息最大限制默认是 5MB，Producer 发送的消息大小超过5MB会导致消息发送失败。如果客户端发送单条消息大小超过该限制，我们可以采用如下两种方式来处理：</p>
+<ul>
+<li>Chunk Message：Plusar 提供 Chunk Message 功能，开启 Chunk 机制时，客户端能够自动对大消息进行拆分，并保证消息的完整性，在 Consumer 能自动整合消息。</li>
+<li>压缩消息：主要是对消息数据中相同字符序列进行替换，来压缩消息的大小。Pulsar 支持 LZ4、ZLIB、ZSTD、SNAPPY 四种压缩算法。<br>我们这里推荐压缩消息对大消息进行处理。</li>
+</ul>
+<p>压缩算法分析比较:</p>
+<ul>
+<li>LZ4<br>LZ4 是一种无损数据压缩算法，可以提供极快的压缩和解压缩速度，对于 CPU 占用少。</li>
+<li>ZLIB<br>ZLIB 压缩算法是一种常用的无损数据压缩技术，它可以有效地减少收发数据的大小，从而提高网络传输效率和网络容量。ZLIB 压缩算法是基于 Lempel-Ziv 压缩算法的一种变体，可以将原始数据压缩到原来的一半大小以下，并且支持压缩和解压缩操作。</li>
+<li>ZSTD<br>ZSTD 压缩算法是一种 Huffman 编码的压缩算法，是 LZ77 的一种变种，可以针对不同数据进行有效压缩。它是一种实时编码算法，在处理大数据时可以更快速、更高效地压缩数据。相比其他压缩算法，ZSTD 在提高数据压缩率的同时兼顾压缩速度。</li>
+<li><p>SNAPPY<br>SNAPPY 压缩是一种无损压缩技术，它依赖于 LZ77 原理来实现压缩效果。SNAPPY 压缩的核心原理是：只要数据流找到两个字符串之间的重复，就会用一组更短的代码来表示这个字符串，这样就可以减少数据流的大小。</p>
+</li>
+<li><p>吞吐量：LZ4 &gt; SNAPPY &gt; ZSTD &gt; ZLIB</p>
+</li>
+<li>压缩比：ZSTD &gt; ZLIB &gt; LZ4 &gt; SNAPPY</li>
+<li>物理资源方面，SNAPPY 算法占用的网络带宽最多，ZSTD 算法占用的网络带宽最少。</li>
+</ul>
+<h3 id="生产者"><a href="#生产者" class="headerlink" title="生产者"></a>生产者</h3><h4 id="访问模式"><a href="#访问模式" class="headerlink" title="访问模式"></a>访问模式</h4><p>消息生成者有多种模式访问 Topic ，可以使用以下几种方式将消息发送到 Topic 。</p>
+<ul>
+<li>Shared：默认情况下，多个生成者可以将消息发送到同一个 Topic。</li>
+<li>Exclusive：在这种模式下，只有一个生产者可以将消息发送到 Topic ，当其他生产者尝试发送消息到这个 Topic 时，会发生错误。只有独占 Topic 的生产者发生宕机时（Network Partition ）该生产者会被驱逐，新的生产者才能产生并向 Topic 发送消息。</li>
+<li>WaitForExclusive：在这种模式下，只有一个生产者可以将消息发送到 Topic 。当已有生成者和 Topic 建立连接时，其他生产者的创建会被挂起而不会产生错误。如果想要采用领导者选举机制来选择消费者的话，可以采用这种模式。</li>
+</ul>
+<h4 id="路由模式"><a href="#路由模式" class="headerlink" title="路由模式"></a>路由模式</h4><p>当将消息发送到分区 Topic 时，需要指定消息的路由模式，这决定了消息将会被发送到哪个分区 Topic 。 Pulsar 有以下三种消息路由模式，RoundRobinPartition 为默认路由模式。</p>
+<ul>
+<li>RoundRobinPartition：如果消息没有指定 key，为了达到最大吞吐量，生产者会以 round-robin （轮询）方式将消息发布到所有分区。 请注意 round-robin 并不是作用于每条单独的消息，而是作用于延迟处理的批次边界，以确保批处理有效。 如果消息指定了key，分区生产者会根据 key 的 hash 值将该消息分配到对应的分区。这是默认的模式。</li>
+<li>SinglePartition：如果消息没有指定 key，生产者将会随机选择一个分区，并发布所有消息到这个分区。 如果消息指定了key，分区生产者会根据key的hash值将该消息分配到对应的分区。</li>
+<li>CustomPartition：自定义模式，用户可以创建自定义路由模式，通过实现 MessageRouter 接口实现自定义路由规则。</li>
 </ul>
 
       
@@ -387,11 +398,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MQ</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">server</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Pulsar</a>
         		</li>
       		
 		</ul>
@@ -447,7 +458,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2020/02/17/Nginx的server_name和location配置/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://sndragon.com/2023/11/11/初识Pulsar/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -461,18 +472,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/02/29/Postman-Host请求头不生效问题/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Postman Host请求头不生效问题
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/05/03/Lucene初识及核心类介绍/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Lucene初识及核心类介绍</div>
+    <a href="/2023/05/13/ZAB协议/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ZAB协议</div>
       <i class="icon-circle-right"></i>
     </a>
   
